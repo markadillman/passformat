@@ -21,7 +21,7 @@ var creditsText = titleString + "<br>" +
 	"Game Developer: Lucia Blackwell<br>" +
 	"Network Developer: Mark Dillman<br>" +
 	"Art Developer: Antonina (Toni) York<br><br>" +
-	"BETA TESTING<br>" +
+	"BETA TESTING AND GAME ART<br>" +
 	"The Folks at Polital Enterprises<br>" +
 	"The Nerdfighers of ANF<br><br>" +
 	"GAME MUSIC<br>" +
