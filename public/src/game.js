@@ -429,7 +429,7 @@ function loadPlayer() {
 	}
 	
 	// Player sprite
-	var player = Crafty.e('Player, 2D, Canvas, Color, Multiway, Jumper, Gravity')
+	var player = Crafty.e('Player, 2D, Canvas, Color, Multiway, Jumper, Gravity, Motion')
 		
 		// Initial position and size
 		// inside the hole in the tree
@@ -538,7 +538,7 @@ function loadPlayer() {
 				xTile = Math.floor(currentUpperLeftX / tileWidth);
 				yTile = Math.floor(currentUpperLeftY / tileHeight);
 				var payload = {'x' : xTile, 'y': yTile};
-				if (this.x > currentUpperLeftX + tileWidth)
+				if (this.x > currentUpperLeftX + tileWidth && this.dx > 0)
 				{
 					currentUpperLeftX = currentUpperLeftX + tileWidth;
 					Crafty.viewport.pan(tileWidth, 0, panTime);
@@ -551,7 +551,7 @@ function loadPlayer() {
 					dynamicPostRequest('/pullright',payload,dynamicPostOnLoad,dynamicError);
 					// Destroy assets in outer leftmost "ring" segment
 				}
-				else if (this.x < currentUpperLeftX + canvasEdge)
+				else if (this.x < currentUpperLeftX + canvasEdge && this.dx < 0)
 				{
 					currentUpperLeftX = currentUpperLeftX - tileWidth;
 					Crafty.viewport.pan(tileWidth*-1, 0, panTime);
@@ -565,7 +565,7 @@ function loadPlayer() {
 					// Destroy assets in outer rightmost "ring" segment
 				}
 
-				if (this.y > currentUpperLeftY + tileHeight)
+				if (this.y > currentUpperLeftY + tileHeight && this.dy > 0)
 				{
 					currentUpperLeftY = currentUpperLeftY + tileHeight;
 					Crafty.viewport.pan(0, tileHeight, panTime);
@@ -578,7 +578,7 @@ function loadPlayer() {
 					dynamicPostRequest('/pullbottom',payload,dynamicPostOnLoad,dynamicError);
 					// Destroy assets in outer top-most "ring" segment
 				}
-				else if (this.y < currentUpperLeftY + canvasEdge)
+				else if (this.y < currentUpperLeftY + canvasEdge && this.dy < 0)
 				{
 					currentUpperLeftY = currentUpperLeftY - tileHeight;
 					Crafty.viewport.pan(0, tileHeight*-1, panTime);
