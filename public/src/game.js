@@ -46,6 +46,7 @@ var playerSpawnDelay = 1000; // ms to wait before spawning player on first world
 var titleTextColor = '#373854';
 var selectedButtonColor = '#99CCFF';
 var panTime = 500; // ms
+var panTime = 500; // ms
 
 //MARK ADDED DATA STRUCTURE THAT OUTLINES THE ENVIRONMENT TILES LOADED
 const initPullPairs = { "-2,-2":{"x":-2,"y":-2},
@@ -494,8 +495,28 @@ function loadPlayer() {
 				if (e.key == Crafty.keys.Q) {
 					// quit to home screen
 					// ### server cleanup stuff here?
-					doQuitToHomeScreen(); // tool.js cleanup
-					Crafty.enterScene('HomeScreen');
+					
+					// hard stop player motion and wait
+					// to make sure no assetRender calls are in progress
+					// when the quit continues
+					player.removeComponent('Gravity');
+					player.removeComponent('Multiway');
+					player.removeComponent('Motion');
+					player.removeComponent('Jumper');
+					Crafty.e('Delay').delay(function(){
+						if (debugging) {
+							console.log("Waited.");
+						}
+						// crafty globals cleanup
+						currentUpperLeftX = 0;
+						currentUpperLeftY = 0;
+						currentPlayerX = 0;
+						currentPlayerY = 0;
+						// tool.js cleanup
+						doQuitToHomeScreen();
+						// switch scenes
+						Crafty.enterScene('HomeScreen');
+					}, exitDelay, 0);
 				}
 				if (e.key == Crafty.keys.T) {
 					// drop a teleportation marker
