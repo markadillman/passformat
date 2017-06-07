@@ -551,7 +551,7 @@ function loadPlayer() {
 					dynamicPostRequest('/pullright',payload,dynamicPostOnLoad,dynamicError);
 					// Destroy assets in outer leftmost "ring" segment
 				}
-				else if (this.x < currentUpperLeftX)
+				else if (this.x < currentUpperLeftX + canvasEdge)
 				{
 					currentUpperLeftX = currentUpperLeftX - tileWidth;
 					Crafty.viewport.pan(tileWidth*-1, 0, panTime);
@@ -578,7 +578,7 @@ function loadPlayer() {
 					dynamicPostRequest('/pullbottom',payload,dynamicPostOnLoad,dynamicError);
 					// Destroy assets in outer top-most "ring" segment
 				}
-				else if (this.y < currentUpperLeftY)
+				else if (this.y < currentUpperLeftY + canvasEdge)
 				{
 					currentUpperLeftY = currentUpperLeftY - tileHeight;
 					Crafty.viewport.pan(0, tileHeight*-1, panTime);
