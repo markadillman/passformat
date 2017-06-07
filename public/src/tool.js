@@ -1532,7 +1532,7 @@ function initSVG(evt) {
 	canvas.addEventListener("wheel", scrollWheel);
 
 	// load data from the server
-	svgLoadFromServer(xTile, yTile, password);
+	svgLoadFromServer(xTile, yTile);
 	
 	// debug message
 	if (debugging) {
@@ -2302,8 +2302,10 @@ function svgPullCallback(request){
 			var properParseText = request.responseText.substring(1);
 			//trim close square bracket
 			properParseText = properParseText.substring(0,properParseText.length-1);
-			console.log("this being parsed:");
-			console.log(properParseText);
+			if (verboseDebugging) {
+				console.log("this being parsed:");
+				console.log(properParseText);
+			}
 			body = JSON.parse(properParseText);
 			if (verboseDebugging){
 				console.log("raw request in pull callback:");
