@@ -141,7 +141,7 @@ function parseKeyHTML(evt) {
 	//console.log(keyID);
 
 	// handle toggling help screen no matter what mode
-	if (keyID == 72) { // h key
+	if (keyID == 72 && messageDiv.style.display != "block") { // h key
 		if (debugging) {
 			console.log("HTML document caught an h keypress.");
 		}
