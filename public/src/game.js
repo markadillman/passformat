@@ -374,7 +374,7 @@ Game =
 			});
 			
 			// load world art using global tile coords from tool.js
-			initAssetRequest(xTile, yTile);
+			initAssetRequest(xTile, yTile, socket);
 			// this will now call the code to load platforms and player, too
 				
 			//BEGIN CODE ADDED BY MARK
