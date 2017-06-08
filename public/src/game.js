@@ -937,7 +937,7 @@ function loadPlayer(argsocket) {
 	onload will render the environment into the correct coordinates. Must pass
 	the data structure key as an arg to the callback ("top pull", etc.)
 */
-function dynamicPostRequest(url,payload,onload,error){
+function dynamicPostRequest(url,payload,onload,error,args){
 	if (verboseDebugging) {
 		console.log("Dynamic post payload:");
 		console.log(payload);
@@ -949,7 +949,12 @@ function dynamicPostRequest(url,payload,onload,error){
 	request.onload = function(){
 		if (request.readyState === 4){
 			if (request.status === 200 || request.status === 242) {
-				onload(request);
+				if (args){
+					onload(request,args);
+				}
+				else {
+					onload(request);
+				}
 			} else {
 				console.error(request.statusText);
 				error(request);
