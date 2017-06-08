@@ -466,7 +466,7 @@ function loadPlatforms() {
 }
 
 // loadPlayer code moved here
-function loadPlayer() {
+function loadPlayer(argsocket) {
 	// Toni added code to set player position
 	var xCoord;
 	var yCoord;
@@ -963,7 +963,7 @@ function dynamicPostRequest(url,payload,onload,error){
 }
 
 //this will render assets formatted as a returned query from the server
-function assetRender(assets){
+function assetRender(assets,argsocket){
 	for (asset in assets){
 		//SVG tags added so that it can be a standalone, valid XML file for URL
 		var myGroupString = svgPrefix + assets[asset]['svg'] + svgPostfix;
@@ -1023,7 +1023,7 @@ function assetRender(assets){
 			if (debugging) {
 				console.log("Waited.");
 			}
-			loadPlayer();
+			loadPlayer(argsocket);
 		}, playerSpawnDelay, 0);
 	}
 	// end Toni's code
@@ -1050,7 +1050,7 @@ function dynamicError(request){
 	console.error(request.statusText);
 }
 
-function initAssetRequest(playerX,playerY){
+function initAssetRequest(playerX,playerY,argsocket){
 	//update player tile (if teleport, this should be called post teleport coords)
 	var playerTileX = Math.floor(playerX/tileWidth);
 	var playerTileY= Math.floor(playerY/tileHeight);
@@ -1061,7 +1061,7 @@ function initAssetRequest(playerX,playerY){
 		console.log("Init request center tile:");
 		console.log(body);
 	}
-	dynamicPostRequest('/initpull',body,initAssetRender,dynamicError);
+	dynamicPostRequest('/initpull',body,initAssetRender,dynamicError,argsocket);
 }
 
 function initAssetRender(request){
