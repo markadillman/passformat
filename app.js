@@ -795,7 +795,7 @@ app.post('/getavatar',function(req,res){
 		console.log("connected succesfully to server");
 		//perform lookup
 		//REFACTOR can be adapted from findDocument
-		var collection = db.collection('avatars');
+		var avatarss = db.collection('avatars');
 		//this will return ALL. In future, may want to paginate.
 		db.avatars.find().toArray(function(err,docs){
 			//MAYBE CLIP THE ARRAY BRACKETS HERE
@@ -812,7 +812,7 @@ app.post('/saveavatar',function(req,res){
 		assert.equal(null,err);
 		console.log("connected succesfully to server");
 		//add to database
-		var collection = db.collection('avatars');
+		var avatars = db.collection('avatars');
 		//this will return ALL. In future, may want to paginate.
 		console.log("About to insert:");
 		console.log(query);
