@@ -550,10 +550,13 @@ function loadPlayer(argsocket) {
 							   Math.floor(currentUpperLeftY / tileHeight));
 				}
 				if (e.key == Crafty.keys.Q) {
+					if (verboseDebugging) {
+						console.log("Q been pressed.");
+					}
 					// quit to home screen
 					// ### server cleanup stuff here?
 					//MARK ADDED
-					argsocket.emit('my disconnect',{});
+					argsocket.emit('my disconnect',{id:socketId});
 					
 					// hard stop player motion and wait
 					// to make sure no assetRender calls are in progress
