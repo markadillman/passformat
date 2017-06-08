@@ -686,7 +686,7 @@ function loadPlayer(argsocket) {
 	    			}
 	    			//delete crafty entity
 	    			var deathmarkedEntity = Crafty(key);
-	    			console.log("deathmarked:");
+	    			console.log("pay attention:");
 	    			console.log(deathmarkedEntity);
 	    			deathmarkedEntity.destroy();
 	    		}
