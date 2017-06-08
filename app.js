@@ -797,7 +797,7 @@ app.post('/getavatar',function(req,res){
 		//REFACTOR can be adapted from findDocument
 		var collection = db.collection('avatars');
 		//this will return ALL. In future, may want to paginate.
-		collection.find().toArray(function(err,docs){
+		db.avatars.find().toArray(function(err,docs){
 			//MAYBE CLIP THE ARRAY BRACKETS HERE
 			res.status(200).send(JSON.stringify(docs));
 		});
@@ -816,13 +816,15 @@ app.post('/saveavatar',function(req,res){
 		//this will return ALL. In future, may want to paginate.
 		console.log("About to insert:");
 		console.log(query);
-		collection.insert(query,function(err,result){
+		db.avatars.insert(query,function(err,result){
 			if (err === null){
 				console.log("Inserted avatar into database");
 				console.log(result);
+				res.status(200).send("avatar entered into database");
 			}
 			else {
 				console.log(err);
+				res.status(553).send("avatar submission broken.");
 			}
 		});
 	});
