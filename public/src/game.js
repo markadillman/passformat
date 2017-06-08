@@ -48,6 +48,17 @@ var titleTextColor = '#373854';
 var selectedButtonColor = '#99CCFF';
 var panTime = 500; // ms
 
+//BEGIN CODE ADDED BY MARK
+
+//global value holder for socket.io socket and socketId
+var socket;
+var socketId;
+var playerGlob;
+//global constant to determine number of logical frames per network frame
+const netFrameRate = 50;
+var playerPositionMap = {};
+//END CODE ADDED BY MARK
+
 //MARK ADDED DATA STRUCTURE THAT OUTLINES THE ENVIRONMENT TILES LOADED
 const initPullPairs = { "-2,-2":{"x":-2,"y":-2},
 						"-2,-1":{"x":-2,"y":-1},
