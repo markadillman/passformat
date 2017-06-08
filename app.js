@@ -816,7 +816,7 @@ app.post('/saveavatar',function(req,res){
 		//this will return ALL. In future, may want to paginate.
 		console.log("About to insert:");
 		console.log(query);
-		collection.insert(query,query,{upsert:true},function(err,result){
+		collection.insert(query,function(err,result){
 			if (err === null){
 				console.log("Inserted avatar into database");
 				console.log(result);
