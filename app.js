@@ -795,7 +795,7 @@ app.post('/getavatar',function(req,res){
 	});
 });
 
-app.post('saveavatar',function(req,res){
+app.post('/saveavatar',function(req,res){
 	var query = {};
 	query.svg = req.body.svg;
 	MongoClient.connect(dbUrl,function(err,db){
