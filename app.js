@@ -135,6 +135,8 @@ socketUniversal.on('connection',function(socket){
 		}
 	});
 	socket.on('disconnect',function(){
+		console.log("disconnected:");
+		console.log(socket.id.toString());
 		delete playerPositionMap[socket.id.toString()];
 		delete playerAvatarMap[socket.id.toString()];
 		console.log(util.inspect(playerPositionMap));
