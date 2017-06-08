@@ -43,9 +43,9 @@ var avatarMultiplier = 5.8; // factor between avatar size and size of oval in dr
 var playerSpawnX = canvasEdge + 365;	// spawn in hole in tree
 var playerSpawnY = canvasEdge + 75;
 var playerSpawnDelay = 1000; // ms to wait before spawning player on first world entry
+var exitDelay = 500; // ms to wait before exiting to make sure no assetRender calls in progress
 var titleTextColor = '#373854';
 var selectedButtonColor = '#99CCFF';
-var panTime = 500; // ms
 var panTime = 500; // ms
 
 //MARK ADDED DATA STRUCTURE THAT OUTLINES THE ENVIRONMENT TILES LOADED
