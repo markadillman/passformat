@@ -557,6 +557,13 @@ function loadPlayer(argsocket) {
 					// ### server cleanup stuff here?
 					//MARK ADDED
 					argsocket.emit('my disconnect',{id:socketId});
+					//clear player position map
+					for (key in playerPositionMap){
+						if (verboseDebugging){
+							console.log("deleted.");
+						}
+						delete playerPositionMap[key];
+					}
 					
 					// hard stop player motion and wait
 					// to make sure no assetRender calls are in progress
