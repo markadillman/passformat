@@ -684,7 +684,7 @@ function loadPlayer(argsocket) {
 	    				console.log("KEYS HERE");
 	    				console.log(targetKey);
 	    				console.log("Crafty ID");
-	    				console.log(playerPositionMap[])
+	    				console.log(playerPositionMap);
 	    			}
 	    			//delete crafty entity
 	    			var deathmarkedEntity = Crafty(playerPositionMap[targetKey]);
