@@ -77,6 +77,64 @@ const pullSets = {	"top pull" : {0:{"x":-2,"y":-3},1:{"x":-1,"y":-3},2:{"x":0,"y
 					"right pull" : {0:{"x":3,"y":-2},1:{"x":3,"y":-1},2:{"x":3,"y":0},3:{"x":3,"y":1},4:{"x":3,"y":2}}
 				};
 
+//socket.io on connect event code
+socketUniversal.on('connection',function(socket){
+	console.log('socketio connection made');
+	socket.emit('assign id',{id : socket.id});
+	socket.on('init position',function(data){
+		//add player to list of active players
+		console.log(util.inspect(data));
+		//put in position map
+		playerPositionMap[socket.id.toString()] = {x:data.x,y:data.y};
+		console.log("Player added to position map.");
+		console.log(util.inspect(playerPositionMap));
+		//put in avatar map
+		playerAvatarMap[socket.id.toString()] = data.avatar;
+		//broadcast new player to other active players
+		socketUniversal.emit('new player',{x:data.x,y:data.y,id:socket.id,avatar:data.avatar});
+	});
+	socket.on('changeCoords',function(data){
+		//console.log(data);
+		//if the player is in the player position map, update it
+		if (!(playerPositionMap[data.id] === undefined))
+			{
+				playerPositionMap[data.id]['x'] = data.x;
+				playerPositionMap[data.id]['y'] = data.y;
+			}
+			//else if there is anything in data, add that person back to player
+			//position map. This is meant to be a recovery from unsteady states
+			//like wifi loss, etc. without page reload. Can be improved, probably.
+		else {
+			if ((!(data.id === undefined)) && (!(data.id === null)) &&
+				(!(data.x === undefined)) && (!(data.x === null)) &&
+				(!(data.y === undefined)) && (!(data.y === null)))
+			{
+				playerPositionMap[socket.id.toString()] = {x:data.x,y:data.y};
+			}
+			//else do nothing because the payload is total junk
+		}
+	});
+	socket.on('disconnect',function(){
+		delete playerPositionMap[socket.id.toString()];
+		delete playerPositionMap[socket.id.toString()];
+		console.log(util.inspect(playerPositionMap));
+		socketUniversal.emit('player logoff',{id:socket.id});
+	})
+	socket.on('position request',function(data){
+		console.log("position request payload");
+		console.log(util.inspect(playerPositionMap));
+		socket.emit('position response',playerPositionMap);
+	});
+	socket.on('avatar lookup',function(data){
+		console.log("avatar lookup stuff");
+		console.log(util.inspect(data));
+		var avatarString = playerAvatarMap[data.id];
+		console.log("found avatar:");
+		console.log(avatarString);
+		socket.emit('avatar lookup response',{avatar:avatarString,id:data.id})
+	});
+});
+
 //HELPER FUNCTION FOR SVG VALIDITY
 function isValidSvg(svgString){
 	//parse and see if there are any errors

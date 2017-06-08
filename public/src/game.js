@@ -122,7 +122,29 @@ const ovalAvatarImg = "<!--FROM THE BLANK--><svg xmlns=\"http://www.w3.org/2000/
 		"style=\"fill: #000000; stroke: #000000; stroke-width: 5\"/></g>" +
 		"<g xmlns=\"http://www.w3.org/2000/svg\" id=\"platformsGroup\" " +
 		"style=\"visibility: hidden\"/></svg>"
-		
+
+//this will load socket.io from CDN
+function loadScript(url, callback)
+{
+    // Adding the script tag to the head as suggested before
+    var head = document.getElementsByTagName('head')[0];
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = url;
+
+    // Then bind the event to the callback function.
+    // There are several events for cross browser compatibility.
+    script.onreadystatechange = callback;
+    script.onload = callback;
+
+    // Fire the loading
+    head.appendChild(script);
+
+    //create the socket io and assign to global variable
+    //BEGIN CODE ADDED BY MARK
+	//create socket.io connection DIFFERENT ON LOCAL AND SERVER. ADJUST.
+}
+	
 Game =
 {
 	start: function()
@@ -342,11 +364,39 @@ Game =
 			// start Toni's code
 			// set playing flag from tool.js
 			playing = true;
+
+			//initialize a new socketio
+			socket = io('http://192.168.2.50:8080');
+			socket.on('assign id', function(data){
+				socketId = data.id;
+				console.log("GOT SOCKET ID:");
+				console.log(data.id);
+			});
 			
 			// load world art using global tile coords from tool.js
 			initAssetRequest(xTile, yTile);
 			// this will now call the code to load platforms and player, too
 				
+			//BEGIN CODE ADDED BY MARK
+	    	//this will trigger the player to call the function that adds to list of known players
+	    	socket.on('new player',function(data){
+	        	//actual event trigger
+	       		playerGlob.trigger('NewPlayer',data);
+	    	});
+	    	//this will trigger when server responds with updated positions
+	    	socket.on('position response',function(data){
+	       		//actual event trigger
+	       		playerGlob.trigger('UpdateMap',data);
+	    	});
+	    	//this will trigger when a player logs off
+	    	socket.on('player logoff',function(data){
+	       		//actual event trigger
+	       		playerGlob.trigger('OtherPlayerLogoff',data);
+	    	});
+	    	socket.on('avatar lookup response',function(data){
+	    		playerGlob.trigger('AvatarSet',data);
+	    	})
+	    	//END CODE ADDED BY MARK	
 		}, function() {
 			// start Toni's code
 			// adding an uninit function
@@ -541,7 +591,183 @@ function loadPlayer() {
 			}
 			// end Toni's code
 		})
-		
+		//ADDED BY MARK, this code will be triggered once player is in world
+	    .bind('SceneLoaded',function(eventData){
+			//function to handle the initial admission to the player pool
+			if (!(eventData === null)){
+				if (verboseDebugging)
+				{
+					console.log("in scene loaded event. Event data:");
+					console.log(eventData);
+					console.log("Socket info");
+					console.log(argsocket);
+				}
+				argsocket.emit('init position',{x : eventData.x , y : eventData.y, avatar: eventData.avatar});
+			}
+	    })
+	    .bind('NewPlayer',function(eventData){
+	      	if (!(eventData.id === socketId)){
+	      		if (verboseDebugging){
+	      			console.log("New player triggered");
+	      			console.log(eventData);
+	      		}
+	      		//this function will either create a different colored rectangle or, in the future,
+	      		//load the player's avatar into memory and start rendering it over their hitbox
+	      		var otherPlayer = Crafty.e('2D, Canvas, Color, Twoway, Gravity')
+	      			// Initial position and size
+	      			.attr({x: eventData.x, y: eventData.y, w: 10, h: 50})
+	      			// Color of sprite (to be replaced)
+	      			//.color('#F41')
+	      			//.twoway(200)
+	      			// Set platforms to stop falling other player
+	      			//.gravity('Platform')
+	      			//.gravityConst(600);
+	      			//AVATAR STUFF
+	      			// generate a URL based on player's avatar
+					var otherAvatarString = eventData.avatar; // just in case the server ones need it
+					var blobSvg = new Blob([otherAvatarString],{type:"image/svg+xml;charset=utf-8"});
+					var domURL = self.URL || self.webkitURL || self;
+					var url = domURL.createObjectURL(blobSvg);
+					// put this into the player as its sprite
+					// reference my displayAvatarInCarousel function above
+					var otherSprite = Crafty.sprite(url, {playerSprite: [210, 0, 390, canvasHeight]});
+					otherPlayer.addComponent('playerSprite');
+					otherPlayer.w = 390/avatarMultiplier;
+					otherPlayer.h = canvasHeight/avatarMultiplier;
+
+
+	      		//add a field that ties this player to an id
+	      		otherPlayer.friendId = eventData.id;
+	      		//set the Crafty id as a field
+	      		otherPlayer.craftyId = otherPlayer.getId();
+	      		//add this to player position map
+	      		playerPositionMap[otherPlayer.friendId] = otherPlayer.craftyId;
+	      		if (verboseDebugging)
+	      		{
+	      			console.log("OTHER PLAYER");
+	      			console.log(otherPlayer);
+	      			console.log("MAP ON NEW LOGIN.");
+	      			console.log(playerPositionMap);
+	      		}
+	      	}
+	      	else {
+	      		if (verboseDebugging)
+	      		{
+	      			console.log("id's equal");
+	      		}
+	      	}
+	    })
+		//this removes a recently logged off player from the position map
+	    .bind('OtherPlayerLogoff',function(eventData){
+	    	delete playerPositionMap[eventData.id];
+	      	console.log("Player position map post logoff");
+	      	console.log(playerPositionMap);
+	    })
+	    //update the position map with new data. Event data is complete wherabouts of active players keyed by id
+	    .bind('UpdateMap',function(eventData){
+	      	if (verboseDebugging)
+	      	{
+	      		console.log("event data");
+	      		console.log(eventData);
+	      	}
+	      	//for each player, update position if entity exists
+	      	for (key in eventData){
+	      		if (verboseDebugging)
+	      		{
+	      			console.log("player position map");
+	      			console.log(playerPositionMap);
+	      			console.log("socket id");
+	      			console.log(socketId);
+	      		}
+	      		//if the ID is not in the current mapping data structure and if map structure aint empty
+	      		if (playerPositionMap[key] === undefined && !(key === socketId)){
+	      			if (verboseDebugging)
+	      			{
+	      				console.log("SEARCH FOR THIS!");
+	      				console.log("SHOULDNT BE HERE WITHOUT ANOTHER PLAYER");
+	      			}
+	      			//query for the avatar
+	      			if (verboseDebugging){
+	      				console.log("Yo who dis guy already");
+	      				console.log(key);
+	      			}
+	      				//this function will either create a different colored rectangle or, in the future,
+	      				//load the player's avatar into memory and start rendering it over their hitbox
+	      				var oldPlayer = Crafty.e('2D, Canvas, Color, Twoway, Gravity')
+	      				// Initial position and size
+	      				.attr({x: eventData[key]['x'], y: eventData[key]['y'], w: 10, h: 50})
+	      				// Color of sprite (to be replaced)
+	      				//.color('#F41')
+	      				//.twoway(200) //EXPERIMENTAL EDIT
+	      				// Set platforms to stop falling other player
+	      				//.gravity('Platform')
+	      				//.gravityConst(600);
+	      			//add a field that ties this player to an id
+	      			oldPlayer.friendId = key;
+	      			//set the Crafty id as a field
+	      			oldPlayer.craftyId = oldPlayer.getId();
+	      			//add this to player position map
+	      			playerPositionMap[oldPlayer.friendId] = oldPlayer.craftyId;	
+	      			argsocket.emit('avatar lookup',{id:key});
+	      		}
+	      		//if player is pre-existing player that does not have an avatar, make one
+	      		else {
+	      			//KEEP BELOW HERE AFTER PASTE
+	      			if (verboseDebugging)
+	      			{
+	      				console.log("SHOULD BE HERE NOW");
+	      				console.log(playerPositionMap[key]);
+	      			}
+	      			//look up crafty entity for this player
+	      			var targetPlayer = Crafty(playerPositionMap[key]);
+	      			targetPlayer.x = eventData[key]['x'];
+	      			targetPlayer.y = eventData[key]['y'];
+	      			if (verboseDebugging)
+	      			{
+	      				console.log(playerPositionMap);	
+	      			}
+	      		}
+	      	}
+	    })
+		//callback to add avatar to another player when it is retrieved
+		//data will be {id,avatar} both as strings
+		.bind("AvatarSet",function(eventData){
+			if (verboseDebugging){
+				console.log("Avatar set event data");
+				console.log(eventData);
+			}
+			var targetPlayer = Crafty(playerPositionMap[eventData.id]);
+			//AVATAR STUFF
+	      	// generate a URL based on player's avatar
+			var otherAvatarString = eventData.avatar; // just in case the server ones need it
+			var blobSvg = new Blob([otherAvatarString],{type:"image/svg+xml;charset=utf-8"});
+			var domURL = self.URL || self.webkitURL || self;
+			var url = domURL.createObjectURL(blobSvg);
+			// put this into the player as its sprite
+			// reference my displayAvatarInCarousel function above
+			var otherSprite = Crafty.sprite(url, {playerSprite: [210, 0, 390, canvasHeight]});
+			targetPlayer.addComponent('playerSprite');
+			targetPlayer.w = 390/avatarMultiplier;
+			targetPlayer.h = canvasHeight/avatarMultiplier;
+		})
+	    //update with new coordinates every second (50 fps) MARK ADDED code to make this only active
+	    //in play mode
+	    .bind("EnterFrame",function(eventData){
+	      	if (eventData.frame % netFrameRate === 0){
+	      		if (mode === gameMode && playing === true){
+	      			//DEBUG
+	      			//console.clear();
+	      			if (verboseDebugging)
+	      			{
+	      				console.log("player position map");
+	      				console.log(playerPositionMap);
+	      			}
+	      			//END DEBUG
+	      			argsocket.emit('changeCoords', {x : this.x , y : this.y , id : socketId});
+	      			argsocket.emit('position request');
+	      		}
+	      	}
+	    })
 		// Move camera when player leaves current tile
 		.bind('Moved', function()
 			{
@@ -683,6 +909,24 @@ function loadPlayer() {
 	if (debugging) {
 		console.log("Loaded player.");
 	}
+
+	//ADDED BY MARK 6-6 bind to global variable
+	playerGlob = player;
+	//here is where the avatar is packaged and submitted to the server
+
+	if (verboseDebugging){
+		console.log("sprite structure");
+		console.log(playerGlob)
+	}
+	//END CODE ADDED BY MARK
+
+	// debug message
+	if (debugging) {
+		console.log("Loaded player.");
+	}
+
+	//trigger the player creation event
+	player.trigger('SceneLoaded',{x:player.x,y:player.y,id:socketId,socket:argsocket,avatar:myString});
 }
 
 /*start Mark's code, helper functions to fetch rows of 5 assets:
