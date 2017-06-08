@@ -559,6 +559,8 @@ function loadPlayer(argsocket) {
 					player.removeComponent('Multiway');
 					player.removeComponent('Motion');
 					player.removeComponent('Jumper');
+					//MARK ADDED
+					argsocket.emit('disconnect',{});
 					Crafty.e('Delay').delay(function(){
 						if (debugging) {
 							console.log("Waited.");
