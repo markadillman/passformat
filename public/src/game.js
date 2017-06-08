@@ -1080,7 +1080,7 @@ function initAssetRequest(playerX,playerY,argsocket){
 	dynamicPostRequest('/initpull',body,initAssetRender,dynamicError,argsocket);
 }
 
-function initAssetRender(request){
+function initAssetRender(request,argsocket){
 	//parse the response body and render it
 	var body = JSON.parse(request.responseText);
 	if (verboseDebugging) {
@@ -1088,7 +1088,7 @@ function initAssetRender(request){
 		console.log(body);
 	}
 	//render new assets in respective tiles
-	assetRender(body);
+	assetRender(body,argsocket);
 }
 // end Mark's code
 
