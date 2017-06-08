@@ -858,14 +858,19 @@ function submitAvatarButton() {
 	displayMessage("Your avatar has been stored.", doAvatarExit, doAvatarExit, false, true)
 }
 function submitTileButton () {
-	// make sure to toggle off platform editing mode if necessary
-	if (masking) {
-		changeMasking(false);
+	// check to make sure there is platform data
+	if (currentPlatform == 1) {
+		// no platforms, put up message and don't submit
+		displayMessage("You must draw at least one platform before submitting your art.", doNothing, doNothing, false, true);
+	} else { // at least 1 platform, so submit	
+		// make sure to toggle off platform editing mode if necessary
+		if (masking) {
+			changeMasking(false);
+		}
+		// ### Mark - why does this submit hiddenCanvas, especially without updating it first?
+		// and yet this seems to work... maybe I'm just tired and not following what's going on
+		svgSubmitToServer(document.getElementById('hiddenCanvas'));
 	}
-	
-	// ### Mark - why does this submit hiddenCanvas, especially without updating it first?
-	// and yet this seems to work... maybe I'm just tired and not following what's going on
-	svgSubmitToServer(document.getElementById('hiddenCanvas'));
 }
 function undoButton() {
 	svgUndoAction();
