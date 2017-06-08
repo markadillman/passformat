@@ -7,15 +7,34 @@ var bodyParser = require('body-parser');
 var styles = require('stylus');
 var SVG = require('svg.js');
 var xmlParse = require('xml2js').parseString;
+var http = require('http');
 const util = require('util');
 var MongoClient = require('mongodb').MongoClient, assert = require('assert');
 //database url
 var dbUrl = 'mongodb://172.31.34.164:27017/test'
+var socketioPort = 8080;
 
 var index = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
+
+var server = http.createServer(app);
+var io = require('socket.io');
+server.listen(socketioPort);
+var socketUniversal = io.listen(server);
+//data structure for Namespace (room) of players to poll for position.
+//declaring here allows for prototyping at server initialization.
+function Player(x,y,id) {
+	this.x = x,
+	this.y = y,
+	this.id = id
+};
+//player position map keyed by player id
+var playerPositionMap = {};
+//player avatar map keyed by player id
+var playerAvatarMap = {};
+
 
 //make process trackable
 process.title = "ariesApp";
