@@ -814,11 +814,11 @@ app.post('/saveavatar',function(req,res){
 		//add to database
 		var collection = db.collection('avatars');
 		//this will return ALL. In future, may want to paginate.
-		console.log("About to insert:");
+		console.log("About to insert:");db.ti
 		console.log(query);
-		collection.update(query,query,{upsert:true},function(err,result){
+		collection.insert(query,query,{upsert:true},function(err,result){
 			if (err === null){
-				console.log("Inserted tile into database");
+				console.log("Inserted avatar into database");
 				console.log(result);
 			}
 			else {
