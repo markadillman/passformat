@@ -63,6 +63,16 @@ var msgBtnCancel;		// the message Cancel button
 var pageHeader;			// the h1 tag for the drawing tool
 var drawingHeader = "CREATE THE BLANK --- Add your art to the world! Don't forget to create platforms before you submit your tile.";
 var avatarHeader = "CREATE YOUR AVATAR --- Edit an existing avatar or draw a new one. For best results, draw to the oval's edges.";
+var mapHeader = "EXPLORE THE BLANK --- Use the arrow keys to pan. Click on a teleportation marker to go directly to that location.";
+var mapCanvasGridDiv;
+var mapGridWidth = 17;	// number of tiles the map can display at once
+var mapGridHeight = 13;
+var mapGrid = [];		// the 2D array of map grid canvases
+for (var i = 0; i < mapGridWidth; i += 1) {
+	mapGrid[i] = [];	// mapGrid[0][1] is the second canvas down in the first column
+}
+var mapCurrentCenterX = 0;	// tile the map is currently centered on
+var mapCurrentCenterY = 0;
 var avatarEllipse;		// the ellipse border for the avatar drawing area
 var toolDiv;			// the div for the entire drawing tool
 var displayDiv;			// the display divs
@@ -140,9 +150,13 @@ function parseKeyHTML(evt) {
 	var keyID = evt.keyCode;
 	//console.log(keyID);
 
+	// handle quitting to menu via q no matter what mode
+	// means moving the code from game.js to here
+	// ### really should switch to this but we have higher priorities right now
+	
 	// handle toggling help screen no matter what mode
 	if (keyID == 72 && messageDiv.style.display != "block") { // h key
-		if (debugging) {
+		if (verboseDebugging) {
 			console.log("HTML document caught an h keypress.");
 		}
 		// toggle help screen mode
@@ -154,49 +168,105 @@ function parseKeyHTML(evt) {
 	}
 
 	// handle music player controls no matter what mode
-	if (keyID == 79 && !musicPaused) { // o key
+	if (keyID == 79 && !musicPaused && messageDiv.style.display != "block") { // o key
+		if (verboseDebugging) {
+			console.log("HTML document caught an o keypress.");
+		}
 		// skip over current track if not paused
 		playNextTrack();
 	}
-	if (keyID == 80) { // p key
+	if (keyID == 80 && messageDiv.style.display != "block") { // p key
+		if (verboseDebugging) {
+			console.log("HTML document caught a p keypress.");
+		}
 		// toggle music being paused
 		toggleMusicPause();
 	}
+	
+	// handle going into map mode only if in game mode and playing
+	if (mode == gameMode && playing) {
+		if (keyID == 77) { // m key
+			if (verboseDebugging) {
+				console.log("HTML document caught an m keypress.");
+			}
+			displayMapScreen(xTile, yTile); // centered on player's current tile
+		}
+	} else { // check to see if already in map mode and need to handle keys
+			// needed to do this so an m to enter map mode doesn't get caught
+			// again immediately in map mode!
+		// handle map panning and coming out of map mode only if in map mode
+		if (mode == mapMode) {
+			switch (keyID) {
+				case 37: // left arrow key
+					if (verboseDebugging) {
+						console.log("HTML document caught a left arrow keypress.");
+					}
+					doMapPanLeft();
+					break;
+				case 38: // up arrow key
+					if (verboseDebugging) {
+						console.log("HTML document caught an up arrow keypress.");
+					}
+					doMapPanUp();
+					break;
+				case 39: // right arrow key
+					if (verboseDebugging) {
+						console.log("HTML document caught a right arrow keypress.");
+					}
+					doMapPanRight();
+					break;
+				case 40: // down arrow key
+					if (verboseDebugging) {
+						console.log("HTML document caught a down arrow keypress.");
+					}
+					doMapPanDown();
+					break;
+				case 77: // m key
+					if (verboseDebugging) {
+						console.log("HTML document caught an m keypress.");
+					}
+					doMapScreenDone();
+					break;
+				default: // do nothing for other keys
+					break;
+			}
+		}
+	}
 
 	// only do anything else if not in game mode
-	if (mode != gameMode) {
+	if (mode != gameMode && mode != mapMode) {
 		switch (keyID) {
 			case 8: // backspace key
 				// stop the backwards navigation
 				evt.preventDefault();
 				// only do something if in platform mode
 				if (masking == true) {
-					if (debugging) {
+					if (verboseDebugging) {
 						console.log("HTML document caught a backspace keypress.");
 					}
 					svgRemoveSelectedPlatform(false);
 				} // else do nothing
 				break;
 			case 37: // left arrow key
-				if (debugging) {
+				if (verboseDebugging) {
 					console.log("HTML document caught a left arrow keypress.");
 				}
 				panLeftButton();
 				break;
 			case 38: // up arrow key
-				if (debugging) {
+				if (verboseDebugging) {
 					console.log("HTML document caught an up arrow keypress.");
 				}
 				panUpButton();
 				break;
 			case 39: // right arrow key
-				if (debugging) {
+				if (verboseDebugging) {
 					console.log("HTML document caught a right arrow keypress.");
 				}
 				panRightButton();
 				break;
 			case 40: // down arrow key
-				if (debugging) {
+				if (verboseDebugging) {
 					console.log("HTML document caught a down arrow keypress.");
 				}
 				panDownButton();
@@ -204,7 +274,7 @@ function parseKeyHTML(evt) {
 			case 46: // delete key
 				// only do something if in platform mode
 				if (masking == true) {
-					if (debugging) {
+					if (verboseDebugging) {
 						console.log("HTML document caught a delete keypress.");
 					}
 					svgRemoveSelectedPlatform(false);
@@ -212,7 +282,7 @@ function parseKeyHTML(evt) {
 				break;
 			case 89: // y key
 				if (evt.ctrlKey) { // only catch ctrl+y
-					if (debugging) {
+					if (verboseDebugging) {
 						console.log("HTML document caught a ctrl+y keypress.");
 					}
 					svgRedoAction();
@@ -220,7 +290,7 @@ function parseKeyHTML(evt) {
 				break;
 			case 90: // z key
 				if (evt.ctrlKey) { // only catch ctrl+z
-					if (debugging) {
+					if (verboseDebugging) {
 						console.log("HTML document caught a ctrl+z keypress.");
 					}
 					svgUndoAction();
@@ -364,13 +434,15 @@ function initHTML() {
 	
 	// check to make sure local storage is working and set it up if necessary
 	if (typeof(localStorage) != "undefined") {
-		if (localStorage.hello != "world") {
+		if (localStorage.hello != "world!") {
 			// local storage has not yet been set up for this browser, so do set up
 			localStorage.hello = "world";
 			localStorage.myAvatarCount = 0;
 			localStorage.myAvatars = JSON.stringify({});
 			localStorage.myTeleporterCount = 0;
 			localStorage.myTeleporters = JSON.stringify({});
+			localStorage.myMapData = JSON.stringify({empty: {}});
+			localStorage.myVisitData = JSON.stringify({0: {0: true}});
 			// debug message
 			if (debugging) {
 				console.log("Set up localStorage for the first time in this browser.");
@@ -398,8 +470,38 @@ function initHTML() {
 	// grab the game div
 	gameDiv = document.getElementById("gameDiv");
 
-	// grab and hide the map screen div
+	// grab, set up, and hide the map screen div
 	mapDiv = document.getElementById("mapDiv");
+	document.getElementById("mapModeHeader").innerHTML = mapHeader;
+	mapCanvasGridDiv = document.getElementById("mapCanvasGridDiv");
+	// make the canvases and put them in the div
+	var myCanvas;
+	var myDiv;
+	for (var i = 0; i < mapGridWidth; i += 1) { // map is this many tiles wide
+		for (var j = 0; j < mapGridHeight; j += 1) { // and this many high
+			// make the div for this spot and place it
+			myDiv = document.createElement("div");
+			myDiv.id = "mapdiv " + i.toString() + " " + j.toString();
+			myDiv.width = canvasWidth / 10;
+			myDiv.height = canvasHeight / 10;
+			myDiv.style.position = "absolute";
+			var leftVal = i * (canvasWidth / 10);
+			myDiv.style.left = leftVal.toString() + "px";
+			var topVal = j * (canvasHeight / 10);
+			myDiv.style.top = topVal.toString() + "px";
+			
+			// make the canvas for this spot, add it to this div and to mapGrid
+			myCanvas = document.createElement("canvas");
+			myCanvas.id = "mapcanv " + i.toString() + " " + j.toString();
+			myCanvas.width = canvasWidth / 10;
+			myCanvas.height = canvasHeight / 10;
+			myDiv.appendChild(myCanvas);
+			mapGrid[i][j] = myCanvas;
+			
+			// append the resulting div to the mapCanvasGridDiv
+			mapCanvasGridDiv.appendChild(myDiv);
+		}
+	}
 	mapDiv.style.display = "none";
 	
 	// create the hidden file input element
@@ -662,6 +764,147 @@ function changeTool(newTool) {
 	if (!isNaN(newTool)) {
 		svgSetTool(newTool);
 	}
+}
+
+// map screen functions
+function displayMapScreen(x, y) {
+	
+	// update map drawing to center on given tile
+	updateMap(x, y);
+	
+	// set the mode
+	previousMode = mode;
+	mode = mapMode;
+	
+	// display correct div
+	showDiv(mode);
+	
+	// debug message
+	if (debugging) {
+		console.log("Displayed map screen.");
+	}
+}
+function doMapScreenDone() {
+	
+	// set the mode back to previous
+	mode = previousMode;
+	previousMode = helpMode;
+	
+	// display correct div
+	showDiv(mode);
+	
+	// debug message
+	if (debugging) {
+		console.log("Hid map screen.");
+	}
+}
+function updateMap(x, y) {
+	// update the map drawing centered on tile x, y
+	// so 0, 0 will center the map on the world's origin tile
+	
+	// update global centerpoint vars
+	mapCurrentCenterX = x;
+	mapCurrentCenterY = y;
+	
+	// get center tile coords in the grid
+	var gridCenterX = Math.floor(mapGridWidth / 2);
+	var gridCenterY = Math.floor(mapGridHeight / 2);
+	
+	// prep for doing map operations
+	var worldX;
+	var worldY;
+	var storedMapData = JSON.parse(localStorage.myMapData);
+	var storedVisitData = JSON.parse(localStorage.myVisitData);
+	var myGroupStr;
+	var myContext;
+	
+	// loop through the mapGrid and decide what to do in each spot
+	for (var i = 0; i < mapGridWidth; i += 1) {
+		for (var j = 0; j < mapGridHeight; j += 1) {
+			
+			// figure out what world tile to look at
+			worldX = mapCurrentCenterX - gridCenterX + i;
+			worldY = mapCurrentCenterY - gridCenterY + j;
+			
+			// check to see if the object is ready for this coordinate
+			if (storedVisitData[worldX] == undefined) {
+				// define it so subsequent code can reference it
+				storedVisitData[worldX] = {};
+			}
+			
+			// determine if the player has been to this tile
+			if (storedVisitData[worldX][worldY] == true) {
+				// they have, so display this tile in the map
+				// using the version they have saved in localStorage
+				myGroupStr = storedMapData[worldX][worldY];
+				myContext = mapGrid[i][j].getContext("2d");
+				putGroupInCanvas(myGroupStr, myContext, 0, 0, canvasWidth, canvasHeight, 0, 0, canvasWidth/10, canvasHeight/10)
+				
+			} else { // they haven't been in this tile
+				// determine if this tile actually exists in the world or not
+				// ### Mark, I need help here, please
+				// ### need to replace "true" with a real test to see if world tile
+				// ### (worldX, worldY) currently exists in the database
+				if (true) { // this tile exists, so display grey box = "fog of war"
+					putColorInCanvas(mapGrid[i][j], 84, 84, 84, 255);
+					
+				} else { // this tile doesn't exist, so just display background color
+					// ### in a perfect world, I would have a helper function to
+					// convert the bgroundColor hex string to these ints
+					putColorInCanvas(mapGrid[i][j], 224, 251, 253, 255);
+				}
+			}
+		}
+	}
+	
+	// display clickable teleportation markers on the map
+	// ###
+	
+	// debug message
+	if (debugging) {
+		console.log("Updated map to center on tile: (" + x.toString() + ", " + y.toString() + ").");
+	}
+}
+function putColorInCanvas(myCanvas, myR, myG, myB, myA) {
+	// myA = 255 for full opacity
+	// create the given color block in given context
+	myContext = myCanvas.getContext("2d");
+	var colorBlock = myContext.createImageData(myCanvas.width, myCanvas.height);
+	for (var j = 0; j < colorBlock.data.length; j += 4) {
+		colorBlock.data[j+0] = myR;
+		colorBlock.data[j+1] = myG;
+		colorBlock.data[j+2] = myB;
+		colorBlock.data[j+3] = myA;
+	}
+	myContext.putImageData(colorBlock, 0, 0);
+}
+function doMapPanUp() {
+	if (debugging) {
+		console.log("Panned the map up.");
+	}
+	mapCurrentCenterY += 1;
+	updateMap(mapCurrentCenterX, mapCurrentCenterY);
+}
+function doMapPanDown() {
+	if (debugging) {
+		console.log("Panned the map down.");
+	}
+	mapCurrentCenterY -= 1;
+	updateMap(mapCurrentCenterX, mapCurrentCenterY);
+}
+function doMapPanLeft() {
+	if (debugging) {
+		console.log("Panned the map left.");
+	}
+	mapCurrentCenterX += 1;
+	updateMap(mapCurrentCenterX, mapCurrentCenterY);
+}
+function doMapPanRight() {
+	if (debugging) {
+		console.log("Panned the map right.");
+	}
+	mapCurrentCenterX -= 1;
+	updateMap(mapCurrentCenterX, mapCurrentCenterY);
 }
 
 // help screen functions
@@ -1416,8 +1659,8 @@ function updateCanvas() {
 }
 
 // helper functions to convert rgb integers into a hex color string
-function intToHexString(int) {
-	var hexString = int.toString(16);
+function intToHexString(myInt) {
+	var hexString = myInt.toString(16);
 	if (hexString.length < 2) {
 		hexString = "0" + hexString;
 	}

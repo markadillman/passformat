@@ -487,11 +487,6 @@ function loadPlayer() {
 					doTileEdit(Math.floor(currentUpperLeftX / tileWidth),
 							   Math.floor(currentUpperLeftY / tileHeight));
 				}
-				if (e.key == Crafty.keys.M) {
-					// ### switch to map mode
-					// remember to have map mode have a way to switch
-					// back on another M keypress
-				}
 				if (e.key == Crafty.keys.Q) {
 					// quit to home screen
 					// ### server cleanup stuff here?
@@ -559,6 +554,7 @@ function loadPlayer() {
 				xTile = Math.floor(currentUpperLeftX / tileWidth);
 				yTile = Math.floor(currentUpperLeftY / tileHeight);
 				var payload = {'x' : xTile, 'y': yTile};
+				var tempObject;
 				if (this.x > currentUpperLeftX + screenWidth)
 				{
 					currentUpperLeftX = currentUpperLeftX + tileWidth;
@@ -567,6 +563,19 @@ function loadPlayer() {
 					// Toni added update of tile coords
 					xTile = Math.floor(currentUpperLeftX / tileWidth);
 					yTile = Math.floor(currentUpperLeftY / tileHeight);
+					
+					// Toni added making sure this tile is marked as visited
+					// get current visited data from localStorage
+					tempObject = JSON.parse(localStorage.myVisitData);
+					// check to see if the object is ready for this coordinate
+					if (tempObject[xTile] == undefined) {
+						// define it so the assignment doesn't barf
+						tempObject[xTile] = {};
+					}
+					// set the flag for this tile to visited
+					tempObject[xTile][yTile] = true;
+					// send the updated object back to localStorage
+					localStorage.myVisitData = JSON.stringify(tempObject);
 
 					// Load assets in outer rightmost "ring" segment
 					dynamicPostRequest('/pullright',payload,dynamicPostOnLoad,dynamicError);
@@ -580,6 +589,19 @@ function loadPlayer() {
 					// Toni added update of tile coords
 					xTile = Math.floor(currentUpperLeftX / tileWidth);
 					yTile = Math.floor(currentUpperLeftY / tileHeight);
+					
+					// Toni added making sure this tile is marked as visited
+					// get current visited data from localStorage
+					tempObject = JSON.parse(localStorage.myVisitData);
+					// check to see if the object is ready for this coordinate
+					if (tempObject[xTile] == undefined) {
+						// define it so the assignment doesn't barf
+						tempObject[xTile] = {};
+					}
+					// set the flag for this tile to visited
+					tempObject[xTile][yTile] = true;
+					// send the updated object back to localStorage
+					localStorage.myVisitData = JSON.stringify(tempObject);
 
 					// Load assets in outer leftmost "ring" segment
 					dynamicPostRequest('/pullleft',payload,dynamicPostOnLoad,dynamicError);
@@ -594,6 +616,19 @@ function loadPlayer() {
 					// Toni added update of tile coords
 					xTile = Math.floor(currentUpperLeftX / tileWidth);
 					yTile = Math.floor(currentUpperLeftY / tileHeight);
+					
+					// Toni added making sure this tile is marked as visited
+					// get current visited data from localStorage
+					tempObject = JSON.parse(localStorage.myVisitData);
+					// check to see if the object is ready for this coordinate
+					if (tempObject[xTile] == undefined) {
+						// define it so the assignment doesn't barf
+						tempObject[xTile] = {};
+					}
+					// set the flag for this tile to visited
+					tempObject[xTile][yTile] = true;
+					// send the updated object back to localStorage
+					localStorage.myVisitData = JSON.stringify(tempObject);
 
 					// Load assets in outer bottom-most "ring" segment
 					dynamicPostRequest('/pullbottom',payload,dynamicPostOnLoad,dynamicError);
@@ -607,6 +642,19 @@ function loadPlayer() {
 					// Toni added update of tile coords
 					xTile = Math.floor(currentUpperLeftX / tileWidth);
 					yTile = Math.floor(currentUpperLeftY / tileHeight);
+					
+					// Toni added making sure this tile is marked as visited
+					// get current visited data from localStorage
+					tempObject = JSON.parse(localStorage.myVisitData);
+					// check to see if the object is ready for this coordinate
+					if (tempObject[xTile] == undefined) {
+						// define it so the assignment doesn't barf
+						tempObject[xTile] = {};
+					}
+					// set the flag for this tile to visited
+					tempObject[xTile][yTile] = true;
+					// send the updated object back to localStorage
+					localStorage.myVisitData = JSON.stringify(tempObject);
 
 					// Load assets in outer top-most "ring" segment
 					dynamicPostRequest('/pulltop',payload,dynamicPostOnLoad,dynamicError);
@@ -706,6 +754,21 @@ function assetRender(assets){
 			console.log(blobSvg);
 		}
 		img.src = url;
+		
+		// start Toni's code
+		// put freshly fetched tile into local map storage
+		// get current map data from localStorage
+		var tempObject = JSON.parse(localStorage.myMapData);
+		// check to see if the object is ready for this coordinate
+		if (tempObject[assets[asset]['xcoord']] == undefined) {
+			// define it so subsequent code can reference it
+			tempObject[assets[asset]['xcoord']] = {};
+		}
+		// add/update the current asset at its coords in the object
+		tempObject[assets[asset]['xcoord']][assets[asset]['ycoord']] = assets[asset]['svg'];
+		// send updated object back to localStorage
+		localStorage.myMapData = JSON.stringify(tempObject);
+		// end Toni's code
 	}
 	// start Toni's code
 	// add the calls to update platforms and player here!
