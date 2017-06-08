@@ -1290,6 +1290,12 @@ function loadLibraryAvatarsToCarousel(myIndex) {
 	carouselStage.removeComponent('myImage');
 
 	// ### Mark - your code probably goes here.
+	// in the future, payload can help pagination. For now, it is blank.
+	postRequest('/getavatar',{},loadLibraryAvatarsToCarouselCallback,postOnError,myIndex);
+	// ### Tony – moved your code to the callback
+}
+
+function loadLibraryAvatarsToCarouselCallback(request,myIndex){
 	// need to fill carouselData array with results from server
 	// our default avatars should be the early indexed items, e.g. carouselData[0] is Mr Stick
 	// just load everything, or dynamically load in chunks sorta like the tile data?
@@ -1358,6 +1364,7 @@ function doSubmitAvatar() {
 	// actually send data of currently selected avatar to the server
 	// get data from carouselData[carouselIndex], will be a valid SVG string
 
+	//TONI: moved your code to callback
 	// hide message box div
 	messageDiv.style.display = "none";
 
@@ -1365,18 +1372,27 @@ function doSubmitAvatar() {
 	turnOnViewButtons();
 
 	// ### Mark - your code probably goes here.
-	
+	//build payload
+	var payload = {};
+	payload.svg = carouselData[carouselIndex];
+	postRequest('/saveavatar',payload,doSubmitAvatarCallback,postOnError);
+}
 
+function doSubmitAvatarCallback(request){
 	// confirmation message
 	turnOffViewButtons();
-	displayMessage("Your avatar has been submitted to the public library.", turnOnViewButtons,
-				   turnOnViewButtons, false, true);
-
-	// debug message
+	if (request.status === 200)
+	{displayMessage("Your avatar has been submitted to the public library.", turnOnViewButtons,
+					   turnOnViewButtons, false, true);}
+	else {
+		displayMissage("Something has gone wrong with your avatar save.",
+					   turnOnViewButtons,turnOnViewButtons,false,true);
+	}
 	if (debugging) {
 		console.log("Submited avatar to library.");
 	}
 }
+
 function myEditAvatarClick() {
 	// if in local / My Avatars mode, don't send info for "New" avatar
 	if (carouselContents == myAvatars) {

@@ -775,6 +775,48 @@ app.post('/pwset',function(req,res){
 	});
 });
 
+//AVATAR STUFF
+app.post('/getavatar',function(req,res){
+	MongoClient.connect(dbUrl,function(err,db){
+		//test for errors, pop out if there are errors present
+		assert.equal(null,err);
+		console.log("connected succesfully to server");
+		//perform lookup
+		//REFACTOR can be adapted from findDocument
+		var collection = db.collection('avatars');
+		//this will return ALL. In future, may want to paginate.
+		collection.find().toArray(function(err,docs){
+			//MAYBE CLIP THE ARRAY BRACKETS HERE
+			res.status(200).send(JSON.stringify(docs));
+		});
+	});
+});
+
+app.post('saveavatar',function(req,res){
+	var query = {};
+	query.svg = req.body.svg;
+	MongoClient.connect(dbUrl,function(err,db){
+		//test for errors, pop out if there are errors present
+		assert.equal(null,err);
+		console.log("connected succesfully to server");
+		//add to database
+		var collection = db.collection('avatars');
+		//this will return ALL. In future, may want to paginate.
+		console.log("About to insert:");
+		console.log(query);
+		collection.update(query,query,{upsert:true},function(err,result){
+			if (err === null){
+				console.log("Inserted tile into database");
+				console.log(result);
+			}
+			else {
+				console.log(err);
+			}
+		});
+	});
+});
+//END AVATAR STUFF
+
 //helper function updatePw filters database and changes applicable setFields 
 var updatePw = function(db,filter,setField,req,res,callback,args){
 	var collection = db.collection('tiles');
