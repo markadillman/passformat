@@ -552,6 +552,8 @@ function loadPlayer(argsocket) {
 				if (e.key == Crafty.keys.Q) {
 					// quit to home screen
 					// ### server cleanup stuff here?
+					//MARK ADDED
+					argsocket.emit('my disconnect',{});
 					
 					// hard stop player motion and wait
 					// to make sure no assetRender calls are in progress
@@ -560,8 +562,6 @@ function loadPlayer(argsocket) {
 					player.removeComponent('Multiway');
 					player.removeComponent('Motion');
 					player.removeComponent('Jumper');
-					//MARK ADDED
-					argsocket.emit('disconnect',{});
 					Crafty.e('Delay').delay(function(){
 						if (debugging) {
 							console.log("Waited.");

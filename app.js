@@ -142,6 +142,13 @@ socketUniversal.on('connection',function(socket){
 		console.log(util.inspect(playerPositionMap));
 		socketUniversal.emit('player logoff',{id:socket.id});
 	})
+	socket.on('my disconnect',function(){
+		console.log("willingly disconnected.");
+		delete playerPositionMap[socket.id.toString()];
+		delete playerAvatarMap[socket.id.toString()];
+		console.log(util.inspect(playerPositionMap));
+		socketUniversal.emit('player logoff',{id:socket.id});
+	})
 	socket.on('position request',function(data){
 		console.log("position request payload");
 		console.log(util.inspect(playerPositionMap));
