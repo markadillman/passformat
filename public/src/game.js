@@ -678,7 +678,7 @@ function loadPlayer(argsocket) {
 	    .bind('OtherPlayerLogoff',function(eventData){
 	    	var targetKey;
 	    	for (key in playerPositionMap){
-	    		if (playerPositionMap[key] === eventData.id){
+	    		if (key === eventData.id){
 	    			targetKey = key;
 	    			if (verboseDebugging){
 	    				console.log("KEYS HERE");
