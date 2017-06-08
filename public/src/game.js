@@ -366,7 +366,7 @@ Game =
 			playing = true;
 
 			//initialize a new socketio
-			socket = io('http://192.168.2.50:8080');
+			socket = io('http://172.31.39.14:8080');
 			socket.on('assign id', function(data){
 				socketId = data.id;
 				console.log("GOT SOCKET ID:");
