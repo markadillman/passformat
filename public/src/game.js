@@ -682,10 +682,12 @@ function loadPlayer(argsocket) {
 	    			targetKey = key;
 	    			if (verboseDebugging){
 	    				console.log("KEYS HERE");
-	    				console.log(targetKey)
+	    				console.log(targetKey);
+	    				console.log("Crafty ID");
+	    				console.log(playerPositionMap[])
 	    			}
 	    			//delete crafty entity
-	    			var deathmarkedEntity = Crafty(key);
+	    			var deathmarkedEntity = Crafty(playerPositionMap[targetKey]);
 	    			console.log("pay attention:");
 	    			console.log(deathmarkedEntity);
 	    			deathmarkedEntity.destroy();
