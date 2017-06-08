@@ -377,7 +377,8 @@ Game =
 			playing = true;
 
 			//initialize a new socketio
-			socket = io('http://52.42.5.103:8080');
+			//socket = io('http://52.42.5.103:8080');
+			socket = io('http://192.168.2.50:8080'); //<-- Mark's test env
 			socket.on('assign id', function(data){
 				socketId = data.id;
 				console.log("GOT SOCKET ID:");

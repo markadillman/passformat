@@ -11,7 +11,8 @@ var http = require('http');
 const util = require('util');
 var MongoClient = require('mongodb').MongoClient, assert = require('assert');
 //database url
-var dbUrl = 'mongodb://172.31.34.164:27017/test'
+//var dbUrl = 'mongodb://172.31.34.164:27017/test'
+var dbUrl = 'mongodb://127.0.0.1:27017/text' //<-- Mark's Test Environment
 var socketioPort = 8080;
 
 var index = require('./routes/index');
@@ -135,7 +136,7 @@ socketUniversal.on('connection',function(socket){
 	});
 	socket.on('disconnect',function(){
 		delete playerPositionMap[socket.id.toString()];
-		delete playerPositionMap[socket.id.toString()];
+		delete playerAvatarMap[socket.id.toString()];
 		console.log(util.inspect(playerPositionMap));
 		socketUniversal.emit('player logoff',{id:socket.id});
 	})
