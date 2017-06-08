@@ -671,11 +671,30 @@ function loadPlayer(argsocket) {
 	      		}
 	      	}
 	    })
-		//this removes a recently logged off player from the position map
+		//this removes a recently logged off player from the position map and despawns them
 	    .bind('OtherPlayerLogoff',function(eventData){
+	    	var targetKey;
+	    	for (key in playerPositionMap){
+	    		if (playerPositionMap[key] === eventData.id){
+	    			targetKey = key;
+	    			if (verboseDebugging){
+	    				console.log("KEYS HERE");
+	    				console.log(targetKey)
+	    			}
+	    			//delete crafty entity
+	    			var deathmarkedEntity = Crafty(key);
+	    			deathmarkedEntity.destroy();
+	    		}
+	    		else {
+	    			console.log("NO MATCH. KEY:");
+	    			console.log(key)
+	    		}
+	    	}
 	    	delete playerPositionMap[eventData.id];
-	      	console.log("Player position map post logoff");
-	      	console.log(playerPositionMap);
+	    	if (verboseDebugging){
+	      		console.log("Player position map post logoff");
+	      		console.log(playerPositionMap);
+	      	}
 	    })
 	    //update the position map with new data. Event data is complete wherabouts of active players keyed by id
 	    .bind('UpdateMap',function(eventData){
