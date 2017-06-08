@@ -797,7 +797,7 @@ app.post('/getavatar',function(req,res){
 		//REFACTOR can be adapted from findDocument
 		var collection = db.collection('avatars');
 		//this will return ALL. In future, may want to paginate.
-		db.collection.find().toArray(function(err,docs){
+		collection.find().toArray(function(err,docs){
 			//MAYBE CLIP THE ARRAY BRACKETS HERE
 			res.status(200).send(JSON.stringify(docs));
 		});
@@ -816,7 +816,7 @@ app.post('/saveavatar',function(req,res){
 		//this will return ALL. In future, may want to paginate.
 		console.log("About to insert:");
 		console.log(query);
-		db.collection.insert(query,function(err,result){
+		collection.insert(query,function(err,result){
 			if (err === null){
 				console.log("Inserted avatar into database");
 				console.log(result);
