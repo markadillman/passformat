@@ -867,7 +867,7 @@ function updateMap(x,y){
 	var currentCoords = {};
 	currentCoords.x = x;
 	currentCoords.y = y;
-	postRequest('/allpop',{},updateMapCallback,onPostError,currentCoords);
+	postRequest('/allpop',{},updateMapCallback,postOnError,currentCoords);
 }
 
 //### Mark 2 TONI: changed this function to a callback and added the docs argument to run the check
