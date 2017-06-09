@@ -1333,6 +1333,10 @@ function loadLibraryAvatarsToCarouselCallback(request,args){
 		carouselData[i] = library[i]['svg'];
 	}
 	displayAvatarInCarousel(carouselData[carouselIndex]);
+	
+	// turn on enter world button just in case
+	turnOnEnterButton();
+	
 	// debug message
 	if (debugging) {
 		console.log("Loaded Public Avatar Library to avatar carousel.");
