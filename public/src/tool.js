@@ -969,7 +969,7 @@ function createTeleMarker() {
 }
 function putTeleMarkerInCanvas(myGroupStr, myContext) {
 	// use true flag to tell putGroupInCanvas not to use the background rect
-	putGroupInCanvas(myGroupStr, myContext, 215, 80, 180, 180, 0, 0, 380, 250, true)
+	putGroupInCanvas(myGroupStr, myContext, 215, 80, 190, 190, 0, 0, 380, 240, true)
 }
 function drawMarkersOnMap() {
 	// get current info out of localStorage
