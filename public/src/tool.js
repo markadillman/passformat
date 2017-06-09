@@ -1134,12 +1134,15 @@ function doTeleport() {
 	var tempObject = JSON.parse(localStorage.myTeleMarkers);
 	var newCoords = tempObject[selectedTeleMarker].split(" ");
 	
+	// unselect selectedTeleMarker
+	teleMarkerUnselect();
+	
 	// use helper function in game.js to move player
 	doPlayerMove(Number(newCoords[0]), Number(newCoords[1]));
 	
-	// manually set player entity's x and y to complete the teleport
+	/*// manually set player entity's x and y
 	Crafty("Player").x = Number(newCoords[0]);
-	Crafty("Player").y = Number(newCoords[1]);
+	Crafty("Player").y = Number(newCoords[1]);*/
 	
 	// hide the map screen
 	doMapScreenDone();
