@@ -1913,6 +1913,7 @@ function doAvatarExit() {
 //or not on an editable tile, or if tile is uneditable.
 function tileEditRequest(xTile,yTile){
 	if (verboseDebugging){
+		console.log("MAKING AN EDIT CHECK");
 		console.log("x,y");
 		console.log(xTile);
 		console.log(yTile);
