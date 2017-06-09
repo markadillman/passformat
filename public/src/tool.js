@@ -1053,11 +1053,9 @@ function removeEventListeners(){
 // these should never run!
 function doMsgBtnOK() {
 	console.log("Something went very awry with the message box Okay button.");
-	eventListenerMsgBtnOK();
 }
 function doMsgBtnCancel() {
 	console.log("Something went very awry with the message box Cancel button.");
-	eventListenerMsgBtnCancel();
 }
 
 // helper handlers for message box functions
