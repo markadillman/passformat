@@ -892,7 +892,7 @@ app.post('/freetile',function(req,res){
 
 /*This returns a ready made query of all tiles with svg environs.
 */
-app.post('/allpop',function(req,res)){
+app.post('/allpop',function(req,res){
 MongoClient.connect(dbUrl,function(err,db){
 		//test for errors, pop out if there are errors present
 		assert.equal(null,err);
