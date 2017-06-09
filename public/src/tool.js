@@ -957,7 +957,7 @@ function updateMapCallback(request,currentCoords) {
 							if (debugging){
 								console.log("ABOUT TO GRAY OUT: (" + xstring + " , " + ystring + ")");
 							}
-							putColorInCanvas(mapGrid[i][j], 84, 84, 84, 255);
+							putColorInCanvas(mapGrid[adjx][adjy], 84, 84, 84, 255);
 						}
 					}
 				} else { // this tile doesn't exist, so just display background color
