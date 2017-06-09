@@ -1023,7 +1023,7 @@ function drawMarkersOnMap() {
 			teleMarkerDivList[i].style.top = teleMapInTileY;
 			
 			// append this div to this tile in the map
-			mapGridDivList[teleMapTileX][teleMapTileY].appendChild(teleMarkerDivList[i]);
+			teleMarkerDivList[teleMapTileX][teleMapTileY].appendChild(teleMarkerDivList[i]);
 			
 		} else { // make sure this div is not appended in the DOM
 			var myParent = teleMarkerDivList[i].parentNode;
