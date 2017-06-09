@@ -955,7 +955,7 @@ function updateMapCallback(request,currentCoords) {
 							var xstring = adjx.toString();
 							var ystring = adjy.toString();
 							if (debugging){
-								console.log("ABOUT TO GRAY OUT: (" + xtring + " , " + ystring + ")");
+								console.log("ABOUT TO GRAY OUT: (" + xstring + " , " + ystring + ")");
 							}
 							putColorInCanvas(mapGrid[i][j], 84, 84, 84, 255);
 						}
