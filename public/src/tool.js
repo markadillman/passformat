@@ -967,7 +967,8 @@ function createTeleMarker() {
 	putTeleMarkerInCanvas(teleMarkerImg, myCanvas.getContext("2d"));
 }
 function putTeleMarkerInCanvas(myGroupStr, myContext) {
-	putGroupInCanvas(myGroupStr, myContext, 200, 110, 190, 300, 0, 0, 50, 70)
+	// use true flag to tell putGroupInCanvas not to use the background rect
+	putGroupInCanvas(myGroupStr, myContext, 200, 110, 190, 300, 0, 0, 50, 70, true)
 }
 function drawMarkersOnMap() {
 	// get current info out of localStorage
@@ -1982,9 +1983,15 @@ function groupToString(groupnum){
 // adapted from Mark's version
 // puts myGroupStr's data into myContext's canvas
 // using given clipping values
-function putGroupInCanvas(myGroupStr, myContext, clipX, clipY, clipW, clipH, canvX, canvY, canvW, canvH) {
+function putGroupInCanvas(myGroupStr, myContext, clipX, clipY, clipW, clipH, canvX, canvY, canvW, canvH, noRect) {
 	// prepend and append svg open and close tag constants
-	myGroupStr = svgPrepend + myGroupStr + svgAppend;
+	// use given flag to determine if using svgPrepent (has white rect)
+	// or svgMinPrepent (does not have white rect)
+	if (noRect) {
+		myGroupStr = svgMinPrepend + myGroupStr + svgAppend;
+	} else {
+		myGroupStr = svgPrepend + myGroupStr + svgAppend;
+	}
 	// debug message
 	if (verboseDebugging) {
 		console.log(myGroupStr);
