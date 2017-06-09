@@ -923,6 +923,9 @@ function updateMapCallback(request,currentCoords) {
 	// loop through the mapGrid and decide what to do in each spot
 	for (var i = 0; i < mapGridWidth; i += 1) {
 		for (var j = 0; j < mapGridHeight; j += 1) {
+			if (debug){
+				console.log("coordinates: (" + i.toString() + " , " + j.toString() + ")");
+			}
 			
 			// figure out what world tile to look at
 			worldX = mapCurrentCenterX - gridCenterX + i;
