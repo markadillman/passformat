@@ -1107,9 +1107,27 @@ function doTeleMarkerDelete() {
 		myParent.removeChild(teleMarkerDivList[selectedTeleMarker]);
 	}
 	
+	// remove entry in localStorage.myTeleMarkers
+	// get current info out of localStorage
+	var tempObject = JSON.parse(localStorage.myTeleMarkers);
+	var numMarkers = Number(localStorage.myTeleMarkerCount);
+	// remove entry if it exists and isn't marker 0
+	if (selectedTeleMarker > 0 && selectedTeleMarker < numMarkers) {
+		delete tempObject[selectedTeleMarker];
+		// shift any entries after that up one index
+		for (var k = selectedTeleMarker; k < numMarkers; k += 1) {
+			tempObject[k] = tempObject[k+1];
+		}
+		// decrement count of markers
+		numMarkers -= 1;
+	} // else do nothing b/c something is messed up somehow
+	// send result back to localStorage
+	localStorage.myTeleMarkers = JSON.stringify(tempObject);
+	localStorage.myTeleMarkerCount = numMarkers;
+	
 	// remove entry in teleMarkerDivList
 	// remove entry if it exists and isn't marker 0
-	var numMarkers = teleMarkerDivList.length;
+	numMarkers = teleMarkerDivList.length;
 	if (selectedTeleMarker > 0 && selectedTeleMarker < numMarkers) {
 		delete teleMarkerDivList[selectedTeleMarker];
 		// shift any entries after that up one index
@@ -1132,21 +1150,6 @@ function doTeleMarkerDelete() {
 			teleMarkerCanvasList[j].id = "teleMarkerCanvas " + j.toString();
 		}
 	} // else do nothing b/c something is messed up somehow
-	
-	// remove entry in localStorage.myTeleMarkers
-	// get current info out of localStorage
-	var tempObject = JSON.parse(localStorage.myTeleMarkers);
-	numMarkers = tempObject.length;
-	// remove entry if it exists and isn't marker 0
-	if (selectedTeleMarker > 0 && selectedTeleMarker < numMarkers) {
-		delete tempObject[selectedTeleMarker];
-		// shift any entries after that up one index
-		for (var k = selectedTeleMarker; k < numMarkers; k += 1) {
-			tempObject[k] = tempObject[k+1];
-		}
-	} // else do nothing b/c something is messed up somehow
-	// send result back to localStorage
-	localStorage.myTeleMarkers = JSON.stringify(tempObject);
 	
 	// set selectedTeleMarker = -1 to indicate no marker selected
 	selectedTeleMarker = -1;

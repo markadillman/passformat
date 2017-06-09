@@ -1492,10 +1492,12 @@ function placeTeleMarker(x, y)
 	
 	// get info from localStorage
 	var teleportMarkers = JSON.parse(localStorage.myTeleMarkers);
+	var numMarkers = Number(localStorage.myTeleMarkerCount);
+	// Toni added the count back in because we do actually need it
 
 	// check to make sure one doesn't already exist at these coordinates
 	var exists = false;
-	for(var i = 0; i < teleportMarkers.length; i++)
+	for(var i = 0; i < numMarkers; i++)
 	{
 		if(teleportMarkers[i] == coordStr)
 		{
@@ -1513,8 +1515,10 @@ function placeTeleMarker(x, y)
 	else
 	{
 		// create marker at player's current coordinates in the world
-		teleportMarkers.push(coordStr);
+		teleportMarkers[numMarkers + 1] = coordStr; // Toni modified syntax
 		localStorage.myTeleMarkers = JSON.stringify(teleportMarkers);
+		// Toni added incrementing counter
+		localStorage.myTeleMarkerCount = numMarkers + 1;
 		// Toni added call to map screen helper function in tool.js
 		createTeleMarker(x, y);
 	}
