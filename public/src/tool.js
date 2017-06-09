@@ -1014,7 +1014,7 @@ function displayMessage(msg, okFn, cancelFn, useTextInput, hideCancelButton, def
 	if (initCoords&&textInputPassword){
 		//this works because the truthiness of strings in Javascriprt. Both true and defined.
 		console.log("first block");
-		msgBtnOK.addEventListener('click',function click1(){
+		okButton.addEventListener('click',function click1(){
 			console.log("callee");
 			console.log(arguments.callee);
 			eventListenerMsgBtnOk = arguments.callee;
@@ -1022,7 +1022,7 @@ function displayMessage(msg, okFn, cancelFn, useTextInput, hideCancelButton, def
 			okFn(initCoords.xcoord,initCoords.ycoord,textInputPassword);
 			//return;
 		},false); 
-		msgBtnCancel.addEventListener('click',function click2(){
+		cancelButton.addEventListener('click',function click2(){
 			console.log("callee");
 			console.log(arguments.callee);
 			eventListenerMsgBtnCancel = arguments.callee;
@@ -1034,7 +1034,7 @@ function displayMessage(msg, okFn, cancelFn, useTextInput, hideCancelButton, def
 	}
 	else if (initCoords) {
 		console.log("second block");
-		msgBtnOK.addEventListener('click',function click1(){
+		okButton.addEventListener('click',function click1(){
 			console.log("callee");
 			console.log(arguments.callee);
 			eventListenerMsgBtnOk = arguments.callee;
@@ -1042,7 +1042,7 @@ function displayMessage(msg, okFn, cancelFn, useTextInput, hideCancelButton, def
 			okFn(initCoords.xcoord,initCoords.ycoord);
 			//return;
 		},false);
-		msgBtnCancel.addEventListener('click',function click2(){
+		cancelButton.addEventListener('click',function click2(){
 			console.log("callee");
 			console.log(arguments.callee);
 			eventListenerMsgBtnCancel = arguments.callee;
@@ -1055,14 +1055,14 @@ function displayMessage(msg, okFn, cancelFn, useTextInput, hideCancelButton, def
 	else
 	{
 		console.log("third block");
-		msgBtnOK.addEventListener('click',function click1(){
+		okButton.addEventListener('click',function click1(){
 			console.log("callee");
 			console.log(arguments.callee);
 			eventListenerMsgBtnOk = arguments.callee;
 			this.removeEventListener("click",click1,false);
 			okFn(); 
 		},false);
-		msgBtnCancel.addEventListener('click',function click2(){
+		cancelButton.addEventListener('click',function click2(){
 			console.log("callee");
 			console.log(arguments.callee);
 			eventListenerMsgBtnCancel = arguments.callee;
