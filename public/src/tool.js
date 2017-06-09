@@ -20,7 +20,7 @@ These chunks are tagged with the phrase "Mark's code" in comments.
 /* CODE FROM HTML PORTION */
 
 var debugging = true;	// toggle debug messages
-var verboseDebugging = true; // toggle verbose debugging messages
+var verboseDebugging = false; // toggle verbose debugging messages
 var useFakeSurroundings = false; // surroundings are colored boxes (for debugging)
 var playing = false;	// flag set to true when player is in Crafty World scene
 var artMode = "art";	// mode strings
@@ -1153,6 +1153,9 @@ function doTeleport() {
 	var panXDelta = (currentXTile - goalXTile) * tileWidth;
 	var panYDelta = (currentYTile - goalYTile) * tileHeight;
 	Crafty.viewport.pan(panXDelta, panYDelta, panTime);
+	
+	console.log(goalXTile);
+	console.log(goalYTile);
 	
 	// unset flag
 	teleporting = false;
