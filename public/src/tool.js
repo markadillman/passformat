@@ -889,6 +889,11 @@ function updateMapCallback(request,currentCoords) {
 		var tempy = populatedTiles[i]['ycoord'];
 		if (debugging){
 			console.log("(X : " + tempx.toString() + ", Y: " + tempy.toString() + ")");
+			console.log(tempx);
+			console.log(tempy);
+		}
+		if (indexedTiles[tempx] === undefined){
+			indexedTiles[tempx]= [];
 		}
 		indexedTiles[tempx][tempy] = true;
 	}
