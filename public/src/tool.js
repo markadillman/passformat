@@ -993,10 +993,10 @@ function drawMarkersOnMap() {
 		teleMapTileY = teleWorldTileY - mapCurrentCenterY + gridCenterY;
 		if (teleMapTileX >= 0 && teleMapTileX <= mapGridWidth && teleMapTileY >= 0 && teleMapTileY <= mapGridHeight) {
 			// if yes, need to draw this marker on the mapGrid in the right spot
-			
+			console.log("here");
 			// get in-map coordinates for these world coordinates
-			teleMapX = 100;
-			teleMapY = 100;
+			teleMapX = 10;
+			teleMapY = 10;
 			
 			// adjust for size of sprite
 			// !!!
