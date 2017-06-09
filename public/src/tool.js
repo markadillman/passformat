@@ -475,6 +475,12 @@ function initHTML() {
 	
 	// add the keybard event listener
 	document.addEventListener("keydown", parseKeyHTML);
+	
+	// turn off the ability to double click, because we don't use it
+	// and sometimes it selects stuff and makes things look weird
+	document.addEventListener("dblclick", function(evt) {
+		evt.preventDefault();
+	});
 
 	// initialize the game music
 	initMusic();
@@ -961,7 +967,7 @@ function createTeleMarker() {
 	putTeleMarkerInCanvas(teleMarkerImg, myCanvas.getContext("2d"));
 }
 function putTeleMarkerInCanvas(myGroupStr, myContext) {
-	putGroupInCanvas(myGroupStr, myContext, 0, 0, canvasWidth, canvasWidth, 0, 0, 100, 100)
+	putGroupInCanvas(myGroupStr, myContext, 0, 0, canvasWidth, canvasWidth, 0, 0, 50, 50)
 }
 function drawMarkersOnMap() {
 	// get current info out of localStorage
