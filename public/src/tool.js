@@ -128,7 +128,7 @@ var eventListenerPwdBtnPublic;
 //this will allow removal of unknown, dynamic event listeners, 
 //adapted from code at http://stackoverflow.com/questions/8841138/remove-event-listener-in-java
 //credit to SO user TERMtm
-HTMLElement.prototype.eventListener = function(type, func, capture){
+/*HTMLElement.prototype.eventListener = function(type, func, capture){
 	//a single object argument possessing the event listener will now remove that event listener
 	if(typeof arguments[0]== "object" && (!arguments[0].nodeType)){
 		console.log("this weird stuff is happening");
@@ -137,7 +137,7 @@ HTMLElement.prototype.eventListener = function(type, func, capture){
 	//regular add function
 	this.addEventListener(type,func,capture);
 	return arguments;
-}
+}*/
 // end Mark's code
 
 // stop event propagation so forms don't actually submit
@@ -964,61 +964,69 @@ function displayMessage(msg, okFn, cancelFn, useTextInput, hideCancelButton, def
 	console.log("MESSAGE");
 	console.log(msg);
 	//remove previous event listeners so that they do not aggregate to multiple per push
-	removeEventListeners();
+	//removeEventListeners();
 	messageText.innerHTML = msg;
 	//updated so all anonymous functions should also remove themselves as event listeners
 	if (initCoords&&textInputPassword){
 		//this works because the truthiness of strings in Javascriprt. Both true and defined.
 		console.log("first block");
-		eventListenerMsgBtnOk = msgBtnOK.eventListener('click',function click1(){
+		eventListenerMsgBtnOk = msgBtnOK.addEventListener('click',function click1(){
 			console.log("callee");
 			console.log(arguments.callee);
 			eventListenerMsgBtnOk = arguments.callee;
-			//this.removeEventListener("click",click1, false);
+			this.removeEventListener("click",click1, false);
 			okFn(initCoords.xcoord,initCoords.ycoord,textInputPassword);
+			return;
 		},false); 
-		eventListenerMsgBtnCancel = msgBtnCancel.eventListener('click',function click2(){
+		eventListenerMsgBtnCancel = msgBtnCancel.addEventListener('click',function click2(){
 			console.log("callee");
 			console.log(arguments.callee);
 			eventListenerMsgBtnCancel = arguments.callee;
-			//this.removeEventListener("click",click2,false);
+			this.removeEventListener("click",click2,false);
 			cancelFn();
+			return;
 		},false);
+		return;
 	}
 	else if (initCoords) {
 		console.log("second block");
-		eventListenerMsgBtnOk = msgBtnOK.eventListener('click',function click1(){
+		eventListenerMsgBtnOk = msgBtnOK.addEventListener('click',function click1(){
 			console.log("callee");
 			console.log(arguments.callee);
 			eventListenerMsgBtnOk = arguments.callee;
-			//this.removeEventListener("click",click1, false);
+			this.removeEventListener("click",click1, false);
 			okFn(initCoords.xcoord,initCoords.ycoord);
+			return;
 		},false);
-		eventListenerMsgBtnCancel = msgBtnCancel.eventListener('click',function click2(){
+		eventListenerMsgBtnCancel = msgBtnCancel.addEventListener('click',function click2(){
 			console.log("callee");
 			console.log(arguments.callee);
 			eventListenerMsgBtnCancel = arguments.callee;
-			//this.removeEventListener("click",click2,false);
+			this.removeEventListener("click",click2,false);
 			cancelFn();
+			return;
 		},false);
+		return;
 	}
 	else
 	{
 		console.log("third block");
-		eventListenerMsgBtnOk = msgBtnOK.eventListener('click',function click1(){
+		eventListenerMsgBtnOk = msgBtnOK.addEventListener('click',function click1(){
 			console.log("callee");
 			console.log(arguments.callee);
 			eventListenerMsgBtnOk = arguments.callee;
-			//this.removeEventListener("click",click1,false);
+			this.removeEventListener("click",click1,false);
 			okFn(); 
 		},false);
-		eventListenerMsgBtnCancel = msgBtnCancel.eventListener('click',function click2(){
+		return;
+		eventListenerMsgBtnCancel = msgBtnCancel.addEventListener('click',function click2(){
 			console.log("callee");
 			console.log(arguments.callee);
 			eventListenerMsgBtnCancel = arguments.callee;
-			//this.removeEventListener("click",click2,false);
+			this.removeEventListener("click",click2,false);
 			cancelFn();
 		},false);
+		return;
 	}
 	// use or hide text input element
 	if (useTextInput) { // show the text input element
@@ -2461,7 +2469,7 @@ function pwUpdateError(){
 // initCoords similarly are present only to pass along to event-driven subfunctions.
 // these functions should include: passwordDiv.style.display = "none";
 function displayPassword(msg, okFn, textInputPassword, initCoords) {
-	removeEventListeners();
+	//removeEventListeners();
 	messageDiv.style.display = "none";
 	var pwdBtnOK = document.getElementById('pwdBtnOK');
 	var pwdBtnCancel = document.getElementById('pwdBtnCancel');
