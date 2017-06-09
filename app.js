@@ -899,7 +899,7 @@ MongoClient.connect(dbUrl,function(err,db){
 		console.log("connected succesfully to server");
 		var collection = db.collection('tiles');
 		//search collection for all tiles with non-empty svg strings
-		collection.find(svg: {$exists : true, $not : /^(?![\s\S])/ }},{xcoord:1,ycoord:1},function(err,docs){
+		collection.find({svg: {$exists : true, $not : /^(?![\s\S])/ }},{xcoord:1,ycoord:1}).toArray(function(err,docs){
 			if (err === null){
 				console.log("Gotten all populated tiles.");
 				console.log(docs);
