@@ -523,10 +523,8 @@ function initHTML() {
 	}
 	// create all existing teleportation markers
 	var myMarkerList = JSON.parse(localStorage.myTeleMarkers);
-	var myMarkerCoords;
 	for (var i = 0; i < myMarkerList.length; i += 1) {
-		myMarkerCoords = myMarkerList[i].split(" ");
-		createTeleMarker(myMarkerCoords[0], myMarkerCoords[1]);
+		createTeleMarker();
 	}
 	// hide the map div
 	mapDiv.style.display = "none";
@@ -884,6 +882,9 @@ function updateMap(x, y) {
 		}
 	}
 	
+	// draw the visible teleport markers given the current map centering
+	drawMarkersOnMap();
+	
 	// debug message
 	if (debugging) {
 		console.log("Updated map to center on tile: (" + x.toString() + ", " + y.toString() + ").");
@@ -930,38 +931,90 @@ function doMapPanRight() {
 	mapCurrentCenterX -= 1;
 	updateMap(mapCurrentCenterX, mapCurrentCenterY);
 }
-function createTeleMarker(x, y) {
-	var myDiv;
-	var myCanvas;
-	
+function createTeleMarker() {
 	// get next index number to use
 	var nextID = teleMarkerDivList.length;
 	
-	// figure out coords to use
-	var mapXCoord = x; // !!! this is definitely the wrong coords
-	var mapYCoord = y;
-	
 	// create the div and add it to the div list
+	var myDiv;
 	myDiv = document.createElement("div");
 	myDiv.id = "teleMarkerDiv " + nextID.toString();
-	myDiv.width = canvasWidth / 30;
-	myDiv.height = canvasHeight / 30;
+	myDiv.width = canvasWidth/30;
+	myDiv.height = canvasHeight/30;
 	myDiv.style.position = "absolute";
-	myDiv.style.left = mapXCoord.toString() + "px";
-	myDiv.style.top = mapYCoord.toString() + "px";
+	myDiv.style.left = 0;
+	myDiv.style.top = 0;
+	myDiv.style.display = "none";
 	myDiv.addEventListener('click', function(evt){toggleTeleSelect(evt)});
 	teleMarkerDivList[nextID] = myDiv;
 	
 	// create the canvas and add it to the canvas list
+	var myCanvas;
 	myCanvas = document.createElement("canvas");
 	myCanvas.id = "teleMarkerCanvas " + nextID.toString();
-	myCanvas.width = canvasWidth / 30;
-	myCanvas.height = canvasHeight / 30;
+	myCanvas.width = canvasWidth/30;
+	myCanvas.height = canvasHeight/30;
 	teleMarkerCanvasList[nextID] = myCanvas;
-	
-	// append the children to draw the canvases in the DOM
 	myDiv.appendChild(myCanvas);
-	mapCanvasGridDiv.appendChild(myDiv);
+}
+function drawMarkersOnMap() {
+	// get current info out of localStorage
+	var teleTempObject = JSON.parse(localStorage.myTeleMarkers);
+	teleNumMarkers = teleTempObject.length;
+	
+	// get center tile coords in the mapGrid
+	var gridCenterX = Math.floor(mapGridWidth / 2);
+	var gridCenterY = Math.floor(mapGridHeight / 2);
+	
+	// loop through all existing markers
+	var teleWorldCoords;
+	var teleWorldX;
+	var teleWorldY;
+	var teleWorldTileX;
+	var teleWorldTileY;
+	var teleMapTileX;
+	var teleMapTileY;
+	var teleMapX;
+	var teleMapY;
+	for (var i = 0; i < teleNumMarkers; i += 1) {
+		
+		// get marker i's world coordinates
+		teleWorldCoords = teleTempObject[i].split(" ");
+		teleWorldX = Number(teleWorldCoords[0]);
+		teleWorldY = Number(teleWorldCoords[1]);
+		
+		// what world tile is this in?
+		teleWorldTileX = Math.floor(teleWorldX/tileWidth);
+		teleWorldTileY = Math.floor(teleWorldY/tileHeight);
+		
+		// is this tile being drawn in the mapGrid right now?
+		// references coordinate conversion from updateMap
+		teleMapTileX = teleWorldTileX - mapCurrentCenterX + gridCenterX;
+		teleMapTileY = teleWorldTileY - mapCurrentCenterY + gridCenterY;
+		if (teleMapTileX >= 0 && teleMapTileX <= mapGridWidth && teleMapTileY >= 0 && teleMapTileY <= mapGridHeight) {
+			// if yes, need to draw this marker on the mapGrid in the right spot
+			
+			// get in-map coordinates for these world coordinates
+			teleMapX = 0;
+			teleMapY = 0;
+			
+			// adjust for size of sprite
+			// !!!
+			
+			// set coords into div
+			teleMarkerDivList[i].style.left = teleMapX;
+			teleMarkerDivList[i].style.top = teleMapY;
+			
+			// append this div to this tile in the map
+			mapCanvasGridDiv.appendChild(teleMarkerDivList[i]);
+			
+		} else { // make sure this div is not appended in the DOM
+			var myParent = teleMarkerDivList[i].parentNode;
+			if (myParent != null) {
+				myParent.removeChild(teleMarkerDivList[i]);
+			}
+		}
+	}
 }
 function toggleTeleSelect(evt) {
 	// reference https://stackoverflow.com/a/9012576
@@ -1016,8 +1069,10 @@ function doTeleMarkerDelete() {
 	// works on current selectedTeleMarker
 	
 	// remove the div from the DOM to stop displaying it
-	var myParent = teleMarkerDivList[selectedTeleMarker];
-	myParent.removeChild(teleMarkerDivList[selectedTeleMarker]);
+	var myParent = teleMarkerDivList[selectedTeleMarker].parentNode;
+	if (myParent != null) {
+		myParent.removeChild(teleMarkerDivList[selectedTeleMarker]);
+	}
 	
 	// remove entry in teleMarkerDivList
 	// remove entry if it exists and isn't marker 0

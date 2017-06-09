@@ -547,9 +547,9 @@ function loadPlayer(argsocket) {
 			}
 
 			// start Toni's code
-			// bind the gameplay mode hotkeys
-			if (mode == gameMode) { // only read these if in gameplay mode
-				if (e.key == Crafty.keys.E) {
+			// bind the gameplay hotkeys based on mode
+			if (mode == gameMode || mode == mapMode) {
+				if (e.key == Crafty.keys.E && mode == gameMode) { // only gameMode
 					if (verboseDebugging) {
 						console.log("Go go gadget edit mode!");
 						console.log("current (x,y)");
@@ -560,7 +560,7 @@ function loadPlayer(argsocket) {
 					doTileEdit(Math.floor(currentUpperLeftX / tileWidth),
 							   Math.floor(currentUpperLeftY / tileHeight));
 				}
-				if (e.key == Crafty.keys.T) {
+				if (e.key == Crafty.keys.T) { // either game or map mode
 					// drop a teleportation marker
 					if (verboseDebugging) {
 						console.log('Teleport markers before: ', JSON.parse(localStorage.teleportMarkers));
@@ -570,7 +570,7 @@ function loadPlayer(argsocket) {
 						console.log('Teleport markers after: ', JSON.parse(localStorage.teleportMarkers));
 					}
 				}
-				if (e.key == Crafty.keys.W) {
+				if (e.key == Crafty.keys.W && mode == gameMode) { // only gameMode
 					// toggle wall view mode
 					
 					// toggle platforms using z index
@@ -1488,8 +1488,7 @@ function placeTeleMarker(x, y)
 		// create marker at player's current coordinates in the world
 		myTeleMarkers.push(coordStr);
 		localStorage.myTeleMarkers = JSON.stringify(myTeleMarkers);
-		// start Toni's code
+		// Toni added call to map screen helper function in tool.js
 		createTeleMarker(x, y);
-		// end Toni's code
 	}
 }
