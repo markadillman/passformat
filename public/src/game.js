@@ -1251,6 +1251,7 @@ function turnOffViewButtons() {
 }
 function turnOnViewButtons() {
 	// turn button functionality back on
+	removeEventListeners();
 	Crafty('myAvatarButton').bind('Click', myAvatarButtonClick);
 	Crafty('myAvatarButton').addComponent('myButton');
 	Crafty('myLibraryButton').bind('Click', myLibraryButtonClick);
@@ -1378,7 +1379,7 @@ function deleteLocalAvatar() {
 				   doDeleteAvatar, turnOnViewButtons, false, false);
 }
 function doDeleteAvatar() {
-
+	removeEventListeners();
 	// hide message box div
 	messageDiv.style.display = "none";
 
@@ -1421,6 +1422,7 @@ function submitAvatarToLibrary() {
 				   doSubmitAvatar, turnOnViewButtons, false, false);
 }
 function doSubmitAvatar() {
+	removeEventListeners();
 	// actually send data of currently selected avatar to the server
 	// get data from carouselData[carouselIndex], will be a valid SVG string
 

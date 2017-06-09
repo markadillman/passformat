@@ -126,26 +126,41 @@ var svgAppend = "</svg>";
 //this variable tracks whether password reprompt at edit submit is necessary
 var passwordReprompt = false;
 const passwordReenterPrompt = "Please re-enter your tile's password to submit your edits.";
+
 //this will contain references to all specific button event listeners
-var eventListenerMsgBtnOK;
-var eventListenerMsgBtnCancel;
-var eventListenerPwdBtnOk;
-var eventListenerPwdBtnSkip;
-var eventListenerPwdBtnCancel;
-var eventListenerPwdBtnPublic;
+var eventListenerMsgBtnOK = null;
+var eventListenerMsgBtnCancel = null;
+var eventListenerPwdBtnOk= null;
+var eventListenerPwdBtnSkip= null;
+var eventListenerPwdBtnCancel= null;
+var eventListenerPwdBtnPublic= null;
+var allEvents=null;
 //this will allow removal of unknown, dynamic event listeners, 
 //adapted from code at http://stackoverflow.com/questions/8841138/remove-event-listener-in-java
 //credit to SO user TERMtm
-/*HTMLElement.prototype.eventListener = function(type, func, capture){
+//ALTHOUGH FOR REAL HIS CODE WAS WAY OFF AND I HAD TO ADAPT IT LIKE WOAH
+HTMLElement.prototype.eventListener = function(type, func, capture){
+	/*console.log("IN PROTO THIS");
+	console.log(this);
+	console.log("IN PROTO ARGUMENTS");
+	console.log(arguments);
+	console.log("IN PROTO ARGUMENTS[1]");
+	console.log(arguments[1]);*/
 	//a single object argument possessing the event listener will now remove that event listener
-	if(typeof arguments[0]== "object" && (!arguments[0].nodeType)){
+	if(!(arguments[0] === "click")){
 		console.log("this weird stuff is happening");
-		return this.removeEventListener.apply(this,arguments[0]);
+		return this.removeEventListener.apply(this,['click',arguments[0],false]);
 	}
-	//regular add function
-	this.addEventListener(type,func,capture);
-	return arguments;
-}*/
+	else {
+		//regular add function
+		console.log("regular event add");
+		this.addEventListener(type,func,capture);
+		allEvents.push(arguments[1]);
+		console.log("all events in proto");
+		console.log(allEvents);
+		return arguments[1];
+	}
+}
 // end Mark's code
 
 // stop event propagation so forms don't actually submit
@@ -448,6 +463,16 @@ function initHTML() {
 	if (verboseDebugging){
 		console.log("html loaded");
 	}
+
+	//initialize global event arrays
+	eventListenerMsgBtnOk = new Array();
+	eventListenerMsgBtnCancel = new Array();
+	eventListenerPwdBtnOk = new Array();
+	eventListenerPwdBtnSkip = new Array();
+	eventListenerPwdBtnCancel = new Array();
+	eventListenerPwdBtnPublic = new Array();
+	allEvents = [];
+
 	// set the page header (defaults to avatar mode since that's used first)
 	pageHeader = document.getElementById("drawingToolHeader");
 	pageHeader.innerHTML = avatarHeader;
@@ -1335,80 +1360,170 @@ function doQuitToHomeScreen(argsocket) {
 // also displays text input element if boolean argument is true
 // these functions should include: messageDiv.style.display = "none";
 function displayMessage(msg, okFn, cancelFn, useTextInput, hideCancelButton, defaultText, textInputPassword, initCoords) {
-	console.log("MESSAGE");
-	console.log(msg);
-	console.log(msgBtnOK);
-	console.log(msgBtnCancel);
-	//remove previous event listeners so that they do not aggregate to multiple per push
-	//removeEventListeners();
+		//remove previous event listeners so that they do not aggregate to multiple per push
+	/*console.log("MESSAGE");
+	console.log(msg);*/
+	removeEventListeners();
 	messageText.innerHTML = msg;
-	console.log("msgbtnok");
-	console.log(msgBtnOK);
 	if (initCoords&&textInputPassword){
 		//this works because the truthiness of strings in Javascriprt. Both true and defined.
-		console.log("first block");
-		msgBtnOK.addEventListener('click',function click1(){
-			console.log("callee");
-			console.log(arguments.callee);
-			onsole.log("this");
-			console.log(this);
-			eventListenerMsgBtnOk = arguments.callee;
-			this.removeEventListener("click",click1, false);
-			okFn(initCoords.xcoord,initCoords.ycoord,textInputPassword);
-			//return;
-		},false); 
-		msgBtnCancel.addEventListener('click',function click2(){
-			console.log("callee");
+		//OK BUTTON
+		var tempEventOkTop = msgBtnOK.eventListener('click',function(){
+			/*console.log("callee");
 			console.log(arguments.callee);
 			console.log("this");
-			console.log(this);
-			eventListenerMsgBtnCancel = arguments.callee;
-			this.removeEventListener("click",click2,false);
+			console.log(this);*/
+			//eventListenerMsgBtnOk = arguments.callee;
+			//this.removeEventListener("click",click1, false);
+			eventListenerMsgBtnOk.push(arguments.callee);
+			removeEventListeners();
+			messageDiv.style.display = "none";
+			okFn(initCoords.xcoord,initCoords.ycoord,textInputPassword);
+			//return;
+		},false);
+		//add event to array
+		if (!(eventListenerMsgBtnOk===null) || !(eventListenerMsgBtnOk ===undefined))
+		{
+			if (Object.prototype.toString.call(eventListenerMsgBtnOk) === '[object Array]')
+			{
+				eventListenerMsgBtnOk.push(tempEventOkTop);
+				allEvents.push(tempEventOkTop);
+				/*console.log("ok post bind");
+				console.log(eventListenerMsgBtnOk);*/
+			}
+		}
+		//CANCEL BUTTON
+		var tempEventCancelTop = msgBtnCancel.eventListener('click',function(){
+			/*console.log("callee");
+			console.log(arguments.callee);
+			console.log("this");
+			console.log(this);*/
+			//eventListenerMsgBtnCancel = arguments.callee;
+			//this.removeEventListener("click",click2,false);
+			eventListenerMsgBtnCancel.push(arguments.callee);
+			removeEventListeners();
+			messageDiv.style.display = "none";
 			cancelFn();
 			//return;
 		},false);
+		if (!(eventListenerMsgBtnCancel===null) || !(eventListenerMsgBtnCancel ===undefined))
+		{
+			if (Object.prototype.toString.call(eventListenerMsgBtnCancel) === '[object Array]')
+			{
+				eventListenerMsgBtnCancel.push(tempEventCancelTop);
+				allEvents.push(tempEventCancelTop);
+				/*console.log("cancel post bind");
+				console.log(eventListenerMsgBtnCancel);*/
+			}
+		}
 		//return;
 	}
 	else if (initCoords) {
 		console.log("second block");
-		msgBtnOK.addEventListener('click',function click1(){
-			console.log("callee");
+		//OK BUTTON
+		var tempEventOkMid = msgBtnOK.eventListener('click',function(){
+			/*console.log("callee");
 			console.log(arguments.callee);
 			console.log("this");
-			console.log(this);
-			eventListenerMsgBtnOk = arguments.callee;
-			this.removeEventListener("click",click1, false);
+			console.log(this);*/
+			//eventListenerMsgBtnOk = arguments.callee;
+			//this.removeEventListener("click",click1, false);
+			eventListenerMsgBtnOk.push(arguments.callee);
+			removeEventListeners();
+			messageDiv.style.display = "none";
 			okFn(initCoords.xcoord,initCoords.ycoord);
 			//return;
 		},false);
-		msgBtnCancel.addEventListener('click',function click2(){
-			console.log("callee");
-			console.log(arguments.callee);
+		//add event to array 
+		if (!(eventListenerMsgBtnOk===null) || !(eventListenerMsgBtnOk ===undefined))
+		{
+			if (Object.prototype.toString.call(eventListenerMsgBtnOk) === '[object Array]')
+			{
+				eventListenerMsgBtnOk.push(tempEventOkMid);
+				allEvents.push(tempEventOkMid);
+				/*console.log("ok post bind");
+				console.log(eventListenerMsgBtnOk);*/
+			}
+		}
+		//CANCEL BUTTON
+		var tempEventCancelMid = msgBtnCancel.eventListener('click',function(){
+			/*console.log("callee");
+			console.log(arguments.callee);*/
 
-			eventListenerMsgBtnCancel = arguments.callee;
-			this.removeEventListener("click",click2,false);
+			//eventListenerMsgBtnCancel = arguments.callee;
+			//this.removeEventListener("click",click2,false);
+			eventListenerMsgBtnCancel.push(arguments.callee);
+			removeEventListeners();
+			messageDiv.style.display = "none";
 			cancelFn();
 			//return;
 		},false);
+		//add event to array 
+		if (!(eventListenerMsgBtnCancel===null) || !(eventListenerMsgBtnCancel ===undefined))
+		{
+			if (Object.prototype.toString.call(eventListenerMsgBtnCancel) === '[object Array]')
+			{
+				eventListenerMsgBtnCancel.push(tempEventCancelMid);
+				allEvents.push(tempEventCancelMid);
+				/*console.log("cancel post bind");
+				console.log(eventListenerMsgBtnCancel);*/
+			}
+		}
 		//return;
 	}
 	else
 	{
 		console.log("third block");
-		msgBtnOK.addEventListener('click',function click1(){
-			console.log("callee");
-			console.log(arguments.callee);
-			eventListenerMsgBtnOk = arguments.callee;
-			this.removeEventListener("click",click1,false);
-			okFn(); 
+		//OK BUTTON
+		var tempEventOkBot = msgBtnOK.eventListener('click',function(){
+			/*console.log("callee");
+			console.log(arguments.callee);*/
+
+			//eventListenerMsgBtnOk = arguments.callee;
+			//this.removeEventListener("click",click1,false);
+			eventListenerMsgBtnOk.push(arguments.callee);
+			/*console.log("INNER REMOVE");
+			console.log("list");
+			console.log(eventListenerMsgBtnOk);*/
+			removeEventListeners();
+			messageDiv.style.display = "none";
+			okFn();
 		},false);
-		msgBtnCancel.addEventListener('click',function click2(){
-			console.log("callee");
-			console.log(arguments.callee);
-			eventListenerMsgBtnCancel = arguments.callee;
-			this.removeEventListener("click",click2,false);
+		//add event to array 
+		if (!(eventListenerMsgBtnOk===null) || !(eventListenerMsgBtnOk ===undefined))
+		{
+			if (Object.prototype.toString.call(eventListenerMsgBtnOk) === '[object Array]')
+			{
+				eventListenerMsgBtnOk.push(tempEventOkBot);
+				allEvents.push(tempEventOkBot);
+				/*console.log("ok post bind");
+				console.log(eventListenerMsgBtnOk);*/
+			}
+		}
+		//CANCEL BUTTON
+		var tempEventCancelBot = msgBtnCancel.eventListener('click',function(){
+			/*console.log("callee");
+			console.log(arguments.callee);*/
+			//eventListenerMsgBtnCancel = arguments.callee;
+			//this.removeEventListener("click",click2,false);
+			eventListenerMsgBtnCancel.push(arguments.callee);
+			/*console.log("INNER REMOVE");
+			console.log("list");
+			console.log(eventListenerMsgBtnCancel);*/
+			removeEventListeners();
+			messageDiv.style.display = "none";
 			cancelFn();
 		},false);
+		//add event to array 
+		if (!(eventListenerMsgBtnCancel===null) || !(eventListenerMsgBtnCancel ===undefined)){
+			if (Object.prototype.toString.call(eventListenerMsgBtnCancel) === '[object Array]')
+			{
+				eventListenerMsgBtnCancel.push(tempEventCancelBot);
+				allEvents.push(tempEventCancelBot);
+				/*console.log("cancel post bind");
+				console.log(eventListenerMsgBtnCancel);*/
+			}
+		}
 	}
 	// use or hide text input element
 	if (useTextInput) { // show the text input element
@@ -1449,10 +1564,25 @@ function displayMessage(msg, okFn, cancelFn, useTextInput, hideCancelButton, def
 //every time on the first line of displayMessage or displayPassword to avoid eventListeners from
 //accumulating. Somewhat redundant with the new self-removing functions above.
 function removeEventListeners(){
+		/*console.log("starting arrays for clear");
+	console.log("remove listeners ok");
+	console.log(eventListenerMsgBtnOk);
+	console.log("remove listenerscancel");
+	console.log(eventListenerMsgBtnCancel);
+	console.log("remove listenerspassword ok");
+	console.log(eventListenerPwdBtnOk);
+	console.log("remove listenerspassword cancel");
+	console.log(eventListenerPwdBtnCancel);
+	console.log("remove listenerspasswordSkip");
+	console.log(eventListenerPwdBtnSkip);
+	console.log("remove listenerspasswordPublic");
+	console.log(eventListenerPwdBtnPublic);*/
+
 	var pwdBtnOK = document.getElementById('pwdBtnOK');
 	var pwdBtnSkip = document.getElementById('pwdBtnSkip');
 	var pwdBtnPublic = document.getElementById('pwdBtnPublic');
 	var pwdBtnCancel = document.getElementById('pwdBtnCancel');
+
 	if (verboseDebugging){
 		console.log("GLOBALS FOR REMOVAL");
 		console.log("OK");
@@ -1462,12 +1592,127 @@ function removeEventListeners(){
 	}
 	//all nodes are gathered in reference-able variables. Now use the prototype that tracks them
 	//to remove all the event listeners regardless of what they are or what args they have.
-	msgBtnOK.eventListener(eventListenerMsgBtnOK);
-	msgBtnCancel.eventListener(eventListenerMsgBtnCancel);
-	pwdBtnOK.eventListener(eventListenerPwdBtnOk);
-	pwdBtnSkip.eventListener(eventListenerPwdBtnSkip);
-	pwdBtnCancel.eventListener(eventListenerPwdBtnCancel);
-	pwdBtnPublic.eventListener(eventListenerPwdBtnPublic);
+	if (allEvents.length > 1){
+		for (var i = (allEvents.length - 1); i >= 0 ; i = i - 1){
+			msgBtnOK.eventListener(allEvents[i]);
+			msgBtnCancel.eventListener(allEvents[i]);
+			pwdBtnOK.eventListener(allEvents[i]);
+			pwdBtnCancel.eventListener(allEvents[i]);
+			pwdBtnSkip.eventListener(allEvents[i]);
+			pwdBtnPublic.eventListener(allEvents[i]);
+			allEvents.splice(i,1);
+		}
+	}
+	if (eventListenerMsgBtnOk.length > 1){
+		for (var i = (eventListenerMsgBtnOk.length-1); i >= 0 ; i = i - 1){
+			var tempnog = msgBtnOK.eventListener(eventListenerMsgBtnOk[i]);
+			/*console.log("function");
+			console.log(eventListenerMsgBtnOk[i]);*/
+			eventListenerMsgBtnOk.splice(i,1);
+			/*console.log("tempnog");
+			console.log(tempnog);
+			console.log("okarray");
+			console.log(eventListenerMsgBtnOk);*/
+		}
+	}
+	/*if (msgOk.length > 1){
+		for (var i = (msgOk.length-1); i >= 0 ; i = i - 1){
+			var tempnog = msgBtnOK.eventListener(msgOk[i]);
+			console.log("function");
+			console.log(msgOk[i]);
+			msgOk.splice(i,1);
+			console.log("tempnog");
+			console.log(tempnog);
+			console.log("okargarray");
+			console.log(msgOk);
+		}
+	}*/
+	if (eventListenerMsgBtnCancel.length > 1){
+		for (var i = (eventListenerMsgBtnCancel.length-1); i >= 0; i = i - 1){
+			var tempnog = msgBtnCancel.eventListener(eventListenerMsgBtnCancel[i]);
+			/*console.log("function");
+			console.log(eventListenerMsgBtnCancel[i]);*/
+			eventListenerMsgBtnCancel.splice(i,1);
+			/*console.log("tempnog");
+			console.log(tempnog);
+			console.log("cancelarray");
+			console.log(eventListenerMsgBtnCancel);*/
+		}
+	}
+	/*if (msgCancel.length > 1){
+		for (var i = (msgCancel.length-1); i >= 0 ; i = i - 1){
+			var tempnog = msgBtnCancel.eventListener(msgCancel[i]);
+			console.log("function");
+			console.log(msgCancel[i]);
+			msgOk.splice(i,1);
+			console.log("tempnog");
+			console.log(tempnog);
+			console.log("cancelargarray");
+			console.log(msgCancel);
+		}
+	}*/
+	if (eventListenerPwdBtnOk.length > 1){
+		for (var i = (eventListenerPwdBtnOk.length-1); i >= 0 ; i = i - 1){
+			var tempnog = pwdBtnOK.eventListener(eventListenerPwdBtnOk[i]);
+			/*console.log("function");
+			console.log(eventListenerPwdBtnOk[i]);*/
+			eventListenerPwdBtnOk.splice(i,1);
+			/*console.log("tempnog");
+			console.log(tempnog);
+			console.log("pwdokarray");
+			console.log(eventListenerPwdBtnOk);*/
+		}
+	}
+	if (eventListenerPwdBtnCancel.length > 1){
+		for (var i = (eventListenerPwdBtnCancel.length-1); i >= 0 ; i = i - 1){
+			var tempnog = pwdBtnCancel.eventListener(eventListenerPwdBtnCancel[i]);
+			/*console.log("function");
+			console.log(eventListenerPwdBtnCancel[i]);*/
+			eventListenerPwdBtnCancel.splice(i,1);
+			/*console.log("tempnog");
+			console.log(tempnog);
+			console.log("pwdcancelarray");
+			console.log(eventListenerPwdBtnCancel);*/
+		}
+	}
+	if (eventListenerPwdBtnSkip.length > 1){
+		for (var i = (eventListenerPwdBtnSkip.length - 1); i >= 0 ; i = i - 1){
+			var tempnog = pwdBtnSkip.eventListener(eventListenerPwdBtnSkip[i]);
+			/*console.log("function");
+			console.log(eventListenerPwdBtnSkip[i]);*/
+			eventListenerPwdBtnSkip.splice(i,1);
+			/*console.log("tempnog");
+			console.log(tempnog);
+			console.log("pwdskiparray");
+			console.log(eventListenerPwdBtnSkip);*/
+		}
+	}
+	if (eventListenerPwdBtnPublic.length > 1){
+		for (var i = (eventListenerPwdBtnPublic.length - 1); i >= 0 ; i = i - 1){
+			var tempnog = pwdBtnPublic.eventListener(eventListenerPwdBtnPublic[i]);
+			/*console.log("function");
+			console.log(eventListenerPwdBtnPublic[i]);*/
+			eventListenerPwdBtnPublic.splice(i,1);
+			/*console.log("tempnog");
+			console.log(tempnog);
+			console.log("pwdpublicarray");
+			console.log(eventListenerPwdBtnPublic);*/
+		}
+	}
+	/*console.log("========POST========");
+	console.log("starting arrays for clear");
+	console.log("remove listeners ok");
+	console.log(eventListenerMsgBtnOk);
+	console.log("remove listenerscancel");
+	console.log(eventListenerMsgBtnCancel);
+	console.log("remove listenerspassword ok");
+	console.log(eventListenerPwdBtnOk);
+	console.log("remove listenerspassword cancel");
+	console.log(eventListenerPwdBtnCancel);
+	console.log("remove listenerspasswordSkip");
+	console.log(eventListenerPwdBtnSkip);
+	console.log("remove listenerspasswordPublic");
+	console.log(eventListenerPwdBtnPublic);*/
 }
 
 // default handlers for message box buttons
@@ -1483,6 +1728,7 @@ function doMsgBtnCancel() {
 function doNothing() {
 	// does what it says on the tin
 	// except for clearing off the message div
+	removeEventListeners();
 	messageDiv.style.display = "none";
 }
 function hardReload() {
@@ -1629,7 +1875,7 @@ function doAvatarEdit(myAvatarString) {
 // exits from the currently edited avatar back into game mode
 // does not save the current edits!
 function doAvatarExit() {
-	
+	removeEventListeners();
 	// clear out all the current SVG
 	svgClearAll();
 	
@@ -1723,6 +1969,7 @@ function tileEditCallback(request){
 //this proceeds the function above, gathering the password data and sending it to the server
 //the coordinates are optionally passed in case it is called from a non-callback context.
 function passwordSubmit(xcoord,ycoord){
+	removeEventListeners();
 	var payload = {};
 	//gather password
 	var field = document.getElementById('msgTextInput');
@@ -1873,6 +2120,7 @@ function doTileEdit(currentX, currentY) {
 // exits from the currently edited tile back into game mode
 // does not save the current edits!
 function doTileExit() {
+	removeEventListeners();
 	if (verboseDebugging){
 		console.log("in doTileExit debugging");
 		console.log("this is good");
@@ -1900,6 +2148,7 @@ function doTileExit() {
 // cannot use a cancel to steal a tile before they gain edit access
 // if someone else is editing.
 function doTileExitNoFree() {
+	removeEventListeners();
 	if (verboseDebugging){
 		console.log("in doTileExit debugging");
 		console.log("this is good");
@@ -2502,6 +2751,7 @@ function saveToFile(filename, textdata) {
 // borrows a bit from Mark's code for loading/saving SVG on the server
 // references: https://www.html5rocks.com/en/tutorials/file/dndfiles/
 function svgSaveToLocal() {
+	removeEventListeners();
 	handleShapeInProgress();
 	
 	// generate the file string
@@ -2713,6 +2963,7 @@ function promptPWOnEdit(message,initCoords){
 }
 
 function editPWSubmit(xcoord,ycoord){
+	removeEventListeners();
 	var payload = {};
 	payload.pw = document.getElementById("msgTextInput").value;
 	payload.x = xcoord;
@@ -2753,6 +3004,7 @@ function editPWResponse(request,pw){
 
 //helper function for password submit cancel
 function removePrompt(){
+	removeEventListeners();
 	messageDiv.style.display = "none";
 	passwordDiv.style.display = "none";
 }
