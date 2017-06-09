@@ -881,17 +881,16 @@ function updateMapCallback(request,currentCoords) {
 		console.log(populatedTiles);
 	}
 
-	var indexedTiles = {};
+	var indexedTiles = [];
 
 	//format response list for quick populating with appropriate tile
 	for (i in populatedTiles){
-		var tempx = populatedTiles[i]['xcoord'].toString();
-		var tempy = populatedTiles[i]['ycoord'].toString();
+		var tempx = populatedTiles[i]['xcoord'];
+		var tempy = populatedTiles[i]['ycoord'];
 		if (debugging){
 			console.log("(X : " + tempx.toString() + ", Y: " + tempy.toString() + ")");
 		}
-		var field = {tempy:true};
-		indexedTiles[tempx] = field;
+		indexedTiles[tempx][tempy] = true;
 	}
 	if (debugging){
 		console.log("POPULATED TILES:");
