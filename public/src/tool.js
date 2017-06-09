@@ -961,7 +961,7 @@ function drawMarkersOnMap() {
 	// get current info out of localStorage
 	var teleTempObject = JSON.parse(localStorage.myTeleMarkers);
 	teleNumMarkers = teleTempObject.length;
-	
+	console.log("here");
 	// get center tile coords in the mapGrid
 	var gridCenterX = Math.floor(mapGridWidth / 2);
 	var gridCenterY = Math.floor(mapGridHeight / 2);
@@ -993,7 +993,7 @@ function drawMarkersOnMap() {
 		teleMapTileY = teleWorldTileY - mapCurrentCenterY + gridCenterY;
 		if (teleMapTileX >= 0 && teleMapTileX <= mapGridWidth && teleMapTileY >= 0 && teleMapTileY <= mapGridHeight) {
 			// if yes, need to draw this marker on the mapGrid in the right spot
-			console.log("here");
+			
 			// get in-map coordinates for these world coordinates
 			teleMapX = 10;
 			teleMapY = 10;
