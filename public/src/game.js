@@ -1340,6 +1340,10 @@ function loadLibraryAvatarsToCarouselCallback(request,myIndex){
 	// load carouselData[0] into the carousel's selected position
 	// ### check that myIndex is valid into this array, else use 0
 	carouselIndex = myIndex;
+	if (verboseDebugging){
+		console.log("Response text for avatar library:");
+		console.log(JSON.parse(request.responseText));
+	}
 	displayAvatarInCarousel(carouselData[carouselIndex]);
 
 	// debug message
