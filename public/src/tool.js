@@ -968,8 +968,10 @@ function displayMessage(msg, okFn, cancelFn, useTextInput, hideCancelButton, def
 	messageText.innerHTML = msg;
 	//updated so all anonymous functions should also remove themselves as event listeners
 	//delete and create new ok and cancel buttons
-	msgBtnOk.id = "junkokid";
-	msgBtnCancel.id = "junkcancelid";
+	var tempOk = msgBtnOk;
+	var tempCancel = msgBtnCancel;
+	tempOk.id = "junkokid";
+	tempCancel.id = "junkcancelid";
 	var parent = document.getElementById("buttonDiv");
 	parent.removeChild(msgBtnOK);
 	parent.removeChild(msgBtnCancel);
