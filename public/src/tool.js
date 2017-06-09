@@ -1035,8 +1035,8 @@ function drawMarkersOnMap() {
 			console.log(teleMapY);
 			
 			// set coords into div
-			teleMarkerDivList[i].style.left = teleMapX;
-			teleMarkerDivList[i].style.top = teleMapY;
+			teleMarkerDivList[i].style.left = teleMapX.toString() + "px";
+			teleMarkerDivList[i].style.top = teleMapY.toString() + "px";
 			
 			// append this div to this tile in the map
 			mapCanvasGridDiv.appendChild(teleMarkerDivList[i]);
