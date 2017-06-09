@@ -427,8 +427,10 @@ function initMusic() {
 }
 
 // initalize the rest of the page
-function initHTML() {
-	
+function initHTML() {	
+	if (verboseDebugging){
+		console.log("html loaded");
+	}
 	// set the page header (defaults to avatar mode since that's used first)
 	pageHeader = document.getElementById("drawingToolHeader");
 	pageHeader.innerHTML = avatarHeader;
