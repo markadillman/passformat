@@ -20,7 +20,7 @@ These chunks are tagged with the phrase "Mark's code" in comments.
 /* CODE FROM HTML PORTION */
 
 var debugging = true;	// toggle debug messages
-var verboseDebugging = false; // toggle verbose debugging messages
+var verboseDebugging = true; // toggle verbose debugging messages
 var useFakeSurroundings = false; // surroundings are colored boxes (for debugging)
 var playing = false;	// flag set to true when player is in Crafty World scene
 var artMode = "art";	// mode strings
@@ -975,6 +975,11 @@ function createTeleMarker() {
 	if (mode == mapMode) {
 		drawMarkersOnMap();
 	}
+	
+	// debug message
+	if (debugging) {
+		console.log("Created a teleportation marker.");
+	}
 }
 function putTeleMarkerInCanvas(myGroupStr, myContext) {
 	// use true flag to tell putGroupInCanvas not to use the background rect
@@ -1051,6 +1056,11 @@ function drawMarkersOnMap() {
 			}
 		}
 	}
+	
+	// debug message
+	if (debugging) {
+		console.log("Drew teleporation markers on the map.");
+	}
 }
 function toggleTeleSelect(evt) {
 	// reference https://stackoverflow.com/a/9012576
@@ -1064,6 +1074,11 @@ function toggleTeleSelect(evt) {
 		teleMarkerUnselect();
 	} else { // select it
 		teleMarkerSelect(targetID);
+	}
+	
+	// debug message
+	if (debugging) {
+		console.log("Toggled teleporation marker selection.");
 	}
 }
 function teleMarkerSelect(markerID) {
@@ -1115,7 +1130,6 @@ function doTeleMarkerDelete() {
 	var numMarkers = Number(localStorage.myTeleMarkerCount);
 	// remove entry if it exists and isn't marker 0
 	if (selectedTeleMarker > 0 && selectedTeleMarker < numMarkers) {
-		console.log("here");
 		delete tempObject[selectedTeleMarker];
 		// shift any entries after that up one index
 		for (var k = selectedTeleMarker; k < numMarkers-1; k += 1) {
@@ -1125,7 +1139,6 @@ function doTeleMarkerDelete() {
 	// send result back to localStorage
 	localStorage.myTeleMarkers = JSON.stringify(tempObject);
 	localStorage.myTeleMarkerCount = numMarkers - 1;
-	console.log(tempObject);
 	
 	// remove entry in teleMarkerDivList
 	// remove entry if it exists and isn't marker 0
@@ -1150,6 +1163,11 @@ function doTeleMarkerDelete() {
 			teleMarkerCanvasList[j].id = "teleMarkerCanvas " + j.toString();
 		}
 	} // else do nothing b/c something is messed up somehow
+	
+	// debug message
+	if (debugging) {
+		console.log("Deleted teleportation marker with ID#: " + selectedTeleMarker.toString() + ".");
+	}
 	
 	// set selectedTeleMarker = -1 to indicate no marker selected
 	selectedTeleMarker = -1;
