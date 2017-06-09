@@ -148,16 +148,16 @@ HTMLElement.prototype.eventListener = function(type, func, capture){
 	console.log(arguments[1]);*/
 	//a single object argument possessing the event listener will now remove that event listener
 	if(!(arguments[0] === "click")){
-		console.log("this weird stuff is happening");
+		//console.log("this weird stuff is happening");
 		return this.removeEventListener.apply(this,['click',arguments[0],false]);
 	}
 	else {
 		//regular add function
-		console.log("regular event add");
+		//console.log("regular event add");
 		this.addEventListener(type,func,capture);
 		allEvents.push(arguments[1]);
-		console.log("all events in proto");
-		console.log(allEvents);
+		//console.log("all events in proto");
+		//console.log(allEvents);
 		return arguments[1];
 	}
 }
