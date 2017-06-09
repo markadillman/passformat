@@ -961,7 +961,7 @@ function createTeleMarker() {
 	putTeleMarkerInCanvas(teleMarkerImg, myCanvas.getContext("2d"));
 }
 function putTeleMarkerInCanvas(myGroupStr, myContext) {
-	putGroupInCanvas(myGroupStr, myContext, 0, 0, canvasWidth, canvasWidth, 0, 0, canvasWidth, canvasHeight)
+	putGroupInCanvas(myGroupStr, myContext, 0, 0, canvasWidth, canvasWidth, 0, 0, 100, 100)
 }
 function drawMarkersOnMap() {
 	// get current info out of localStorage
@@ -999,7 +999,7 @@ function drawMarkersOnMap() {
 		teleMapTileY = teleWorldTileY - mapCurrentCenterY + gridCenterY;
 		if (teleMapTileX >= 0 && teleMapTileX <= mapGridWidth && teleMapTileY >= 0 && teleMapTileY <= mapGridHeight) {
 			// if yes, need to draw this marker on the mapGrid in the right spot
-			console.log("here");
+			
 			// get in-map coordinates for these world coordinates
 			teleMapX = 10;
 			teleMapY = 10;
@@ -1066,6 +1066,9 @@ function teleMarkerUnselect() {
 	
 	// switch current selectedTeleMarker back to regular sprite
 	putTeleMarkerInCanvas(teleMarkerImg, teleMarkerCanvasList[selectedTeleMarker].getContext("2d"));
+	
+	// set selectedTeleMarker to -1 to indicate no marker selected
+	selectedTeleMarker = -1;
 }
 function doTeleMarkerDelete() {
 	// works on current selectedTeleMarker
