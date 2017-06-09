@@ -1515,7 +1515,7 @@ function placeTeleMarker(x, y)
 	else
 	{
 		// create marker at player's current coordinates in the world
-		teleportMarkers[numMarkers + 1] = coordStr; // Toni modified syntax
+		teleportMarkers[numMarkers] = coordStr; // Toni modified syntax
 		localStorage.myTeleMarkers = JSON.stringify(teleportMarkers);
 		// Toni added incrementing counter
 		localStorage.myTeleMarkerCount = numMarkers + 1;
