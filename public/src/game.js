@@ -33,8 +33,6 @@ var tileHeight = 350;
 var canvasEdge = 50;
 var screenWidth = tileWidth + (2 * canvasEdge);
 var screenHeight = tileHeight + (2 * canvasEdge);
-var currentCenterX = 0;
-var currentCenterY = 0;
 var currentUpperLeftX = 0;
 var currentUpperLeftY = 0;
 var spriteWidth = 15;
@@ -49,7 +47,6 @@ var selectedButtonColor = '#99CCFF';
 var panTime = 500; // ms
 
 //BEGIN CODE ADDED BY MARK
-
 //global value holder for socket.io socket and socketId
 var socket;
 var socketId;
@@ -103,7 +100,7 @@ var carouselContents = myAvatars;
 var carouselStage;
 var carouselData = [];
 var carouselIndex = 0;
-// Toni is very sorry this is so ugly, but it's an easy way to have the svg string for the New Avatar image
+// Toni is very sorry this is so ugly, but it's an easy way to have the svg strings for these images
 const newAvatarImg = "<!--FROM THE BLANK--><svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">" +
 		"<clipPath id=\"avatarClipPath\"><ellipse cx=\"300\" cy=\"175\" rx=\"87\" ry=\"174\">" + 
 		"</ellipse></clipPath><g xmlns=\"http://www.w3.org/2000/svg\" id=\"drawingGroup\" " +
@@ -124,6 +121,20 @@ const newAvatarImg = "<!--FROM THE BLANK--><svg xmlns=\"http://www.w3.org/2000/s
 		"points=\"269.5 311 326.5 313\" style=\"fill: none; stroke: #000000; stroke-width: " +
 		"5\"/></g><g xmlns=\"http://www.w3.org/2000/svg\" id=\"platformsGroup\" " +
 		"style=\"visibility: hidden\"/></svg>";
+const teleMarkerImg = "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">" + 
+		"<g xmlns=\"http://www.w3.org/2000/svg\" id=\"drawingGroup\" style=\"opacity: 1\" > " +
+		"<polygon id=\"o1\" points=\"292.96000000000004 105.92 308.96000000000004 147.51999999999998 " +
+		"365.28 146.88 319.84 178.88 338.4 235.2 291.68 198.72 252 229.44 265.44 183.36 230.88 148.16 " +
+		"277.6 148.16\" style=\"fill: #ffff17; fill-rule: evenodd; stroke: #ffff17; stroke-width: 4; opacity: .25\"/> " +
+		"<polygon id=\"o2\" points=\"226 148 279 148 293 98 313 147 374 146 323 182 343 243 292 204 248 237 265 184\" " +
+		"style=\"fill: none; fill-rule: evenodd; stroke: #000000; stroke-width: 4\"/></g></svg>"
+const selectedTeleMarkerImg = "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">" + 
+		"<g xmlns=\"http://www.w3.org/2000/svg\" id=\"drawingGroup\" style=\"opacity: 1\" > " +
+		"<polygon id=\"o1\" points=\"292.96000000000004 105.92 308.96000000000004 147.51999999999998 " +
+		"365.28 146.88 319.84 178.88 338.4 235.2 291.68 198.72 252 229.44 265.44 183.36 230.88 148.16 " +
+		"277.6 148.16\" style=\"fill: #ffff17; fill-rule: evenodd; stroke: #ffff17; stroke-width: 4; opacity: .75\"/> " +
+		"<polygon id=\"o2\" points=\"226 148 279 148 293 98 313 147 374 146 323 182 343 243 292 204 248 237 265 184\" " +
+		"style=\"fill: none; fill-rule: evenodd; stroke: #000000; stroke-width: 10\"/></g></svg>"
 // Toni used this for testing the size/shape of avatars rendered in Crafty
 const ovalAvatarImg = "<!--FROM THE BLANK--><svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">" +
 		"<clipPath id=\"avatarClipPath\"><ellipse cx=\"300\" cy=\"175\" rx=\"87\" " +
@@ -549,48 +560,15 @@ function loadPlayer(argsocket) {
 					doTileEdit(Math.floor(currentUpperLeftX / tileWidth),
 							   Math.floor(currentUpperLeftY / tileHeight));
 				}
-				if (e.key == Crafty.keys.Q) {
-					if (verboseDebugging) {
-						console.log("Q been pressed.");
-					}
-					// quit to home screen
-					// ### server cleanup stuff here?
-					//MARK ADDED
-					argsocket.emit('my disconnect',{id:socketId});
-					//clear player position map
-					for (key in playerPositionMap){
-						if (verboseDebugging){
-							console.log("deleted.");
-						}
-						delete playerPositionMap[key];
-					}
-					
-					// hard stop player motion and wait
-					// to make sure no assetRender calls are in progress
-					// when the quit continues
-					player.removeComponent('Gravity');
-					player.removeComponent('Multiway');
-					player.removeComponent('Motion');
-					player.removeComponent('Jumper');
-					Crafty.e('Delay').delay(function(){
-						if (debugging) {
-							console.log("Waited.");
-						}
-						// crafty globals cleanup
-						currentUpperLeftX = 0;
-						currentUpperLeftY = 0;
-						currentPlayerX = 0;
-						currentPlayerY = 0;
-						// tool.js cleanup
-						doQuitToHomeScreen();
-						// switch scenes
-						Crafty.enterScene('HomeScreen');
-					}, exitDelay, 0);
-				}
 				if (e.key == Crafty.keys.T) {
 					// drop a teleportation marker
-					// ### check to make sure one doesn't already exist at these coordinates?
-					// ### create marker at player's current coordinates in the world
+					if (verboseDebugging) {
+						console.log('Teleport markers before: ', JSON.parse(localStorage.teleportMarkers));
+					}
+					placeTeleMarker(player.x, player.y);
+					if (verboseDebugging) {
+						console.log('Teleport markers after: ', JSON.parse(localStorage.teleportMarkers));
+					}
 				}
 				if (e.key == Crafty.keys.W) {
 					// toggle wall view mode
@@ -816,124 +794,7 @@ function loadPlayer(argsocket) {
 	      	}
 	    })
 		// Move camera when player leaves current tile
-		.bind('Moved', function()
-			{
-				// Toni added code to update current player position
-				currentPlayerX = this.x;
-				currentPlayerY = this.y;
-				
-				// MARK ADDED get current tile coordinates to orient pull
-				// Toni switched these to use the global vars from tool.js
-				xTile = Math.floor(currentUpperLeftX / tileWidth);
-				yTile = Math.floor(currentUpperLeftY / tileHeight);
-				var payload = {'x' : xTile, 'y': yTile};
-				var tempObject;
-				if (this.x > currentUpperLeftX + screenWidth)
-				{
-					currentUpperLeftX = currentUpperLeftX + tileWidth;
-					Crafty.viewport.pan(tileWidth, 0, panTime);
-					
-					// Toni added update of tile coords
-					xTile = Math.floor(currentUpperLeftX / tileWidth);
-					yTile = Math.floor(currentUpperLeftY / tileHeight);
-					
-					// Toni added making sure this tile is marked as visited
-					// get current visited data from localStorage
-					tempObject = JSON.parse(localStorage.myVisitData);
-					// check to see if the object is ready for this coordinate
-					if (tempObject[xTile] == undefined) {
-						// define it so the assignment doesn't barf
-						tempObject[xTile] = {};
-					}
-					// set the flag for this tile to visited
-					tempObject[xTile][yTile] = true;
-					// send the updated object back to localStorage
-					localStorage.myVisitData = JSON.stringify(tempObject);
-
-					// Load assets in outer rightmost "ring" segment
-					dynamicPostRequest('/pullright',payload,dynamicPostOnLoad,dynamicError);
-					// Destroy assets in outer leftmost "ring" segment
-				}
-				else if (this.x < currentUpperLeftX)
-				{
-					currentUpperLeftX = currentUpperLeftX - tileWidth;
-					Crafty.viewport.pan(tileWidth*-1, 0, panTime);
-					
-					// Toni added update of tile coords
-					xTile = Math.floor(currentUpperLeftX / tileWidth);
-					yTile = Math.floor(currentUpperLeftY / tileHeight);
-					
-					// Toni added making sure this tile is marked as visited
-					// get current visited data from localStorage
-					tempObject = JSON.parse(localStorage.myVisitData);
-					// check to see if the object is ready for this coordinate
-					if (tempObject[xTile] == undefined) {
-						// define it so the assignment doesn't barf
-						tempObject[xTile] = {};
-					}
-					// set the flag for this tile to visited
-					tempObject[xTile][yTile] = true;
-					// send the updated object back to localStorage
-					localStorage.myVisitData = JSON.stringify(tempObject);
-
-					// Load assets in outer leftmost "ring" segment
-					dynamicPostRequest('/pullleft',payload,dynamicPostOnLoad,dynamicError);
-					// Destroy assets in outer rightmost "ring" segment
-				}
-
-				if (this.y > currentUpperLeftY + screenHeight)
-				{
-					currentUpperLeftY = currentUpperLeftY + tileHeight;
-					Crafty.viewport.pan(0, tileHeight, panTime);
-					
-					// Toni added update of tile coords
-					xTile = Math.floor(currentUpperLeftX / tileWidth);
-					yTile = Math.floor(currentUpperLeftY / tileHeight);
-					
-					// Toni added making sure this tile is marked as visited
-					// get current visited data from localStorage
-					tempObject = JSON.parse(localStorage.myVisitData);
-					// check to see if the object is ready for this coordinate
-					if (tempObject[xTile] == undefined) {
-						// define it so the assignment doesn't barf
-						tempObject[xTile] = {};
-					}
-					// set the flag for this tile to visited
-					tempObject[xTile][yTile] = true;
-					// send the updated object back to localStorage
-					localStorage.myVisitData = JSON.stringify(tempObject);
-
-					// Load assets in outer bottom-most "ring" segment
-					dynamicPostRequest('/pullbottom',payload,dynamicPostOnLoad,dynamicError);
-					// Destroy assets in outer top-most "ring" segment
-				}
-				else if (this.y < currentUpperLeftY)
-				{
-					currentUpperLeftY = currentUpperLeftY - tileHeight;
-					Crafty.viewport.pan(0, tileHeight*-1, panTime);
-					
-					// Toni added update of tile coords
-					xTile = Math.floor(currentUpperLeftX / tileWidth);
-					yTile = Math.floor(currentUpperLeftY / tileHeight);
-					
-					// Toni added making sure this tile is marked as visited
-					// get current visited data from localStorage
-					tempObject = JSON.parse(localStorage.myVisitData);
-					// check to see if the object is ready for this coordinate
-					if (tempObject[xTile] == undefined) {
-						// define it so the assignment doesn't barf
-						tempObject[xTile] = {};
-					}
-					// set the flag for this tile to visited
-					tempObject[xTile][yTile] = true;
-					// send the updated object back to localStorage
-					localStorage.myVisitData = JSON.stringify(tempObject);
-
-					// Load assets in outer top-most "ring" segment
-					dynamicPostRequest('/pulltop',payload,dynamicPostOnLoad,dynamicError);
-					// Destroy assets in outer bottom-most "ring" segment
-				}
-			});
+		.bind('Moved', doPlayerMove(this.x, this.y));
 		
 	// start Toni's code
 	// generate a URL based on currently selected avatar
@@ -974,6 +835,126 @@ function loadPlayer(argsocket) {
 
 	//trigger the player creation event
 	player.trigger('SceneLoaded',{x:player.x,y:player.y,id:socketId,socket:argsocket,avatar:myString});
+}
+
+// Toni moved this code here so it could be called on teleport
+// as well as on the player's "Moved" event
+function doPlayerMove(x, y) {
+	// Toni added code to update current player position
+	currentPlayerX = x;
+	currentPlayerY = y;
+	
+	// MARK ADDED get current tile coordinates to orient pull
+	// Toni switched these to use the global vars from tool.js
+	xTile = Math.floor(currentUpperLeftX / tileWidth);
+	yTile = Math.floor(currentUpperLeftY / tileHeight);
+	var payload = {'x' : xTile, 'y': yTile};
+	var tempObject;
+	if (x > currentUpperLeftX + screenWidth)
+	{
+		currentUpperLeftX = currentUpperLeftX + tileWidth;
+		Crafty.viewport.pan(tileWidth, 0, panTime);
+		
+		// Toni added update of tile coords
+		xTile = Math.floor(currentUpperLeftX / tileWidth);
+		yTile = Math.floor(currentUpperLeftY / tileHeight);
+		
+		// Toni added making sure this tile is marked as visited
+		// get current visited data from localStorage
+		tempObject = JSON.parse(localStorage.myVisitData);
+		// check to see if the object is ready for this coordinate
+		if (tempObject[xTile] == undefined) {
+			// define it so the assignment doesn't barf
+			tempObject[xTile] = {};
+		}
+		// set the flag for this tile to visited
+		tempObject[xTile][yTile] = true;
+		// send the updated object back to localStorage
+		localStorage.myVisitData = JSON.stringify(tempObject);
+
+		// Load assets in outer rightmost "ring" segment
+		dynamicPostRequest('/pullright',payload,dynamicPostOnLoad,dynamicError);
+		// Destroy assets in outer leftmost "ring" segment
+	}
+	else if (x < currentUpperLeftX)
+	{
+		currentUpperLeftX = currentUpperLeftX - tileWidth;
+		Crafty.viewport.pan(tileWidth*-1, 0, panTime);
+		
+		// Toni added update of tile coords
+		xTile = Math.floor(currentUpperLeftX / tileWidth);
+		yTile = Math.floor(currentUpperLeftY / tileHeight);
+		
+		// Toni added making sure this tile is marked as visited
+		// get current visited data from localStorage
+		tempObject = JSON.parse(localStorage.myVisitData);
+		// check to see if the object is ready for this coordinate
+		if (tempObject[xTile] == undefined) {
+			// define it so the assignment doesn't barf
+			tempObject[xTile] = {};
+		}
+		// set the flag for this tile to visited
+		tempObject[xTile][yTile] = true;
+		// send the updated object back to localStorage
+		localStorage.myVisitData = JSON.stringify(tempObject);
+
+		// Load assets in outer leftmost "ring" segment
+		dynamicPostRequest('/pullleft',payload,dynamicPostOnLoad,dynamicError);
+		// Destroy assets in outer rightmost "ring" segment
+	}
+
+	if (y > currentUpperLeftY + screenHeight)
+	{
+		currentUpperLeftY = currentUpperLeftY + tileHeight;
+		Crafty.viewport.pan(0, tileHeight, panTime);
+		
+		// Toni added update of tile coords
+		xTile = Math.floor(currentUpperLeftX / tileWidth);
+		yTile = Math.floor(currentUpperLeftY / tileHeight);
+		
+		// Toni added making sure this tile is marked as visited
+		// get current visited data from localStorage
+		tempObject = JSON.parse(localStorage.myVisitData);
+		// check to see if the object is ready for this coordinate
+		if (tempObject[xTile] == undefined) {
+			// define it so the assignment doesn't barf
+			tempObject[xTile] = {};
+		}
+		// set the flag for this tile to visited
+		tempObject[xTile][yTile] = true;
+		// send the updated object back to localStorage
+		localStorage.myVisitData = JSON.stringify(tempObject);
+
+		// Load assets in outer bottom-most "ring" segment
+		dynamicPostRequest('/pullbottom',payload,dynamicPostOnLoad,dynamicError);
+		// Destroy assets in outer top-most "ring" segment
+	}
+	else if (y < currentUpperLeftY)
+	{
+		currentUpperLeftY = currentUpperLeftY - tileHeight;
+		Crafty.viewport.pan(0, tileHeight*-1, panTime);
+		
+		// Toni added update of tile coords
+		xTile = Math.floor(currentUpperLeftX / tileWidth);
+		yTile = Math.floor(currentUpperLeftY / tileHeight);
+		
+		// Toni added making sure this tile is marked as visited
+		// get current visited data from localStorage
+		tempObject = JSON.parse(localStorage.myVisitData);
+		// check to see if the object is ready for this coordinate
+		if (tempObject[xTile] == undefined) {
+			// define it so the assignment doesn't barf
+			tempObject[xTile] = {};
+		}
+		// set the flag for this tile to visited
+		tempObject[xTile][yTile] = true;
+		// send the updated object back to localStorage
+		localStorage.myVisitData = JSON.stringify(tempObject);
+
+		// Load assets in outer top-most "ring" segment
+		dynamicPostRequest('/pulltop',payload,dynamicPostOnLoad,dynamicError);
+		// Destroy assets in outer bottom-most "ring" segment
+	}
 }
 
 /*start Mark's code, helper functions to fetch rows of 5 assets:
@@ -1456,3 +1437,49 @@ function doEnterButton() {
 	Crafty.enterScene('World');
 }
 // end Toni's code
+
+// Lucia's teleportation marker placement function
+function placeTeleMarker(x, y)
+{
+	// drop a teleportation marker
+	// Get current coordinates as a string
+	var xStr = x.toString();
+	var yStr = y.toString();
+	var coordStr = xStr + ' ' + yStr;  // Format: x y (Toni removed punctuation)
+
+	// check to make sure one doesn't already exist at these coordinates
+	if(localStorage.myTeleMarkers == null)
+	{
+		var myTeleMarkers = [];
+	}
+	else
+	{
+		var myTeleMarkers = JSON.parse(localStorage.myTeleMarkers);
+	}
+
+	var exists = false;
+	for(var i = 0; i < myTeleMarkers.length; i++)
+	{
+		if(myTeleMarkers[i] == coordStr)
+		{
+			exists = true;
+		}
+	}
+	if (verboseDebugging) {
+		console.log('Exists: ', exists);
+	}
+
+	if(exists)
+	{
+		// Do nothing
+	}
+	else
+	{
+		// create marker at player's current coordinates in the world
+		myTeleMarkers.push(coordStr);
+		localStorage.myTeleMarkers = JSON.stringify(myTeleMarkers);
+		// start Toni's code
+		createTeleMarker(x, y);
+		// end Toni's code
+	}
+}

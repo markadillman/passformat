@@ -200,6 +200,8 @@ http://infiniteblank.com/wordpress/?page_id=20
 							
 							<input type="button" name="removePlatform" value="Remove Selected Platform"
 								onclick="removeSelectedPlatform(false)"></input>
+								
+							<p>NOTE: Platforms must be either single line segments or closed, convex polygons.</p>
 						
 						</div>
 					</fieldset>
@@ -241,6 +243,16 @@ http://infiniteblank.com/wordpress/?page_id=20
 		<div id="mapDiv" style="display: none; width: 1031px; margin: auto">
 			<h1 id="mapModeHeader" style="position: absolute; top: 5px"></h1>
 			<div id = "mapCanvasGridDiv" style="position: absolute; width: 1020px; top: 53px"></div>
+			<div id = "mapControlsDiv" style="position: absolute; width: 1020px; top: 510px">
+				<form id="mapControls" onsubmit="return onFormSubmit(this)" style="position: absolute">
+					<input type="button" id="teleMarkerDeleteBtn" onclick="doTeleMarkerDelete()" value="Delete Marker"
+						style="width: 100px; position: absolute; left: 300px; background: none!important; color: inherit; border: none; padding: 0!important; cursor: pointer; font-family: Trebuchet MS; font-size: 20px">
+					</input>
+					<input type="button" id="teleportBtn" onclick="doTeleport()" value="Teleport"
+						style="width: 100px; position: absolute; left: 600px; background: none!important; color: inherit; border: none; padding: 0!important; cursor: pointer; font-family: Trebuchet MS; font-size: 20px">
+					</input>
+				</form>
+			</div>
 		</div>
 		
 		

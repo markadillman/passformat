@@ -65,6 +65,7 @@ var drawingHeader = "CREATE THE BLANK --- Add your art to the world! Don't forge
 var avatarHeader = "CREATE YOUR AVATAR --- Edit an existing avatar or draw a new one. For best results, draw to the oval's edges.";
 var mapHeader = "EXPLORE THE BLANK --- Use the arrow keys to pan. Click on a teleportation marker to go directly to that location.";
 var mapCanvasGridDiv;
+var mapControlsDiv;
 var mapGridWidth = 17;	// number of tiles the map can display at once
 var mapGridHeight = 13;
 var mapGrid = [];		// the 2D array of map grid canvases
@@ -73,6 +74,9 @@ for (var i = 0; i < mapGridWidth; i += 1) {
 }
 var mapCurrentCenterX = 0;	// tile the map is currently centered on
 var mapCurrentCenterY = 0;
+var teleMarkerDivList = [];	// the divs that hold the canvases for the tele markers
+var teleMarkerCanvasList = []; // the canvases that display the teleport markers
+var selectedTeleMarker = -1; // index of currently selected teleport marker, -1 if none selected
 var avatarEllipse;		// the ellipse border for the avatar drawing area
 var toolDiv;			// the div for the entire drawing tool
 var displayDiv;			// the display divs
@@ -182,6 +186,15 @@ function parseKeyHTML(evt) {
 		}
 		// toggle music being paused
 		toggleMusicPause();
+	}
+	
+	// handle quitting to home screen if anywhere but art tool or message box
+	if (keyID == 81 && mode != artMode && messageDiv.style.display != "block") {
+		if (verboseDebugging) {
+			console.log("HTML document caught a q keypress.");
+		}
+		// do everything necessary to quit to the home screen
+		doQuitToHomeScreen();
 	}
 	
 	// handle going into map mode only if in game mode and playing
@@ -442,8 +455,7 @@ function initHTML() {
 			localStorage.hello = "world";
 			localStorage.myAvatarCount = 0;
 			localStorage.myAvatars = JSON.stringify({});
-			localStorage.myTeleporterCount = 0;
-			localStorage.myTeleporters = JSON.stringify({});
+			localStorage.myTeleMarkers = JSON.stringify([playerSpawnX + " " + playerSpawnY]);
 			localStorage.myMapData = JSON.stringify({empty: {}});
 			localStorage.myVisitData = JSON.stringify({0: {0: true}});
 			// debug message
@@ -475,11 +487,14 @@ function initHTML() {
 
 	// grab, set up, and hide the map screen div
 	mapDiv = document.getElementById("mapDiv");
+	mapControlsDiv = document.getElementById("mapControlsDiv");
 	document.getElementById("mapModeHeader").innerHTML = mapHeader;
 	mapCanvasGridDiv = document.getElementById("mapCanvasGridDiv");
-	// make the canvases and put them in the div
+	// make the grid canvases and put them in the div
 	var myCanvas;
 	var myDiv;
+	var leftVal;
+	var rightVal;
 	for (var i = 0; i < mapGridWidth; i += 1) { // map is this many tiles wide
 		for (var j = 0; j < mapGridHeight; j += 1) { // and this many high
 			// make the div for this spot and place it
@@ -488,9 +503,9 @@ function initHTML() {
 			myDiv.width = canvasWidth / 10;
 			myDiv.height = canvasHeight / 10;
 			myDiv.style.position = "absolute";
-			var leftVal = i * (canvasWidth / 10);
+			leftVal = i * (canvasWidth / 10);
 			myDiv.style.left = leftVal.toString() + "px";
-			var topVal = j * (canvasHeight / 10);
+			topVal = j * (canvasHeight / 10);
 			myDiv.style.top = topVal.toString() + "px";
 			
 			// make the canvas for this spot, add it to this div and to mapGrid
@@ -505,6 +520,14 @@ function initHTML() {
 			mapCanvasGridDiv.appendChild(myDiv);
 		}
 	}
+	// create all existing teleportation markers
+	var myMarkerList = JSON.parse(localStorage.myTeleMarkers);
+	var myMarkerCoords;
+	for (var i = 0; i < myMarkerList.length; i += 1) {
+		myMarkerCoords = myMarkerList[i].split(" ");
+		createTeleMarker(myMarkerCoords[0], myMarkerCoords[1]);
+	}
+	// hide the map div
 	mapDiv.style.display = "none";
 	
 	// create the hidden file input element
@@ -860,9 +883,6 @@ function updateMap(x, y) {
 		}
 	}
 	
-	// display clickable teleportation markers on the map
-	// ###
-	
 	// debug message
 	if (debugging) {
 		console.log("Updated map to center on tile: (" + x.toString() + ", " + y.toString() + ").");
@@ -909,6 +929,130 @@ function doMapPanRight() {
 	mapCurrentCenterX -= 1;
 	updateMap(mapCurrentCenterX, mapCurrentCenterY);
 }
+function createTeleMarker(x, y) {
+	var myDiv;
+	var myCanvas;
+	
+	// get next index number to use
+	var nextID = teleMarkerDivList.length;
+	
+	// create the div and add it to the div list
+	myDiv = document.createElement("div");
+	myDiv.id = "telediv " + .toString();
+	myDiv.width = canvasWidth / 30;
+	myDiv.height = canvasHeight / 30;
+	myDiv.style.position = "absolute";
+	myDiv.style.left = x.toString() + "px";
+	myDiv.style.top = y.toString() + "px";
+	teleMarkerDivList[nextID] = myDiv;
+	
+	// create the canvas and add it to the canvas list
+	myCanvas = document.createElement("canvas");
+	myCanvas.id = "telecanv " + .toString();
+	myCanvas.width = canvasWidth / 30;
+	myCanvas.height = canvasHeight / 30;
+	teleMarkerCanvasList[nextID] = myCanvas;
+	
+	// append the children to draw the canvases in the DOM
+	myDiv.appendChild(myCanvas);
+	mapCanvasGridDiv.appendChild(myDiv);
+}
+function teleMarkerSelect(markerID) {
+	// unselect the current selectedTeleMarker if any
+	if (selectedTeleMarker != -1) {
+		teleMarkerUnselect();
+	}
+	
+	// switch markerID to use selected sprite
+	myGroupStr = selectedTeleMarkerImg;
+	myContext = teleMarkerCanvasList[markerID].getContext("2d");
+	putGroupInCanvas(myGroupStr, myContext, 0, 0, canvasWidth, canvasHeight, 0, 0, canvasWidth/30, canvasHeight/30)
+	
+	// update selectedTeleMarker
+	selectedTeleMarker = markerID;
+	
+	// marker selected, so unhide controls div
+	mapControlsDiv.style.display = "block";
+	
+	// then hide delete button if permanent spawn point marker is selected
+	if (selectedTeleMarker == 0) {
+		document.getElementById("teleMarkerDeleteBtn").style.display = "none";
+	} else { // else show the delete button for all other markers
+		document.getElementById("teleMarkerDeleteBtn").style.display = "block";
+	}
+}
+function teleMarkerUnselect() {
+	// works on current selectedTeleMarker
+	
+	// no marker selected so hide whole controls div
+	mapControlsDiv.style.display = "none";
+	
+	// switch current selectedTeleMarker back to regular sprite
+	myGroupStr = teleMarkerImg;
+	myContext = teleMarkerCanvasList[selectedTeleMarker].getContext("2d");
+	putGroupInCanvas(myGroupStr, myContext, 0, 0, canvasWidth, canvasHeight, 0, 0, canvasWidth/30, canvasHeight/30)
+}
+function doTeleMarkerDelete() {
+	// works on current selectedTeleMarker
+	
+	// remove the div from the DOM to stop displaying it
+	var myParent = teleMarkerDivList[selectedTeleMarker];
+	myParent.removeChild(teleMarkerDivList[selectedTeleMarker]);
+	
+	// remove entry in teleMarkerDivList
+	// remove entry if it exists and isn't marker 0
+	var numMarkers = teleMarkerDivList.length;
+	if (selectedTeleMarker > 0 && selectedTeleMarker < numMarkers) {
+		delete teleMarkerDivList[selectedTeleMarker];
+		// shift any entries after that up one index
+		for (var i = selectedTeleMarker; i < numMarkers-1; i += 1) {
+			teleMarkerDivList[i] = teleMarkerDivList[i+1];
+		}
+	} // else do nothing b/c something is messed up somehow
+	
+	// remove entry in teleMarkerCanvasList
+	// remove entry if it exists and isn't marker 0
+	numMarkers = teleMarkerCanvasList.length;
+	if (selectedTeleMarker > 0 && selectedTeleMarker < numMarkers) {
+		delete teleMarkerCanvasList[selectedTeleMarker];
+		// shift any entries after that up one index
+		for (var j = selectedTeleMarker; j < numMarkers-1; j += 1) {
+			teleMarkerCanvasList[j] = teleMarkerCanvasList[j+1];
+		}
+	} // else do nothing b/c something is messed up somehow
+	
+	// remove entry in localStorage.myTeleMarkers
+	// get current info out of localStorage
+	var tempObject = JSON.parse(localStorage.myTeleMarkers);
+	numMarkers = tempObject.length;
+	// remove entry if it exists and isn't marker 0
+	if (selectedTeleMarker > 0 && selectedTeleMarker < numMarkers) {
+		delete tempObject[selectedTeleMarker];
+		// shift any entries after that up one index
+		for (var k = selectedTeleMarker; k < numMarkers-1; k += 1) {
+			tempObject[k] = tempObject[k+1];
+		}
+	} // else do nothing b/c something is messed up somehow
+	// send result back to localStorage
+	localStorage.myTeleMarkers = JSON.stringify(tempObject);
+	
+	// set selectedTeleMarker = -1 to indicate no marker selected
+	selectedTeleMarker = -1;
+}
+function doTeleport() {
+	// works on current selectedTeleMarker
+	
+	// get info out of localStorage
+	var tempObject = JSON.parse(localStorage.myTeleMarkers);
+	var newCoords = tempObject[selectedTeleMarker].split(" ");
+	
+	// use helper function in game.js to move player
+	doPlayerMove(Number(newCoords[0]), Number(newCoords[1]));
+	
+	// manually set player entity's x and y to complete the teleport
+	player.x = Number(newCoords[0]);
+	player.y = Number(newCoords[1]);
+}
 
 // help screen functions
 function displayHelpScreen() {
@@ -943,18 +1087,85 @@ function doHelpScreenDone() {
 // quit to home screen function
 function doQuitToHomeScreen() {
 	
-	// set the mode and flags
-	previousMode = mode;
-	mode = gameMode;
-	playing = false;
-	firstWorldEntry = true;
+	// do cleanup necessary if player exists
+	// Toni moved this code from its original place 
+	// in the player's Q handlerin game.js
+	if (playing) {
+		if (verboseDebugging) {
+			console.log("Q been pressed.");
+		}
+		// quit to home screen
+		// server cleanup stuff here
+		//MARK ADDED
+		argsocket.emit('my disconnect',{id:socketId});
+		//clear player position map
+		for (key in playerPositionMap){
+			if (verboseDebugging){
+				console.log("deleted.");
+			}
+			delete playerPositionMap[key];
+		}
+		
+		// hard stop player motion and wait
+		// to make sure no assetRender calls are in progress
+		// when the quit continues
+		player.removeComponent('Gravity');
+		player.removeComponent('Multiway');
+		player.removeComponent('Motion');
+		player.removeComponent('Jumper');
+		Crafty.e('Delay').delay(function(){
+			if (debugging) {
+				console.log("Waited.");
+			}
+			
+			// crafty globals cleanup
+			currentUpperLeftX = 0;
+			currentUpperLeftY = 0;
+			currentPlayerX = 0;
+			currentPlayerY = 0;
+			
+			// tool.js cleanup
+			// set the mode and flags
+			previousMode = mode;
+			mode = gameMode;
+			playing = false;
+			firstWorldEntry = true;
 
-	// display correct div
-	showDiv(mode);
-	
-	// debug message
-	if (debugging) {
-		console.log("Quit to home screen.");
+			// display correct div
+			showDiv(mode);
+			
+			// switch scenes
+			Crafty.enterScene('HomeScreen');
+			
+			// debug message
+			if (debugging) {
+				console.log("Quit to home screen.");
+			}
+		}, exitDelay, 0);
+	} else { // weren't in play mode, so no player to clean up
+		// crafty globals cleanup
+		currentUpperLeftX = 0;
+		currentUpperLeftY = 0;
+		currentPlayerX = 0;
+		currentPlayerY = 0;
+		
+		// tool.js cleanup
+		// set the mode and flags
+		previousMode = mode;
+		mode = gameMode;
+		playing = false;
+		firstWorldEntry = true;
+
+		// display correct div
+		showDiv(mode);
+		
+		// switch scenes just in case its necessary
+		Crafty.enterScene('HomeScreen');
+		
+		// debug message
+		if (debugging) {
+			console.log("Quit to home screen.");
+		}
 	}
 }
 
