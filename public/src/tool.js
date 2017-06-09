@@ -1027,12 +1027,8 @@ function drawMarkersOnMap() {
 			teleMapY = teleMapInTileY + (teleMapTileY * (canvasHeight/10));
 			
 			// adjust for size of sprite
-			// !!!
-			
-			console.log(teleMapTileX);
-			console.log(teleMapTileY);
-			console.log(teleMapX);
-			console.log(teleMapY);
+			teleMapX -= 10;
+			teleMapY -= 10;
 			
 			// set coords into div
 			teleMarkerDivList[i].style.left = teleMapX.toString() + "px";
