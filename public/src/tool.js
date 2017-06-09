@@ -890,7 +890,7 @@ function updateMapCallback(request,currentCoords) {
 		if (debugging){
 			console.log("(X : " + tempx.toString() + ", Y: " + tempy.toString() + ")");
 		}
-		var field = {tempY.toString():true};
+		var field = {tempy:true};
 		indexedTiles[tempx] = field;
 	}
 	if (debugging){
