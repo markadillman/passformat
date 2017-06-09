@@ -936,7 +936,7 @@ function updateMapCallback(request,currentCoords) {
 				// ### (worldX, worldY) currently exists in the database
 				if (indexedTiles[i][j]) { // this tile exists, so display grey box = "fog of war"
 					putColorInCanvas(mapGrid[i][j], 84, 84, 84, 255);
-									
+
 				} else { // this tile doesn't exist, so just display background color
 					// ### in a perfect world, I would have a helper function to
 					// convert the bgroundColor hex string to these ints
@@ -951,7 +951,7 @@ function updateMapCallback(request,currentCoords) {
 	
 	// debug message
 	if (debugging) {
-		console.log("Updated map to center on tile: (" + x.toString() + ", " + y.toString() + ").");
+		console.log("Updated map to center on tile: (" + mapCurrentCenterX.toString() + ", " + mapCurrentCenterY.toString() + ").");
 	}
 }
 function putColorInCanvas(myCanvas, myR, myG, myB, myA) {
