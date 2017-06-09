@@ -961,7 +961,7 @@ function drawMarkersOnMap() {
 	// get current info out of localStorage
 	var teleTempObject = JSON.parse(localStorage.myTeleMarkers);
 	teleNumMarkers = teleTempObject.length;
-	console.log("here");
+	
 	// get center tile coords in the mapGrid
 	var gridCenterX = Math.floor(mapGridWidth / 2);
 	var gridCenterY = Math.floor(mapGridHeight / 2);
@@ -977,7 +977,7 @@ function drawMarkersOnMap() {
 	var teleMapX;
 	var teleMapY;
 	for (var i = 0; i < teleNumMarkers; i += 1) {
-		
+		console.log("here");
 		// get marker i's world coordinates
 		teleWorldCoords = teleTempObject[i].split(" ");
 		teleWorldX = Number(teleWorldCoords[0]);
