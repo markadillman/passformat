@@ -969,7 +969,7 @@ function createTeleMarker() {
 }
 function putTeleMarkerInCanvas(myGroupStr, myContext) {
 	// use true flag to tell putGroupInCanvas not to use the background rect
-	putGroupInCanvas(myGroupStr, myContext, 200, 110, 180, 300, 0, 0, 50, 70, true)
+	putGroupInCanvas(myGroupStr, myContext, 200, 110, 170, 300, 0, 0, 50, 70, true)
 }
 function drawMarkersOnMap() {
 	// get current info out of localStorage
@@ -1009,8 +1009,8 @@ function drawMarkersOnMap() {
 			// if yes, need to draw this marker on the mapGrid in the right spot
 			
 			// get in-map coordinates for these world coordinates
-			teleMapX = 10;
-			teleMapY = 10;
+			teleMapX = 100;
+			teleMapY = 100;
 			
 			// adjust for size of sprite
 			// !!!
