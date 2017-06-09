@@ -854,14 +854,10 @@ function doPlayerMove(x, y, handlePan) {
 	yTile = Math.floor(currentUpperLeftY / tileHeight);
 	var payload = {'x' : xTile, 'y': yTile};
 	var tempObject;
-	if (x > currentUpperLeftX + screenWidth)
+	if (x > currentUpperLeftX + screenWidth && handlePan)
 	{
 		currentUpperLeftX = currentUpperLeftX + tileWidth;
-		
-		// Toni adding flag check to stop double pan on teleport
-		if (handlePan) {
-			Crafty.viewport.pan(tileWidth, 0, panTime);
-		}
+		Crafty.viewport.pan(tileWidth, 0, panTime);
 		
 		// Toni added update of tile coords
 		xTile = Math.floor(currentUpperLeftX / tileWidth);
@@ -884,14 +880,10 @@ function doPlayerMove(x, y, handlePan) {
 		dynamicPostRequest('/pullright',payload,dynamicPostOnLoad,dynamicError);
 		// Destroy assets in outer leftmost "ring" segment
 	}
-	else if (x < currentUpperLeftX)
+	else if (x < currentUpperLeftX && handlePan)
 	{
 		currentUpperLeftX = currentUpperLeftX - tileWidth;
-		
-		// Toni adding flag check to stop double pan on teleport
-		if (handlePan) {
-			Crafty.viewport.pan(tileWidth*-1, 0, panTime);
-		}
+		Crafty.viewport.pan(tileWidth*-1, 0, panTime);
 		
 		// Toni added update of tile coords
 		xTile = Math.floor(currentUpperLeftX / tileWidth);
@@ -915,14 +907,10 @@ function doPlayerMove(x, y, handlePan) {
 		// Destroy assets in outer rightmost "ring" segment
 	}
 
-	if (y > currentUpperLeftY + screenHeight)
+	if (y > currentUpperLeftY + screenHeight && handlePan)
 	{
 		currentUpperLeftY = currentUpperLeftY + tileHeight;
-		
-		// Toni adding flag check to stop double pan on teleport
-		if (handlePan) {
-			Crafty.viewport.pan(0, tileHeight, panTime);
-		}
+		Crafty.viewport.pan(0, tileHeight, panTime);
 		
 		// Toni added update of tile coords
 		xTile = Math.floor(currentUpperLeftX / tileWidth);
@@ -945,14 +933,10 @@ function doPlayerMove(x, y, handlePan) {
 		dynamicPostRequest('/pullbottom',payload,dynamicPostOnLoad,dynamicError);
 		// Destroy assets in outer top-most "ring" segment
 	}
-	else if (y < currentUpperLeftY)
+	else if (y < currentUpperLeftY && handlePan)
 	{
 		currentUpperLeftY = currentUpperLeftY - tileHeight;
-		
-		// Toni adding flag check to stop double pan on teleport
-		if (handlePan) {
-			Crafty.viewport.pan(0, tileHeight*-1, panTime);
-		}
+		Crafty.viewport.pan(0, tileHeight*-1, panTime);
 		
 		// Toni added update of tile coords
 		xTile = Math.floor(currentUpperLeftX / tileWidth);
@@ -974,6 +958,25 @@ function doPlayerMove(x, y, handlePan) {
 		// Load assets in outer top-most "ring" segment
 		dynamicPostRequest('/pulltop',payload,dynamicPostOnLoad,dynamicError);
 		// Destroy assets in outer bottom-most "ring" segment
+	}
+	if (!handlePan) {
+		// check this just in case teleport has gotten weird on us
+		
+		// Toni added making sure this tile is marked as visited
+		// get current visited data from localStorage
+		tempObject = JSON.parse(localStorage.myVisitData);
+		// check to see if the object is ready for this coordinate
+		if (tempObject[xTile] == undefined) {
+			// define it so the assignment doesn't barf
+			tempObject[xTile] = {};
+		}
+		// set the flag for this tile to visited
+		tempObject[xTile][yTile] = true;
+		// send the updated object back to localStorage
+		localStorage.myVisitData = JSON.stringify(tempObject);
+		
+		// do post-teleport asset request
+		initAssetRequest(currentPlayerX, currentPlayerY, argsocket);
 	}
 }
 

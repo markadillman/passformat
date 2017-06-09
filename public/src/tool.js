@@ -1148,8 +1148,9 @@ function doTeleport() {
 	var panYDelta = (goalYTile - currentYTile) * tileHeight;
 	Crafty.viewport.pan(panXDelta, panYDelta, panTime);
 	
-	console.log(panXDelta);
-	console.log(panYDelta);
+	// manually fix upperleft vars
+	currentUpperLeftX = (goalXTile * tileWidth) + canvasEdge;
+	currentUpperLeftY = (goalYTile * tileHeight) + canvasEdge;
 	
 	// use helper function in game.js to finish moving player
 	// false b/c do not want doPlayerMove to pan again
