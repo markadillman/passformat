@@ -881,19 +881,19 @@ function updateMapCallback(request,currentCoords) {
 		console.log(populatedTiles);
 	}
 
-	var indexedTiles = [];
+	var indexedTiles = {};
 
 	//format response list for quick populating with appropriate tile
 	for (i in populatedTiles){
-		var tempx = populatedTiles[i]['xcoord'];
-		var tempy = populatedTiles[i]['ycoord'];
+		var tempx = populatedTiles[i]['xcoord'].toString();
+		var tempy = populatedTiles[i]['ycoord'].toString();
 		if (debugging){
 			console.log("(X : " + tempx.toString() + ", Y: " + tempy.toString() + ")");
 			console.log(tempx);
 			console.log(tempy);
 		}
 		if (indexedTiles[tempx] === undefined){
-			indexedTiles[tempx]= [];
+			indexedTiles[tempx] = {};
 		}
 		indexedTiles[tempx][tempy] = true;
 	}
