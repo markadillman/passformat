@@ -966,6 +966,7 @@ function displayMessage(msg, okFn, cancelFn, useTextInput, hideCancelButton, def
 	//updated so all anonymous functions should also remove themselves as event listeners
 	if (initCoords&&textInputPassword){
 		//this works because the truthiness of strings in Javascriprt. Both true and defined.
+		console.log("first block");
 		msgBtnOK.addEventListener('click',function (){
 			eventListenerMsgBtnOk = arguments.callee;
 			this.removeEventListener("click",arguments.callee, false);
@@ -978,6 +979,7 @@ function displayMessage(msg, okFn, cancelFn, useTextInput, hideCancelButton, def
 		},false);
 	}
 	else if (initCoords) {
+		console.log("second block");
 		msgBtnOK.addEventListener('click',function (){
 			eventListenerMsgBtnOk = arguments.callee;
 			this.removeEventListener("click",arguments.callee, false);
@@ -991,6 +993,7 @@ function displayMessage(msg, okFn, cancelFn, useTextInput, hideCancelButton, def
 	}
 	else
 	{
+		console.log("third block");
 		msgBtnOK.addEventListener('click',function (){
 			eventListenerMsgBtnOk = arguments.callee;
 			this.removeEventListener("click",arguments.callee,false);
@@ -1048,12 +1051,11 @@ function removeEventListeners(){
 	var pwdBtnPublic = document.getElementById('pwdBtnPublic');
 	var pwdBtnCancel = document.getElementById('pwdBtnCancel');
 	if (verboseDebugging){
-		console.log("GLOBALS FOR REMOVAL"){
-			console.log("OK");
-			console.log(eventListenerMsgBtnOK);
-			console.log("CANCEL");
-			console.log(eventListenerMsgBtnCancel);
-		}
+		console.log("GLOBALS FOR REMOVAL");
+		console.log("OK");
+		console.log(eventListenerMsgBtnOK);
+		console.log("CANCEL");
+		console.log(eventListenerMsgBtnCancel);
 	}
 	//all nodes are gathered in reference-able variables. Now use the prototype that tracks them
 	//to remove all the event listeners regardless of what they are or what args they have.
