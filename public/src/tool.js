@@ -966,38 +966,38 @@ function displayMessage(msg, okFn, cancelFn, useTextInput, hideCancelButton, def
 	//updated so all anonymous functions should also remove themselves as event listeners
 	if (initCoords&&textInputPassword){
 		//this works because the truthiness of strings in Javascriprt. Both true and defined.
-		eventListenerMsgBtnOK = msgBtnOK.addEventListener('click',function clicked1(){
-			eventListenerMsgBtnOk = clicked1;
+		msgBtnOK.addEventListener('click',function clicked1(){
+			eventListenerMsgBtnOk = arguments.callee;
 			this.removeEventListener("click",clicked1, false);
 			okFn(initCoords.xcoord,initCoords.ycoord,textInputPassword);
 		},false); 
-		eventListenerMsgBtnCancel = msgBtnCancel.addEventListener('click',function clicked2(){
-			eventListenerMsgBtnCancel = clicked2;
+		msgBtnCancel.addEventListener('click',function clicked2(){
+			eventListenerMsgBtnCancel = arguments.callee;
 			this.removeEventListener("click",clicked2,false);
 			cancelFn();
 		},false);
 	}
 	else if (initCoords) {
-		eventListenerMsgBtnOK = msgBtnOK.addEventListener('click',function clicked1(){
-			eventListenerMsgBtnOk = clicked1;
+		msgBtnOK.addEventListener('click',function clicked1(){
+			eventListenerMsgBtnOk = arguments.callee;
 			this.removeEventListener("click",clicked1, false);
 			okFn(initCoords.xcoord,initCoords.ycoord);
 		},false);
-		eventListenerMsgBtnCancel = msgBtnCancel.addEventListener('click',function clicked2(){
-			eventListenerMsgBtnCancel = clicked2;
+		msgBtnCancel.addEventListener('click',function clicked2(){
+			eventListenerMsgBtnCancel = arguments.callee;
 			this.removeEventListener("click",clicked2,false);
 			cancelFn();
 		},false);
 	}
 	else
 	{
-		eventListenerMsgBtnOK = msgBtnOK.addEventListener('click',function clicked1(){
-			eventListenerMsgBtnOk = clicked1;
+		msgBtnOK.addEventListener('click',function clicked1(){
+			eventListenerMsgBtnOk = arguments.callee;
 			this.removeEventListener("click",clicked1,false);
 			okFn(); 
 		},false);
-		eventListenerMsgBtnCancel = msgBtnCancel.addEventListener('click',function clicked2(){
-			eventListenerMsgBtnCancel = clicked2;
+		msgBtnCancel.addEventListener('click',function clicked2(){
+			eventListenerMsgBtnCancel = arguments.callee;
 			this.removeEventListener("click",clicked2,false);
 			cancelFn();
 		},false);
