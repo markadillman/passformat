@@ -1293,6 +1293,9 @@ function loadMyAvatarsToCarousel(myIndex) {
 
 	// load carouselData[carouselIndex] into the carousel's selected position
 	displayAvatarInCarousel(carouselData[carouselIndex]);
+	
+	// set content marker
+	carouselContents = myAvatars;
 
 	// debug message
 	if (debugging) {
@@ -1336,6 +1339,9 @@ function loadLibraryAvatarsToCarouselCallback(request,args){
 	
 	// turn on enter world button just in case
 	turnOnEnterButton();
+	
+	// set content marker
+	carouselContents = libraryAvatars;
 	
 	// debug message
 	if (debugging) {
