@@ -194,7 +194,7 @@ function parseKeyHTML(evt) {
 			console.log("HTML document caught a q keypress.");
 		}
 		// do everything necessary to quit to the home screen
-		doQuitToHomeScreen();
+		doQuitToHomeScreen(socket);
 	}
 	
 	// handle going into map mode only if in game mode and playing
@@ -1111,7 +1111,7 @@ function doHelpScreenDone() {
 }
 
 // quit to home screen function
-function doQuitToHomeScreen() {
+function doQuitToHomeScreen(argsocket) {
 	
 	// do cleanup necessary if player exists
 	// Toni moved this code from its original place 
