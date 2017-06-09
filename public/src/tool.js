@@ -977,7 +977,7 @@ function drawMarkersOnMap() {
 	var teleMapX;
 	var teleMapY;
 	for (var i = 0; i < teleNumMarkers; i += 1) {
-		console.log("here");
+		
 		// get marker i's world coordinates
 		teleWorldCoords = teleTempObject[i].split(" ");
 		teleWorldX = Number(teleWorldCoords[0]);
@@ -993,7 +993,7 @@ function drawMarkersOnMap() {
 		teleMapTileY = teleWorldTileY - mapCurrentCenterY + gridCenterY;
 		if (teleMapTileX >= 0 && teleMapTileX <= mapGridWidth && teleMapTileY >= 0 && teleMapTileY <= mapGridHeight) {
 			// if yes, need to draw this marker on the mapGrid in the right spot
-			
+			console.log("here");
 			// get in-map coordinates for these world coordinates
 			teleMapX = 10;
 			teleMapY = 10;
