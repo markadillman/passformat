@@ -939,8 +939,8 @@ function createTeleMarker() {
 	var myDiv;
 	myDiv = document.createElement("div");
 	myDiv.id = "teleMarkerDiv " + nextID.toString();
-	myDiv.width = canvasWidth/30;
-	myDiv.height = canvasHeight/30;
+	myDiv.width = canvasWidth;
+	myDiv.height = canvasHeight;
 	myDiv.style.position = "absolute";
 	myDiv.style.left = 0;
 	myDiv.style.top = 0;
@@ -952,8 +952,8 @@ function createTeleMarker() {
 	var myCanvas;
 	myCanvas = document.createElement("canvas");
 	myCanvas.id = "teleMarkerCanvas " + nextID.toString();
-	myCanvas.width = canvasWidth/30;
-	myCanvas.height = canvasHeight/30;
+	myCanvas.width = canvasWidth;
+	myCanvas.height = canvasHeight;
 	teleMarkerCanvasList[nextID] = myCanvas;
 	myDiv.appendChild(myCanvas);
 	
@@ -961,7 +961,7 @@ function createTeleMarker() {
 	putTeleMarkerInCanvas(teleMarkerImg, myCanvas.getContext("2d"));
 }
 function putTeleMarkerInCanvas(myGroupStr, myContext) {
-	putGroupInCanvas(myGroupStr, myContext, 100, 100, 50, 50, 0, 0, canvasWidth/30, canvasHeight/30)
+	putGroupInCanvas(myGroupStr, myContext, 100, 100, 50, 50, 0, 0, canvasWidth, canvasHeight)
 }
 function drawMarkersOnMap() {
 	// get current info out of localStorage
@@ -1010,7 +1010,6 @@ function drawMarkersOnMap() {
 			// set coords into div
 			teleMarkerDivList[i].style.left = teleMapX;
 			teleMarkerDivList[i].style.top = teleMapY;
-			console.log(teleMarkerDivList[i]);
 			
 			// append this div to this tile in the map
 			mapCanvasGridDiv.appendChild(teleMarkerDivList[i]);
