@@ -881,7 +881,7 @@ function updateMapCallback(request,currentCoords) {
 		console.log(populatedTiles);
 	}
 
-	var indexedTiles = {}};
+	var indexedTiles = {};
 	//format response list for quick populating with appropriate tile
 	for (i in populatedTiles){
 		var tempx = populatedTiles[i]['xcoord'];
@@ -961,6 +961,7 @@ function updateMapCallback(request,currentCoords) {
 		console.log("Updated map to center on tile: (" + mapCurrentCenterX.toString() + ", " + mapCurrentCenterY.toString() + ").");
 	}
 }
+
 function putColorInCanvas(myCanvas, myR, myG, myB, myA) {
 	// myA = 255 for full opacity
 	// create the given color block in given context
