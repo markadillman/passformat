@@ -1041,12 +1041,12 @@ function removeEventListeners(){
 	var pwdBtnCancel = document.getElementById('pwdBtnCancel');
 	//all nodes are gathered in reference-able variables. Now use the prototype that tracks them
 	//to remove all the event listeners regardless of what they are or what args they have.
-	msgBtnOK.eventListener(eventListenerMsgBtnOK);
-	msgBtnCancel.eventListener(eventListenerMsgBtnCancel);
-	pwdBtnOK.eventListener(eventListenerPwdBtnOk);
-	pwdBtnSkip.eventListener(eventListenerPwdBtnSkip);
-	pwdBtnCancel.eventListener(eventListenerPwdBtnCancel);
-	pwdBtnPublic.eventListener(eventListenerPwdBtnPublic);
+	msgBtnOK.removeEventListener('click',eventListenerMsgBtnOK,true);
+	msgBtnCancel.removeEventListener('click',eventListenerMsgBtnCancel,true);
+	pwdBtnOK.removeEventListener('click',eventListenerPwdBtnOk,true);
+	pwdBtnSkip.removeEventListener('click',eventListenerPwdBtnSkip,true);
+	pwdBtnCancel.removeEventListener('click',eventListenerPwdBtnCancel,true);
+	pwdBtnPublic.removeEventListener('click',eventListenerPwdBtnPublic,true);
 }
 
 // default handlers for message box buttons
