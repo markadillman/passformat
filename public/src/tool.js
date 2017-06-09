@@ -1006,7 +1006,7 @@ function drawMarkersOnMap() {
 			teleMarkerDivList[i].style.top = teleMapY;
 			
 			// append this div to this tile in the map
-			mapCanvasGridDiv.appendChild(teleMarkerDivList[i]);
+			//mapCanvasGridDiv.appendChild(teleMarkerDivList[i]);
 			
 		} else { // make sure this div is not appended in the DOM
 			var myParent = teleMarkerDivList[i].parentNode;
