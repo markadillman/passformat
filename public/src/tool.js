@@ -889,7 +889,7 @@ function updateMapCallback(request,currentCoords) {
 		if (debugging){
 			console.log("(X : " + tempx.toString() + ", Y: " + tempy.toString() + ")");
 		}
-		indexedTiles[tempx][tempy] = {hasAssets:true};
+		indexedTiles.tempx.tempy = {hasAssets:true};
 	}
 	if (debugging){
 		console.log("POPULATED TILES:");
