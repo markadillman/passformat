@@ -885,8 +885,8 @@ function updateMapCallback(request,currentCoords) {
 
 	//format response list for quick populating with appropriate tile
 	for (i in populatedTiles){
-		var tempx = populatedTiles[i]['xcoord'].toString();
-		var tempy = populatedTiles[i]['ycoord'].toString();
+		var tempx = populatedTiles[i]['xcoord'];
+		var tempy = populatedTiles[i]['ycoord'];
 		if (debugging){
 			console.log("(X : " + tempx.toString() + ", Y: " + tempy.toString() + ")");
 			console.log(tempx);
@@ -948,7 +948,7 @@ function updateMapCallback(request,currentCoords) {
 				// ### need to replace "true" with a real test to see if world tile
 				// ### (worldX, worldY) currently exists in the database
 				if (!(indexedTiles[i.toString()] === undefined)){
-					if (indexedTiles[i.toString()][j.toString()] === undefined){
+					if (!(indexedTiles[i.toString()][j.toString()] === undefined)){
 						if (indexedTiles[i.toString()][j.toString()]['hasArt']) { // this tile exists, so display grey box = "fog of war"
 							putColorInCanvas(mapGrid[i][j], 84, 84, 84, 255);
 						}
