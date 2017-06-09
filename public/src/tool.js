@@ -960,60 +960,62 @@ function doQuitToHomeScreen() {
 // also displays text input element if boolean argument is true
 // these functions should include: messageDiv.style.display = "none";
 function displayMessage(msg, okFn, cancelFn, useTextInput, hideCancelButton, defaultText, textInputPassword, initCoords) {
+	console.log("MESSAGE");
+	console.log(msg);
 	//remove previous event listeners so that they do not aggregate to multiple per push
-	removeEventListeners();
+	//removeEventListeners();
 	messageText.innerHTML = msg;
 	//updated so all anonymous functions should also remove themselves as event listeners
 	if (initCoords&&textInputPassword){
 		//this works because the truthiness of strings in Javascriprt. Both true and defined.
 		console.log("first block");
-		eventListenerMsgBtnOk = msgBtnOK.addEventListener('click',function (){
+		eventListenerMsgBtnOk = msgBtnOK.addEventListener('click',function click1(){
 			console.log("callee");
 			console.log(arguments.callee);
 			eventListenerMsgBtnOk = arguments.callee;
-			this.removeEventListener("click",arguments.callee, false);
+			this.removeEventListener("click",click1, false);
 			okFn(initCoords.xcoord,initCoords.ycoord,textInputPassword);
 		},false); 
-		eventListenerMsgBtnCancel = msgBtnCancel.addEventListener('click',function (){
+		eventListenerMsgBtnCancel = msgBtnCancel.addEventListener('click',function click2(){
 			console.log("callee");
 			console.log(arguments.callee);
 			eventListenerMsgBtnCancel = arguments.callee;
-			this.removeEventListener("click",arguments.callee,false);
+			this.removeEventListener("click",click2,false);
 			cancelFn();
 		},false);
 	}
 	else if (initCoords) {
 		console.log("second block");
-		eventListenerMsgBtnOk = msgBtnOK.addEventListener('click',function (){
+		eventListenerMsgBtnOk = msgBtnOK.addEventListener('click',function click1(){
 			console.log("callee");
 			console.log(arguments.callee);
 			eventListenerMsgBtnOk = arguments.callee;
-			this.removeEventListener("click",arguments.callee, false);
+			this.removeEventListener("click",click1, false);
 			okFn(initCoords.xcoord,initCoords.ycoord);
 		},false);
-		eventListenerMsgBtnCancel = msgBtnCancel.addEventListener('click',function (){
+		eventListenerMsgBtnCancel = msgBtnCancel.addEventListener('click',function click2(){
 			console.log("callee");
 			console.log(arguments.callee);
 			eventListenerMsgBtnCancel = arguments.callee;
-			this.removeEventListener("click",arguments.callee,false);
+			this.removeEventListener("click",click2,false);
 			cancelFn();
 		},false);
 	}
 	else
 	{
 		console.log("third block");
-		eventListenerMsgBtnOk = msgBtnOK.addEventListener('click',function (){
+		eventListenerMsgBtnOk = msgBtnOK.addEventListener('click',function click1(){
 			console.log("callee");
 			console.log(arguments.callee);
 			eventListenerMsgBtnOk = arguments.callee;
-			this.removeEventListener("click",arguments.callee,false);
+			this.removeEventListener("click",click1,false);
 			okFn(); 
 		},false);
-		eventListenerMsgBtnCancel = msgBtnCancel.addEventListener('click',function(){
+		eventListenerMsgBtnCancel = msgBtnCancel.addEventListener('click',function click2(){
 			console.log("callee");
 			console.log(arguments.callee);
 			eventListenerMsgBtnCancel = arguments.callee;
-			this.removeEventListener("click",arguments.callee,false);
+			this.removeEventListener("click",click2,false);
 			cancelFn();
 		},false);
 	}
