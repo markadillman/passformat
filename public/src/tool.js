@@ -936,19 +936,24 @@ function createTeleMarker(x, y) {
 	// get next index number to use
 	var nextID = teleMarkerDivList.length;
 	
+	// figure out coords to use
+	var mapXCoord = x; // !!! this is definitely the wrong coords
+	var mapYCoord = y;
+	
 	// create the div and add it to the div list
 	myDiv = document.createElement("div");
-	myDiv.id = "telediv " + .toString();
+	myDiv.id = "teleMarkerDiv " + nextID.toString();
 	myDiv.width = canvasWidth / 30;
 	myDiv.height = canvasHeight / 30;
 	myDiv.style.position = "absolute";
-	myDiv.style.left = x.toString() + "px";
-	myDiv.style.top = y.toString() + "px";
+	myDiv.style.left = mapXCoord.toString() + "px";
+	myDiv.style.top = mapYCoord.toString() + "px";
+	myDiv.addEventListener('click', toggleTeleSelect(evt));
 	teleMarkerDivList[nextID] = myDiv;
 	
 	// create the canvas and add it to the canvas list
 	myCanvas = document.createElement("canvas");
-	myCanvas.id = "telecanv " + .toString();
+	myCanvas.id = "teleMarkerCanvas " + nextID.toString();
 	myCanvas.width = canvasWidth / 30;
 	myCanvas.height = canvasHeight / 30;
 	teleMarkerCanvasList[nextID] = myCanvas;
@@ -956,6 +961,20 @@ function createTeleMarker(x, y) {
 	// append the children to draw the canvases in the DOM
 	myDiv.appendChild(myCanvas);
 	mapCanvasGridDiv.appendChild(myDiv);
+}
+function toggleTeleSelect(evt) {
+	// reference https://stackoverflow.com/a/9012576
+	evt = evt || window.event;
+    var target = evt.target || evt.srcElement;
+	var targetID = Number(target.id.split(" ")[1]);
+	
+	// is the clicked on marker already selected?
+	if (targetID == selectedTeleMarker) {
+		// then unselect it
+		teleMarkerUnselect();
+	} else { // select it
+		teleMarkerSelect(targetID);
+	}
 }
 function teleMarkerSelect(markerID) {
 	// unselect the current selectedTeleMarker if any
@@ -1007,6 +1026,8 @@ function doTeleMarkerDelete() {
 		// shift any entries after that up one index
 		for (var i = selectedTeleMarker; i < numMarkers-1; i += 1) {
 			teleMarkerDivList[i] = teleMarkerDivList[i+1];
+			// and adjust their ids so they're still matching/parallel
+			teleMarkerDivList[i].id = "teleMarkerDiv " + i.toString();
 		}
 	} // else do nothing b/c something is messed up somehow
 	
@@ -1018,6 +1039,8 @@ function doTeleMarkerDelete() {
 		// shift any entries after that up one index
 		for (var j = selectedTeleMarker; j < numMarkers-1; j += 1) {
 			teleMarkerCanvasList[j] = teleMarkerCanvasList[j+1];
+			// and adjust their ids so they're still matching/parallel
+			teleMarkerCanvasList[j].id = "teleMarkerCanvas " + j.toString();
 		}
 	} // else do nothing b/c something is messed up somehow
 	
@@ -1052,6 +1075,9 @@ function doTeleport() {
 	// manually set player entity's x and y to complete the teleport
 	player.x = Number(newCoords[0]);
 	player.y = Number(newCoords[1]);
+	
+	// hide the map screen
+	doMapScreenDone();
 }
 
 // help screen functions
