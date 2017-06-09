@@ -1113,7 +1113,7 @@ function doTeleMarkerDelete() {
 	if (selectedTeleMarker > 0 && selectedTeleMarker < numMarkers) {
 		delete teleMarkerDivList[selectedTeleMarker];
 		// shift any entries after that up one index
-		for (var i = selectedTeleMarker; i < numMarkers-1; i += 1) {
+		for (var i = selectedTeleMarker; i < numMarkers; i += 1) {
 			teleMarkerDivList[i] = teleMarkerDivList[i+1];
 			// and adjust their ids so they're still matching/parallel
 			teleMarkerDivList[i].id = "teleMarkerDiv " + i.toString();
@@ -1126,7 +1126,7 @@ function doTeleMarkerDelete() {
 	if (selectedTeleMarker > 0 && selectedTeleMarker < numMarkers) {
 		delete teleMarkerCanvasList[selectedTeleMarker];
 		// shift any entries after that up one index
-		for (var j = selectedTeleMarker; j < numMarkers-1; j += 1) {
+		for (var j = selectedTeleMarker; j < numMarkers; j += 1) {
 			teleMarkerCanvasList[j] = teleMarkerCanvasList[j+1];
 			// and adjust their ids so they're still matching/parallel
 			teleMarkerCanvasList[j].id = "teleMarkerCanvas " + j.toString();
@@ -1141,7 +1141,7 @@ function doTeleMarkerDelete() {
 	if (selectedTeleMarker > 0 && selectedTeleMarker < numMarkers) {
 		delete tempObject[selectedTeleMarker];
 		// shift any entries after that up one index
-		for (var k = selectedTeleMarker; k < numMarkers-1; k += 1) {
+		for (var k = selectedTeleMarker; k < numMarkers; k += 1) {
 			tempObject[k] = tempObject[k+1];
 		}
 	} // else do nothing b/c something is messed up somehow
