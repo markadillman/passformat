@@ -858,7 +858,7 @@ function doPlayerMove(x, y, handlePan) {
 	yTile = Math.floor(currentUpperLeftY / tileHeight);
 	var payload = {'x' : xTile, 'y': yTile};
 	var tempObject;
-	if (x > currentUpperLeftX + screenWidth && handlePan)
+	if ((x > currentUpperLeftX + screenWidth) && handlePan)
 	{
 		currentUpperLeftX = currentUpperLeftX + tileWidth;
 		Crafty.viewport.pan(tileWidth, 0, panTime);
@@ -884,7 +884,7 @@ function doPlayerMove(x, y, handlePan) {
 		dynamicPostRequest('/pullright',payload,dynamicPostOnLoad,dynamicError);
 		// Destroy assets in outer leftmost "ring" segment
 	}
-	else if (x < currentUpperLeftX && handlePan)
+	else if ((x < currentUpperLeftX) && handlePan)
 	{
 		currentUpperLeftX = currentUpperLeftX - tileWidth;
 		Crafty.viewport.pan(tileWidth*-1, 0, panTime);
@@ -911,7 +911,7 @@ function doPlayerMove(x, y, handlePan) {
 		// Destroy assets in outer rightmost "ring" segment
 	}
 
-	if (y > currentUpperLeftY + screenHeight && handlePan)
+	if ((y > currentUpperLeftY + screenHeight) && handlePan)
 	{
 		currentUpperLeftY = currentUpperLeftY + tileHeight;
 		Crafty.viewport.pan(0, tileHeight, panTime);
@@ -937,7 +937,7 @@ function doPlayerMove(x, y, handlePan) {
 		dynamicPostRequest('/pullbottom',payload,dynamicPostOnLoad,dynamicError);
 		// Destroy assets in outer top-most "ring" segment
 	}
-	else if (y < currentUpperLeftY && handlePan)
+	else if ((y < currentUpperLeftY) && handlePan)
 	{
 		currentUpperLeftY = currentUpperLeftY - tileHeight;
 		Crafty.viewport.pan(0, tileHeight*-1, panTime);
