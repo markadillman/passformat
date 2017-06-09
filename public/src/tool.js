@@ -983,10 +983,12 @@ function drawMarkersOnMap() {
 	var teleWorldY;
 	var teleWorldTileX;
 	var teleWorldTileY;
+	var teleWorldInTileX;
+	var teleWorldInTileY;
 	var teleMapTileX;
 	var teleMapTileY;
-	var teleMapX;
-	var teleMapY;
+	var teleMapInTileX;
+	var teleMapInTileY;
 	for (var i = 0; i < teleNumMarkers; i += 1) {
 		
 		// get marker i's world coordinates
@@ -998,6 +1000,10 @@ function drawMarkersOnMap() {
 		teleWorldTileX = Math.floor(teleWorldX/tileWidth);
 		teleWorldTileY = Math.floor(teleWorldY/tileHeight);
 		
+		// what is marker i's coordinate inside that tile?
+		teleWorldInTileX = teleWorldX - (teleWorldTileX * tileWidth);
+		teleWorldInTileY = teleWorldY - (teleWorldTileY * tileHeight);
+		
 		// is this tile being drawn in the mapGrid right now?
 		// references coordinate conversion from updateMap
 		teleMapTileX = teleWorldTileX - mapCurrentCenterX + gridCenterX;
@@ -1005,9 +1011,9 @@ function drawMarkersOnMap() {
 		if (teleMapTileX >= 0 && teleMapTileX <= mapGridWidth && teleMapTileY >= 0 && teleMapTileY <= mapGridHeight) {
 			// if yes, need to draw this marker on the mapGrid in the right spot
 			
-			// get in-map coordinates for these world coordinates
-			teleMapX = "100px";
-			teleMapY = "100px";
+			// get in-map-tile coordinates
+			teleMapInTileX = teleWorldInTileX / 10;
+			teleMapInTileY = teleWorldInTileY / 10;
 			
 			// adjust for size of sprite
 			// !!!
@@ -1017,7 +1023,7 @@ function drawMarkersOnMap() {
 			teleMarkerDivList[i].style.top = teleMapY;
 			
 			// append this div to this tile in the map
-			mapCanvasGridDiv.appendChild(teleMarkerDivList[i]);
+			mapGrid[teleMapTileX][teleMapTileY].appendChild(teleMarkerDivList[i]);
 			
 		} else { // make sure this div is not appended in the DOM
 			var myParent = teleMarkerDivList[i].parentNode;
