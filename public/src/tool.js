@@ -979,7 +979,8 @@ function displayMessage(msg, okFn, cancelFn, useTextInput, hideCancelButton, def
 	tempOk.id = "junkokid";
 	tempCancel.id = "junkcancelid";
 	var parent = document.getElementById("buttonDiv");
-
+	console.log("PARENT");
+	console.log(parent);
 	parent.removeChild(tempOk);
 	parent.removeChild(tempCancel);
 	//recreate them
