@@ -529,7 +529,7 @@ function initHTML() {
 			myCanvas.height = canvasHeight / 10;
 			myDiv.appendChild(myCanvas);
 			mapGrid[i][j] = myCanvas;
-			
+		
 			// append the resulting div to the mapCanvasGridDiv
 			mapCanvasGridDiv.appendChild(myDiv);
 		}
