@@ -946,8 +946,6 @@ function createTeleMarker() {
 	var myDiv;
 	myDiv = document.createElement("div");
 	myDiv.id = "teleMarkerDiv " + nextID.toString();
-	myDiv.style.width = "8px";
-	myDiv.style.height = "8px";
 	myDiv.style.position = "absolute";
 	myDiv.style.left = "0px";
 	myDiv.style.top = "0px";
