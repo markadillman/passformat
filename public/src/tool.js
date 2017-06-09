@@ -1003,7 +1003,7 @@ function drawMarkersOnMap() {
 	var teleMapInTileY;
 	var teleMapX;
 	var teleMapY;
-	for (var i = 0; i <= teleNumMarkers; i += 1) {
+	for (var i = 0; i < teleNumMarkers; i += 1) {
 		
 		// get marker i's world coordinates
 		teleWorldCoords = teleTempObject[i].split(" ");
