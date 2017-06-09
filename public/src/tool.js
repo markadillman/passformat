@@ -1154,8 +1154,12 @@ function doTeleport() {
 	var panYDelta = (currentYTile - goalYTile) * tileHeight;
 	Crafty.viewport.pan(panXDelta, panYDelta, panTime);
 	
+	console.log(currentXTile);
+	console.log(currentYTile);
 	console.log(goalXTile);
 	console.log(goalYTile);
+	console.log(panXDelta);
+	console.log(panYDelta);
 	
 	// unset flag
 	teleporting = false;
