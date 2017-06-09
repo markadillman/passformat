@@ -895,7 +895,7 @@ function updateMapCallback(request,currentCoords) {
 		if (indexedTiles[tempx] === undefined){
 			indexedTiles[tempx] = {};
 		}
-		indexedTiles[tempx][tempy] = {hasArt:true}};
+		indexedTiles[tempx][tempy] = {hasArt:true};
 	}
 	if (debugging){
 		console.log("POPULATED TILES:");
