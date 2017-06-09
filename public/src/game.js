@@ -1324,14 +1324,16 @@ function loadLibraryAvatarsToCarousel(myIndex) {
 	// clear out current carouselData and carouselStage
 	carouselData = [];
 	carouselStage.removeComponent('myImage');
-
+	var args = {};
+	args.myIndex = myIndex;
+	args.carouselData = carouselData;
 	// ### Mark - your code probably goes here.
 	// in the future, payload can help pagination. For now, it is blank.
-	postRequest('/getavatar',{},loadLibraryAvatarsToCarouselCallback,postOnError,myIndex);
+	postRequest('/getavatar',{},loadLibraryAvatarsToCarouselCallback,postOnError,args);
 	// ### Tony – moved your code to the callback
 }
 
-function loadLibraryAvatarsToCarouselCallback(request,myIndex){
+function loadLibraryAvatarsToCarouselCallback(request,args){
 	// need to fill carouselData array with results from server
 	// our default avatars should be the early indexed items, e.g. carouselData[0] is Mr Stick
 	// just load everything, or dynamically load in chunks sorta like the tile data?
@@ -1339,13 +1341,17 @@ function loadLibraryAvatarsToCarouselCallback(request,myIndex){
 
 	// load carouselData[0] into the carousel's selected position
 	// ### check that myIndex is valid into this array, else use 0
-	carouselIndex = myIndex;
+	carouselIndex = args.myIndex;
+	carouselData = args.carouselData;
 	if (verboseDebugging){
 		console.log("Response text for avatar library:");
 		console.log(JSON.parse(request.responseText));
 	}
+	var library = JSON.parse(request.responseText);
+	for (i in library){
+		carouselData[i] = library[i]['svg'];
+	}
 	displayAvatarInCarousel(carouselData[carouselIndex]);
-
 	// debug message
 	if (debugging) {
 		console.log("Loaded Public Avatar Library to avatar carousel.");
