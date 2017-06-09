@@ -950,6 +950,13 @@ function updateMapCallback(request,currentCoords) {
 				if (!(indexedTiles[i.toString()] === undefined)){
 					if (!(indexedTiles[i.toString()][j.toString()] === undefined)){
 						if (indexedTiles[i.toString()][j.toString()]['hasArt']) { // this tile exists, so display grey box = "fog of war"
+							var adjx = mapCurrentCenterX - gridCenterX + i;
+							var adjy = mapCurrentCenterY - gridCenterY + j;
+							var xstring = adjx.toString();
+							var ystring = adjy.toString();
+							if (debugging){
+								console.log("ABOUT TO GRAY OUT: (" + xtring + " , " + ystring + ")");
+							}
 							putColorInCanvas(mapGrid[i][j], 84, 84, 84, 255);
 						}
 					}
