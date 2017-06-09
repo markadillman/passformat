@@ -3359,6 +3359,9 @@ function svgPullCallback(request){
 // call this from the svg init function
 // and from doTileEdit
 function svgLoadFromServer(xTile, yTile, password, callback) {
+	if (debugging){
+		console.log("in tile edit");
+	}
 	if (verboseDebugging)
 	{
 		console.log("password pre retrieve");
