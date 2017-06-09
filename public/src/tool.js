@@ -963,6 +963,8 @@ function doQuitToHomeScreen() {
 // also displays text input element if boolean argument is true
 // these functions should include: messageDiv.style.display = "none";
 function displayMessage(msg, okFn, cancelFn, useTextInput, hideCancelButton, defaultText, textInputPassword, initCoords) {
+	msgBtnOk = document.getElementById("msgBtnOK");
+	msgBtnCancel = document.getElementById("msgBtnCancel");
 	console.log("MESSAGE");
 	console.log(msg);
 	console.log(msgBtnOk);
