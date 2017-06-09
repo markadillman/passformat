@@ -882,6 +882,7 @@ function updateMapCallback(request,currentCoords) {
 	}
 
 	var indexedTiles = {};
+
 	//format response list for quick populating with appropriate tile
 	for (i in populatedTiles){
 		var tempx = populatedTiles[i]['xcoord'].toString();
@@ -889,7 +890,8 @@ function updateMapCallback(request,currentCoords) {
 		if (debugging){
 			console.log("(X : " + tempx.toString() + ", Y: " + tempy.toString() + ")");
 		}
-		indexedTiles.tempx.tempy = {hasAssets:true};
+		var field = {tempY.toString():true};
+		indexedTiles[tempx] = field;
 	}
 	if (debugging){
 		console.log("POPULATED TILES:");
@@ -941,7 +943,7 @@ function updateMapCallback(request,currentCoords) {
 				// ### Mark, I need help here, please
 				// ### need to replace "true" with a real test to see if world tile
 				// ### (worldX, worldY) currently exists in the database
-				if (indexedTiles[i][j]) { // this tile exists, so display grey box = "fog of war"
+				if (indexedTiles[i.toString()][j.toString()]) { // this tile exists, so display grey box = "fog of war"
 					putColorInCanvas(mapGrid[i][j], 84, 84, 84, 255);
 
 				} else { // this tile doesn't exist, so just display background color
