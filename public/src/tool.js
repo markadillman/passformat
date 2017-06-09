@@ -881,6 +881,13 @@ function updateMapCallback(request,currentCoords) {
 		console.log(populatedTiles);
 	}
 
+	var indexedTiles = {};
+	//format response list for quick populating with appropriate tile
+	for (i in populatedTiles){
+		indexedTiles[populatedTiles[i]['xcoord']][populatedTiles[i]['ycoord']]
+			= true;
+	}
+
 	// update the map drawing centered on tile x, y
 	// so 0, 0 will center the map on the world's origin tile
 	
@@ -927,9 +934,9 @@ function updateMapCallback(request,currentCoords) {
 				// ### Mark, I need help here, please
 				// ### need to replace "true" with a real test to see if world tile
 				// ### (worldX, worldY) currently exists in the database
-				if (true) { // this tile exists, so display grey box = "fog of war"
+				if (indexedTiles[i][j]) { // this tile exists, so display grey box = "fog of war"
 					putColorInCanvas(mapGrid[i][j], 84, 84, 84, 255);
-					
+									
 				} else { // this tile doesn't exist, so just display background color
 					// ### in a perfect world, I would have a helper function to
 					// convert the bgroundColor hex string to these ints
