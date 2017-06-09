@@ -947,6 +947,8 @@ function createTeleMarker() {
 	myDiv = document.createElement("div");
 	myDiv.id = "teleMarkerDiv " + nextID.toString();
 	myDiv.style.position = "absolute";
+	myDiv.width = 21;
+	myDiv.height = 21;
 	myDiv.addEventListener('click', function(evt){toggleTeleSelect(evt)});
 	teleMarkerDivList[nextID] = myDiv;
 	
@@ -954,8 +956,8 @@ function createTeleMarker() {
 	var myCanvas;
 	myCanvas = document.createElement("canvas");
 	myCanvas.id = "teleMarkerCanvas " + nextID.toString();
-	myCanvas.style.width = "21px";
-	myCanvas.style.height = "21px";
+	myCanvas.style.width = 21;
+	myCanvas.style.height = 21;
 	teleMarkerCanvasList[nextID] = myCanvas;
 	myDiv.appendChild(myCanvas);
 	
