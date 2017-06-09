@@ -131,6 +131,7 @@ var eventListenerPwdBtnPublic;
 HTMLElement.prototype.eventListener = function(type, func, capture){
 	//a single object argument possessing the event listener will now remove that event listener
 	if(typeof arguments[0]== "object" && (!arguments[0].nodeType)){
+		console.log("this weird stuff is happening");
 		return this.removeEventListener.apply(this,arguments[0]);
 	}
 	//regular add function
