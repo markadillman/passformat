@@ -847,6 +847,10 @@ function doPlayerMove(x, y, handlePan) {
 	// Toni added code to update current player position
 	currentPlayerX = x;
 	currentPlayerY = y;
+	if (!handlePan) {
+		Crafty("Player").x = currentPlayerX;
+		Crafty("Player").y = currentPlayerY;
+	}
 	
 	// MARK ADDED get current tile coordinates to orient pull
 	// Toni switched these to use the global vars from tool.js
