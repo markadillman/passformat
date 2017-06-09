@@ -961,40 +961,40 @@ function doQuitToHomeScreen() {
 // these functions should include: messageDiv.style.display = "none";
 function displayMessage(msg, okFn, cancelFn, useTextInput, hideCancelButton, defaultText, textInputPassword, initCoords) {
 	//remove previous event listeners so that they do not aggregate to multiple per push
-	//removeEventListeners();
+	removeEventListeners();
 	messageText.innerHTML = msg;
 	//updated so all anonymous functions should also remove themselves as event listeners
 	if (initCoords&&textInputPassword){
 		//this works because the truthiness of strings in Javascriprt. Both true and defined.
 		eventListenerMsgBtnOK = msgBtnOK.addEventListener('click',function clicked1(){
-			this.removeEventListener("click",clicked1, false);
+			this.removeEventListener("click",clicked1, true);
 			okFn(initCoords.xcoord,initCoords.ycoord,textInputPassword);
-		},false); 
+		},true); 
 		eventListenerMsgBtnCancel = msgBtnCancel.addEventListener('click',function clicked2(){
-			this.removeEventListener("click",clicked2,false);
+			this.removeEventListener("click",clicked2,true);
 			cancelFn();
-		},false);
+		},true);
 	}
 	else if (initCoords) {
 		eventListenerMsgBtnOK = msgBtnOK.addEventListener('click',function clicked1(){
-			this.removeEventListener("click",clicked1, false);
+			this.removeEventListener("click",clicked1, true);
 			okFn(initCoords.xcoord,initCoords.ycoord);
-		},false);
+		},true);
 		eventListenerMsgBtnCancel = msgBtnCancel.addEventListener('click',function clicked2(){
-			this.removeEventListener("click",clicked2,false);
+			this.removeEventListener("click",clicked2,true);
 			cancelFn();
-		},false);
+		},true);
 	}
 	else
 	{
 		eventListenerMsgBtnOK = msgBtnOK.addEventListener('click',function clicked1(){
-			this.removeEventListener("click",clicked1,false);
+			this.removeEventListener("click",clicked1,true);
 			okFn(); 
-		},false);
+		},true);
 		eventListenerMsgBtnCancel = msgBtnCancel.addEventListener('click',function clicked2(){
-			this.removeEventListener("click",clicked2,false);
+			this.removeEventListener("click",clicked2,true);
 			cancelFn();
-		},false);
+		},true);
 	}
 	// use or hide text input element
 	if (useTextInput) { // show the text input element
