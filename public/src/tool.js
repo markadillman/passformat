@@ -74,6 +74,10 @@ for (var i = 0; i < mapGridWidth; i += 1) {
 }
 var mapCurrentCenterX = 0;	// tile the map is currently centered on
 var mapCurrentCenterY = 0;
+var mapGridDivList = [];
+for (var i = 0; i < mapGridWidth; i += 1) {
+	mapGridDivList[i] = [];
+}
 var teleMarkerDivList = [];	// the divs that hold the canvases for the tele markers
 var teleMarkerCanvasList = []; // the canvases that display the teleport markers
 var selectedTeleMarker = -1; // index of currently selected teleport marker, -1 if none selected
@@ -515,6 +519,7 @@ function initHTML() {
 			myDiv.style.left = leftVal.toString() + "px";
 			topVal = j * (canvasHeight / 10);
 			myDiv.style.top = topVal.toString() + "px";
+			mapGridDivList[i][j] = myDiv;
 			
 			// make the canvas for this spot, add it to this div and to mapGrid
 			myCanvas = document.createElement("canvas");
@@ -1023,7 +1028,7 @@ function drawMarkersOnMap() {
 			teleMarkerDivList[i].style.top = teleMapInTileY;
 			
 			// append this div to this tile in the map
-			teleMarkerDivList[teleMapTileX][teleMapTileY].appendChild(teleMarkerDivList[i]);
+			mapGridDivList[teleMapTileX][teleMapTileY].appendChild(teleMarkerDivList[i]);
 			
 		} else { // make sure this div is not appended in the DOM
 			var myParent = teleMarkerDivList[i].parentNode;
