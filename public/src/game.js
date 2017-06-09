@@ -795,7 +795,9 @@ function loadPlayer(argsocket) {
 	    })
 		// Move camera when player leaves current tile
 		.bind('Moved', function(eventData) {
-			doPlayerMove(this.x, this.y)
+			// Toni moved code to its own function
+			// call with true here so doPlayerMove handles the pan itself
+			doPlayerMove(this.x, this.y, true)
 		});
 		
 	// start Toni's code
