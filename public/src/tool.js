@@ -529,7 +529,7 @@ function initHTML() {
 			myCanvas.height = canvasHeight / 10;
 			myDiv.appendChild(myCanvas);
 			mapGrid[i][j] = myCanvas;
-		
+			
 			// append the resulting div to the mapCanvasGridDiv
 			mapCanvasGridDiv.appendChild(myDiv);
 		}
@@ -983,7 +983,7 @@ function putTeleMarkerInCanvas(myGroupStr, myContext) {
 function drawMarkersOnMap() {
 	// get current info out of localStorage
 	var teleTempObject = JSON.parse(localStorage.myTeleMarkers);
-	var teleNumMarkers = Number(local.Storage.myTeleMarkerCount);
+	var teleNumMarkers = Number(localStorage.myTeleMarkerCount);
 	
 	// get center tile coords in the mapGrid
 	var gridCenterX = Math.floor(mapGridWidth / 2);
