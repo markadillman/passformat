@@ -11,8 +11,8 @@ var http = require('http');
 const util = require('util');
 var MongoClient = require('mongodb').MongoClient, assert = require('assert');
 //database url
-var dbUrl = 'mongodb://172.31.34.164:27017/test'
-//var dbUrl = 'mongodb://127.0.0.1:27017/test' //<-- Mark's Test Environment
+//var dbUrl = 'mongodb://172.31.34.164:27017/test'
+var dbUrl = 'mongodb://127.0.0.1:27017/test' //<-- Mark's Test Environment
 var socketioPort = 8080;
 
 var index = require('./routes/index');
@@ -888,6 +888,29 @@ app.post('/freetile',function(req,res){
 	console.log(util.inspect(req.body));
 	setEdited(req.body.xcoord,req.body.ycoord,false);
 	res.status(200).send("Tile freed.");
+});
+
+/*This returns a ready made query of all tiles with svg environs.
+*/
+app.post('/allpop',function(req,res){
+MongoClient.connect(dbUrl,function(err,db){
+		//test for errors, pop out if there are errors present
+		assert.equal(null,err);
+		console.log("connected succesfully to server");
+		var collection = db.collection('tiles');
+		//search collection for all tiles with non-empty svg strings
+		collection.find({svg: {$exists : true, $not :  /^(?![\s\S])/ }},function(err,docs){
+			if (err === null){
+				console.log("Gotten all populated tiles.");
+				console.log(docs);
+				res.status(200).send(JSON.stringify());
+			}
+			else {
+				console.log(err);
+				res.status(553).send("avatar submission broken.");
+			}
+		});
+	});
 });
 
 //multiple routes using helper function.

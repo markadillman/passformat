@@ -862,13 +862,31 @@ function doMapScreenDone() {
 		console.log("Hid map screen.");
 	}
 }
-function updateMap(x, y) {
+
+function updateMap(x,y){
+	var currentCoords = {};
+	currentCoords.x = x;
+	currentCoords.y = y;
+	postRequest('/allpop',{},updateMapCallback,onPostError,currentCoords);
+}
+
+//### Mark 2 TONI: changed this function to a callback and added the docs argument to run the check
+function updateMapCallback(request,currentCoords) {
+	//parse the response body
+	var populatedTiles = JSON.parse(request.responseText);
+	if (debugging){
+		console.log("Update map response from server: ");
+		console.log(request.getAllResponseHeaders.toString());
+		console.log(request.responseText);
+		console.log(populatedTiles);
+	}
+
 	// update the map drawing centered on tile x, y
 	// so 0, 0 will center the map on the world's origin tile
 	
 	// update global centerpoint vars
-	mapCurrentCenterX = x;
-	mapCurrentCenterY = y;
+	mapCurrentCenterX = currentCoords.x;
+	mapCurrentCenterY = currentCoords.y;
 	
 	// get center tile coords in the grid
 	var gridCenterX = Math.floor(mapGridWidth / 2);
