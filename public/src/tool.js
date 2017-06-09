@@ -952,8 +952,8 @@ function createTeleMarker() {
 	myDiv = document.createElement("div");
 	myDiv.id = "teleMarkerDiv " + nextID.toString();
 	myDiv.style.position = "absolute";
-	myDiv.width = 21;
-	myDiv.height = 21;
+	myDiv.width = "21px";
+	myDiv.height = "21px";
 	myDiv.addEventListener('click', function(evt){toggleTeleSelect(evt)});
 	teleMarkerDivList[nextID] = myDiv;
 	
@@ -968,6 +968,11 @@ function createTeleMarker() {
 	
 	// put the regular marker sprite in the canvas
 	putTeleMarkerInCanvas(teleMarkerImg, myCanvas.getContext("2d"));
+	
+	// re-draw markers to make sure it shows up if in map mode
+	if (mode == mapMode) {
+		drawMarkersOnMap();
+	}
 }
 function putTeleMarkerInCanvas(myGroupStr, myContext) {
 	// use true flag to tell putGroupInCanvas not to use the background rect
