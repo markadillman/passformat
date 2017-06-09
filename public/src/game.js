@@ -91,6 +91,7 @@ var firstWorldEntry = true;
 // and globals to track player's current position
 var currentPlayerX;
 var currentPlayerY;
+var teleporting = false; // to know if currently teleporting or not
 
 // Toni added variables for the avatar carousel
 var numAvatars = 0;
@@ -855,7 +856,11 @@ function doPlayerMove(x, y) {
 	if (x > currentUpperLeftX + screenWidth)
 	{
 		currentUpperLeftX = currentUpperLeftX + tileWidth;
-		Crafty.viewport.pan(tileWidth, 0, panTime);
+		
+		// Toni adding flag check to stop double pan on teleport
+		if (!teleporting) {
+			Crafty.viewport.pan(tileWidth, 0, panTime);
+		}
 		
 		// Toni added update of tile coords
 		xTile = Math.floor(currentUpperLeftX / tileWidth);
@@ -881,7 +886,11 @@ function doPlayerMove(x, y) {
 	else if (x < currentUpperLeftX)
 	{
 		currentUpperLeftX = currentUpperLeftX - tileWidth;
-		Crafty.viewport.pan(tileWidth*-1, 0, panTime);
+		
+		// Toni adding flag check to stop double pan on teleport
+		if (!teleporting) {
+			Crafty.viewport.pan(tileWidth*-1, 0, panTime);
+		}
 		
 		// Toni added update of tile coords
 		xTile = Math.floor(currentUpperLeftX / tileWidth);
@@ -908,7 +917,11 @@ function doPlayerMove(x, y) {
 	if (y > currentUpperLeftY + screenHeight)
 	{
 		currentUpperLeftY = currentUpperLeftY + tileHeight;
-		Crafty.viewport.pan(0, tileHeight, panTime);
+		
+		// Toni adding flag check to stop double pan on teleport
+		if (!teleporting) {
+			Crafty.viewport.pan(0, tileHeight, panTime);
+		}
 		
 		// Toni added update of tile coords
 		xTile = Math.floor(currentUpperLeftX / tileWidth);
@@ -934,7 +947,11 @@ function doPlayerMove(x, y) {
 	else if (y < currentUpperLeftY)
 	{
 		currentUpperLeftY = currentUpperLeftY - tileHeight;
-		Crafty.viewport.pan(0, tileHeight*-1, panTime);
+		
+		// Toni adding flag check to stop double pan on teleport
+		if (!teleporting) {
+			Crafty.viewport.pan(0, tileHeight*-1, panTime);
+		}
 		
 		// Toni added update of tile coords
 		xTile = Math.floor(currentUpperLeftX / tileWidth);

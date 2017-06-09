@@ -1130,19 +1130,32 @@ function doTeleMarkerDelete() {
 function doTeleport() {
 	// works on current selectedTeleMarker
 	
+	// set flag
+	teleporting = true;
+	
 	// get info out of localStorage
 	var tempObject = JSON.parse(localStorage.myTeleMarkers);
 	var newCoords = tempObject[selectedTeleMarker].split(" ");
+	var newXCoord = Number(newCoords[0]);
+	var newYCoord = Number(newCoords[1]);
 	
 	// unselect selectedTeleMarker
 	teleMarkerUnselect();
 	
 	// use helper function in game.js to move player
-	doPlayerMove(Number(newCoords[0]), Number(newCoords[1]));
+	doPlayerMove(newXCoord, newYCoord);
 	
-	/*// manually set player entity's x and y
-	Crafty("Player").x = Number(newCoords[0]);
-	Crafty("Player").y = Number(newCoords[1]);*/
+	// manually fix viewport pan
+	var currentXTile = Math.floor(currentUpperLeftX / tileWidth);
+	var currentYTile = Math.floor(currentUpperLeftY / tileHeight);
+	var goalXTile = Math.floor(newXCoord / tileWidth);
+	var goalYTile = Math.floor(newYCoord / tileHeight);
+	var panXDelta = (currentXTile - goalXTile) * tileWidth;
+	var panYDelta = (currentYTile - goalYTile) * tileHeight;
+	Crafty.viewport.pan(panXDelta, panYDelta, panTime);
+	
+	// unset flag
+	teleporting = false;
 	
 	// hide the map screen
 	doMapScreenDone();
