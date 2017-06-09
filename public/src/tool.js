@@ -459,7 +459,7 @@ function initHTML() {
 			localStorage.hello = "world";
 			localStorage.myAvatarCount = 0;
 			localStorage.myAvatars = JSON.stringify({});
-			localStorage.myTeleMarkerCount = 0;
+			localStorage.myTeleMarkerCount = 1;
 			localStorage.myTeleMarkers = JSON.stringify([playerSpawnX + " " + playerSpawnY]);
 			localStorage.myMapData = JSON.stringify({empty: {}});
 			localStorage.myVisitData = JSON.stringify({0: {0: true}});
