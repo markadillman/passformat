@@ -1145,13 +1145,9 @@ function doTeleport() {
 	var goalXTile = Math.floor(newXCoord / tileWidth);
 	var goalYTile = Math.floor(newYCoord / tileHeight);
 	var panXDelta = (goalXTile - currentXTile) * tileWidth;
-	var panYDelta = (goalYTile - goalYTile) * tileHeight;
+	var panYDelta = (goalYTile - currentYTile) * tileHeight;
 	Crafty.viewport.pan(panXDelta, panYDelta, panTime);
 	
-	console.log(currentXTile);
-	console.log(currentYTile);
-	console.log(goalXTile);
-	console.log(goalYTile);
 	console.log(panXDelta);
 	console.log(panYDelta);
 	
