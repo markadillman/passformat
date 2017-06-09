@@ -984,8 +984,8 @@ function displayMessage(msg, okFn, cancelFn, useTextInput, hideCancelButton, def
 	//recreate them
 	var okButton = document.createElement("button");
 	//ok
-	okButton.id = "msgBtnOk";
-	okButton.onClick = "doMsgBtnOk()";
+	okButton.id = "msgBtnOK";
+	okButton.onClick = "doMsgBtnOK()";
 	okButton.value = "Okay";
 	okButton.style.display = "block";
 	okButton.style.width = "80px";
