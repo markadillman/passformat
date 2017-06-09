@@ -1942,8 +1942,8 @@ function tileEditCallback(request){
 	if (request.status === 224){
 		if (verboseDebugging){
 			console.log("Edit authorization success.");
-			passwordApproved(body.xcoord,body.ycoord,'');
 		}
+		passwordApproved(body.xcoord,body.ycoord,'');
 		return request.status;
 	}
 	else if (request.status === 242){
