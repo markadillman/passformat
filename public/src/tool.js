@@ -1138,8 +1138,8 @@ function doTeleport() {
 	doPlayerMove(Number(newCoords[0]), Number(newCoords[1]));
 	
 	// manually set player entity's x and y to complete the teleport
-	player.x = Number(newCoords[0]);
-	player.y = Number(newCoords[1]);
+	Crafty("Player").x = Number(newCoords[0]);
+	Crafty("Player").y = Number(newCoords[1]);
 	
 	// hide the map screen
 	doMapScreenDone();
