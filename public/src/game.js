@@ -1484,20 +1484,24 @@ function placeTeleMarker(x, y)
 	var yStr = y.toString();
 	var coordStr = xStr + ' ' + yStr;  // Format: x y (Toni removed punctuation)
 
-	// check to make sure one doesn't already exist at these coordinates
-	if(localStorage.myTeleMarkers == null)
+	/*if(localStorage.myTeleMarkers == null)
 	{
-		var myTeleMarkers = [];
+		var teleportMarkers = [];
 	}
 	else
 	{
-		var myTeleMarkers = JSON.parse(localStorage.myTeleMarkers);
-	}
+		var teleportMarkers = JSON.parse(localStorage.myTeleMarkers);
+	}*/ // Toni commented this out b/c myTeleMarkers is initialized on page load
+	// and always contains at least the spawn point marker
+	
+	// get info from localStorage
+	var teleportMarkers = JSON.parse(localStorage.myTeleMarkers);
 
+	// check to make sure one doesn't already exist at these coordinates
 	var exists = false;
-	for(var i = 0; i < myTeleMarkers.length; i++)
+	for(var i = 0; i < teleportMarkers.length; i++)
 	{
-		if(myTeleMarkers[i] == coordStr)
+		if(teleportMarkers[i] == coordStr)
 		{
 			exists = true;
 		}
@@ -1513,8 +1517,8 @@ function placeTeleMarker(x, y)
 	else
 	{
 		// create marker at player's current coordinates in the world
-		myTeleMarkers.push(coordStr);
-		localStorage.myTeleMarkers = JSON.stringify(myTeleMarkers);
+		teleportMarkers.push(coordStr);
+		localStorage.myTeleMarkers = JSON.stringify(teleportMarkers);
 		// Toni added call to map screen helper function in tool.js
 		createTeleMarker(x, y);
 	}
