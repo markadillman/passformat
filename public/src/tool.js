@@ -948,7 +948,7 @@ function updateMapCallback(request,currentCoords) {
 				// ### need to replace "true" with a real test to see if world tile
 				// ### (worldX, worldY) currently exists in the database
 				if (!(indexedTiles[i.toString()] === undefined)){
-					if (indexedTiles[i.toString()][j.toString()] === undefined)
+					if (indexedTiles[i.toString()][j.toString()] === undefined){
 						if (indexedTiles[i.toString()][j.toString()]['hasArt']) { // this tile exists, so display grey box = "fog of war"
 							putColorInCanvas(mapGrid[i][j], 84, 84, 84, 255);
 						}
