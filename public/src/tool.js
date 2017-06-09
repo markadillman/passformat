@@ -536,7 +536,8 @@ function initHTML() {
 	}
 	// create all existing teleportation markers
 	var myMarkerList = JSON.parse(localStorage.myTeleMarkers);
-	for (var i = 0; i < myMarkerList.length; i += 1) {
+	var myMarkerCount = Number(localStorage.myTeleMarkerCount);
+	for (var i = 0; i < myMarkerCount; i += 1) {
 		createTeleMarker();
 	}
 	// hide the map div
@@ -982,7 +983,7 @@ function putTeleMarkerInCanvas(myGroupStr, myContext) {
 function drawMarkersOnMap() {
 	// get current info out of localStorage
 	var teleTempObject = JSON.parse(localStorage.myTeleMarkers);
-	teleNumMarkers = teleTempObject.length;
+	var teleNumMarkers = Number(local.Storage.myTeleMarkerCount);
 	
 	// get center tile coords in the mapGrid
 	var gridCenterX = Math.floor(mapGridWidth / 2);
