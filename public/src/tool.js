@@ -884,8 +884,8 @@ function updateMapCallback(request,currentCoords) {
 	var indexedTiles = {};
 	//format response list for quick populating with appropriate tile
 	for (i in populatedTiles){
-		var tempx = populatedTiles[i]['xcoord'];
-		var tempy = populatedTiles[i]['ycoord'];
+		var tempx = populatedTiles[i]['xcoord'].toString();
+		var tempy = populatedTiles[i]['ycoord'].toString();
 		if (debugging){
 			console.log("(X : " + tempx.toString() + ", Y: " + tempy.toString() + ")");
 		}
