@@ -1114,6 +1114,7 @@ function doTeleMarkerDelete() {
 	var numMarkers = Number(localStorage.myTeleMarkerCount);
 	// remove entry if it exists and isn't marker 0
 	if (selectedTeleMarker > 0 && selectedTeleMarker < numMarkers) {
+		console.log("here");
 		delete tempObject[selectedTeleMarker];
 		// shift any entries after that up one index
 		for (var k = selectedTeleMarker; k < numMarkers; k += 1) {
