@@ -976,7 +976,7 @@ function doPlayerMove(x, y, handlePan) {
 		localStorage.myVisitData = JSON.stringify(tempObject);
 		
 		// do post-teleport asset request
-		initAssetRequest(currentPlayerX, currentPlayerY, argsocket);
+		initAssetRequest(currentPlayerX, currentPlayerY, socket);
 	}
 }
 
