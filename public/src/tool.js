@@ -895,7 +895,7 @@ function updateMapCallback(request,currentCoords) {
 		if (indexedTiles[tempx] === undefined){
 			indexedTiles[tempx] = {};
 		}
-		indexedTiles[tempx][tempy] = true;
+		indexedTiles[tempx][tempy] = {hasArt:true}};
 	}
 	if (debugging){
 		console.log("POPULATED TILES:");
@@ -947,7 +947,7 @@ function updateMapCallback(request,currentCoords) {
 				// ### Mark, I need help here, please
 				// ### need to replace "true" with a real test to see if world tile
 				// ### (worldX, worldY) currently exists in the database
-				if (indexedTiles[i.toString()][j.toString()]) { // this tile exists, so display grey box = "fog of war"
+				if (indexedTiles[i.toString()][j.toString()]['hasArt']) { // this tile exists, so display grey box = "fog of war"
 					putColorInCanvas(mapGrid[i][j], 84, 84, 84, 255);
 
 				} else { // this tile doesn't exist, so just display background color
