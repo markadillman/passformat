@@ -488,6 +488,7 @@ function initHTML() {
 	// grab, set up, and hide the map screen div
 	mapDiv = document.getElementById("mapDiv");
 	mapControlsDiv = document.getElementById("mapControlsDiv");
+	mapControlsDiv.style.display = "none"; // hidden by default
 	document.getElementById("mapModeHeader").innerHTML = mapHeader;
 	mapCanvasGridDiv = document.getElementById("mapCanvasGridDiv");
 	// make the grid canvases and put them in the div
