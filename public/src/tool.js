@@ -995,8 +995,8 @@ function drawMarkersOnMap() {
 			// if yes, need to draw this marker on the mapGrid in the right spot
 			
 			// get in-map coordinates for these world coordinates
-			teleMapX = 0;
-			teleMapY = 0;
+			teleMapX = 100;
+			teleMapY = 100;
 			
 			// adjust for size of sprite
 			// !!!
