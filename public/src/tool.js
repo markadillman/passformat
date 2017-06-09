@@ -1119,16 +1119,13 @@ function doTeleMarkerDelete() {
 		for (var k = selectedTeleMarker; k < numMarkers; k += 1) {
 			tempObject[k] = tempObject[k+1];
 		}
-		// decrement count of markers
-		numMarkers -= 1;
 	} // else do nothing b/c something is messed up somehow
 	// send result back to localStorage
 	localStorage.myTeleMarkers = JSON.stringify(tempObject);
-	localStorage.myTeleMarkerCount = numMarkers;
+	localStorage.myTeleMarkerCount = numMarkers - 1;
 	
 	// remove entry in teleMarkerDivList
 	// remove entry if it exists and isn't marker 0
-	numMarkers = teleMarkerDivList.length;
 	if (selectedTeleMarker > 0 && selectedTeleMarker < numMarkers) {
 		delete teleMarkerDivList[selectedTeleMarker];
 		// shift any entries after that up one index
@@ -1141,7 +1138,6 @@ function doTeleMarkerDelete() {
 	
 	// remove entry in teleMarkerCanvasList
 	// remove entry if it exists and isn't marker 0
-	numMarkers = teleMarkerCanvasList.length;
 	if (selectedTeleMarker > 0 && selectedTeleMarker < numMarkers) {
 		delete teleMarkerCanvasList[selectedTeleMarker];
 		// shift any entries after that up one index
