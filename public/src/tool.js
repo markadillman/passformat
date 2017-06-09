@@ -959,8 +959,8 @@ function createTeleMarker() {
 	var myCanvas;
 	myCanvas = document.createElement("canvas");
 	myCanvas.id = "teleMarkerCanvas " + nextID.toString();
-	myCanvas.width = 390;
-	myCanvas.height = 240;
+	myCanvas.width = 370;
+	myCanvas.height = 260;
 	teleMarkerCanvasList[nextID] = myCanvas;
 	myDiv.appendChild(myCanvas);
 	
@@ -969,7 +969,7 @@ function createTeleMarker() {
 }
 function putTeleMarkerInCanvas(myGroupStr, myContext) {
 	// use true flag to tell putGroupInCanvas not to use the background rect
-	putGroupInCanvas(myGroupStr, myContext, 212, 80, 180, 180, 0, 0, 390, 240, true)
+	putGroupInCanvas(myGroupStr, myContext, 212, 80, 180, 180, 0, 0, 370, 260, true)
 }
 function drawMarkersOnMap() {
 	// get current info out of localStorage
