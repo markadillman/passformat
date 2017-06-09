@@ -91,7 +91,6 @@ var firstWorldEntry = true;
 // and globals to track player's current position
 var currentPlayerX;
 var currentPlayerY;
-var teleporting = false; // to know if currently teleporting or not
 
 // Toni added variables for the avatar carousel
 var numAvatars = 0;
@@ -842,7 +841,7 @@ function loadPlayer(argsocket) {
 
 // Toni moved this code here so it could be called on teleport
 // as well as on the player's "Moved" event
-function doPlayerMove(x, y) {
+function doPlayerMove(x, y, handlePan) {
 	// Toni added code to update current player position
 	currentPlayerX = x;
 	currentPlayerY = y;
@@ -858,7 +857,7 @@ function doPlayerMove(x, y) {
 		currentUpperLeftX = currentUpperLeftX + tileWidth;
 		
 		// Toni adding flag check to stop double pan on teleport
-		if (!teleporting) {
+		if (handlePan) {
 			Crafty.viewport.pan(tileWidth, 0, panTime);
 		}
 		
@@ -888,7 +887,7 @@ function doPlayerMove(x, y) {
 		currentUpperLeftX = currentUpperLeftX - tileWidth;
 		
 		// Toni adding flag check to stop double pan on teleport
-		if (!teleporting) {
+		if (handlePan) {
 			Crafty.viewport.pan(tileWidth*-1, 0, panTime);
 		}
 		
@@ -919,7 +918,7 @@ function doPlayerMove(x, y) {
 		currentUpperLeftY = currentUpperLeftY + tileHeight;
 		
 		// Toni adding flag check to stop double pan on teleport
-		if (!teleporting) {
+		if (handlePan) {
 			Crafty.viewport.pan(0, tileHeight, panTime);
 		}
 		
@@ -949,7 +948,7 @@ function doPlayerMove(x, y) {
 		currentUpperLeftY = currentUpperLeftY - tileHeight;
 		
 		// Toni adding flag check to stop double pan on teleport
-		if (!teleporting) {
+		if (handlePan) {
 			Crafty.viewport.pan(0, tileHeight*-1, panTime);
 		}
 		
