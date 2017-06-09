@@ -1518,4 +1518,9 @@ function placeTeleMarker(x, y)
 		// Toni added call to map screen helper function in tool.js
 		createTeleMarker(x, y);
 	}
+	
+	// Toni added debug message
+	if (debugging) {
+		console.log("Placed a teleportation marker.");
+	}
 }
