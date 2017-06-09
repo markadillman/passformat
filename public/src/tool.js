@@ -1123,6 +1123,7 @@ function doTeleMarkerDelete() {
 	// send result back to localStorage
 	localStorage.myTeleMarkers = JSON.stringify(tempObject);
 	localStorage.myTeleMarkerCount = numMarkers - 1;
+	console.log(tempObject);
 	
 	// remove entry in teleMarkerDivList
 	// remove entry if it exists and isn't marker 0
