@@ -794,7 +794,7 @@ function loadPlayer(argsocket) {
 	      	}
 	    })
 		// Move camera when player leaves current tile
-		.bind('Moved', doPlayerMove(this.x, this.y));
+		.bind('Moved', function(this.x, this.y){doPlayerMove(this.x, this.y)});
 		
 	// start Toni's code
 	// generate a URL based on currently selected avatar
