@@ -952,8 +952,8 @@ function createTeleMarker() {
 	myDiv = document.createElement("div");
 	myDiv.id = "teleMarkerDiv " + nextID.toString();
 	myDiv.style.position = "absolute";
-	myDiv.width = 20;
-	myDiv.height = 20;
+	myDiv.style.width = 20;
+	myDiv.style.height = 20;
 	myDiv.addEventListener('click', function(evt){toggleTeleSelect(evt)});
 	teleMarkerDivList[nextID] = myDiv;
 	
