@@ -961,40 +961,40 @@ function doQuitToHomeScreen() {
 // these functions should include: messageDiv.style.display = "none";
 function displayMessage(msg, okFn, cancelFn, useTextInput, hideCancelButton, defaultText, textInputPassword, initCoords) {
 	//remove previous event listeners so that they do not aggregate to multiple per push
-	removeEventListeners();
+	//removeEventListeners();
 	messageText.innerHTML = msg;
 	//updated so all anonymous functions should also remove themselves as event listeners
 	if (initCoords&&textInputPassword){
 		//this works because the truthiness of strings in Javascriprt. Both true and defined.
 		eventListenerMsgBtnOK = msgBtnOK.addEventListener('click',function clicked1(){
-			this.removeEventListener("click",clicked1, true);
+			this.removeEventListener("click",clicked1, false);
 			okFn(initCoords.xcoord,initCoords.ycoord,textInputPassword);
-		},true); 
+		},false); 
 		eventListenerMsgBtnCancel = msgBtnCancel.addEventListener('click',function clicked2(){
-			this.removeEventListener("click",clicked2,true);
+			this.removeEventListener("click",clicked2,false);
 			cancelFn();
-		},true);
+		},false);
 	}
 	else if (initCoords) {
 		eventListenerMsgBtnOK = msgBtnOK.addEventListener('click',function clicked1(){
-			this.removeEventListener("click",clicked1, true);
+			this.removeEventListener("click",clicked1, false);
 			okFn(initCoords.xcoord,initCoords.ycoord);
-		},true);
+		},false);
 		eventListenerMsgBtnCancel = msgBtnCancel.addEventListener('click',function clicked2(){
-			this.removeEventListener("click",clicked2,true);
+			this.removeEventListener("click",clicked2,false);
 			cancelFn();
-		},true);
+		},false);
 	}
 	else
 	{
 		eventListenerMsgBtnOK = msgBtnOK.addEventListener('click',function clicked1(){
-			this.removeEventListener("click",clicked1,true);
+			this.removeEventListener("click",clicked1,false);
 			okFn(); 
-		},true);
+		},false);
 		eventListenerMsgBtnCancel = msgBtnCancel.addEventListener('click',function clicked2(){
-			this.removeEventListener("click",clicked2,true);
+			this.removeEventListener("click",clicked2,false);
 			cancelFn();
-		},true);
+		},false);
 	}
 	// use or hide text input element
 	if (useTextInput) { // show the text input element
@@ -1041,12 +1041,12 @@ function removeEventListeners(){
 	var pwdBtnCancel = document.getElementById('pwdBtnCancel');
 	//all nodes are gathered in reference-able variables. Now use the prototype that tracks them
 	//to remove all the event listeners regardless of what they are or what args they have.
-	msgBtnOK.removeEventListener('click',eventListenerMsgBtnOK,true);
-	msgBtnCancel.removeEventListener('click',eventListenerMsgBtnCancel,true);
-	pwdBtnOK.removeEventListener('click',eventListenerPwdBtnOk,true);
-	pwdBtnSkip.removeEventListener('click',eventListenerPwdBtnSkip,true);
-	pwdBtnCancel.removeEventListener('click',eventListenerPwdBtnCancel,true);
-	pwdBtnPublic.removeEventListener('click',eventListenerPwdBtnPublic,true);
+	msgBtnOK.eventListener(eventListenerMsgBtnOK);
+	msgBtnCancel.eventListener(eventListenerMsgBtnCancel);
+	pwdBtnOK.eventListener(eventListenerPwdBtnOk);
+	pwdBtnSkip.eventListener(eventListenerPwdBtnSkip);
+	pwdBtnCancel.eventListener(eventListenerPwdBtnCancel);
+	pwdBtnPublic.eventListener(eventListenerPwdBtnPublic);
 }
 
 // default handlers for message box buttons
