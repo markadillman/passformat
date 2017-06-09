@@ -950,13 +950,13 @@ function updateMapCallback(request,currentCoords) {
 				// ### Mark, I need help here, please
 				// ### need to replace "true" with a real test to see if world tile
 				// ### (worldX, worldY) currently exists in the database
-				var adji = i - (mapGridWidth/2);
-				var adjj = j - (mapGridHeight/2);
-				if (!(indexedTiles[i.toString()] === undefined)){
-					if (!(indexedTiles[i.toString()][j.toString()] === undefined)){
-						if (indexedTiles[i.toString()][j.toString()]['hasArt']) { // this tile exists, so display grey box = "fog of war"
-							var adjx = gridCenterX + i;
-							var adjy = gridCenterY + j;
+				var adji = i - gridCenterX;
+				var adjj = j - gridCenterY;
+				if (!(indexedTiles[adji.toString()] === undefined)){
+					if (!(indexedTiles[adji.toString()][adjj.toString()] === undefined)){
+						if (indexedTiles[adji.toString()][adjj.toString()]['hasArt']) { // this tile exists, so display grey box = "fog of war"
+							var adjx = gridCenterX + adji;
+							var adjy = gridCenterY + adjj;
 							var xstring = adjx.toString();
 							var ystring = adjy.toString();
 							if (debugging){
