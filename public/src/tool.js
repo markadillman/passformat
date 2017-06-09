@@ -1019,8 +1019,8 @@ function drawMarkersOnMap() {
 			// !!!
 			
 			// set coords into div
-			teleMarkerDivList[i].style.left = teleMapX;
-			teleMarkerDivList[i].style.top = teleMapY;
+			teleMarkerDivList[i].style.left = teleMapInTileX;
+			teleMarkerDivList[i].style.top = teleMapInTileY;
 			
 			// append this div to this tile in the map
 			mapGrid[teleMapTileX][teleMapTileY].appendChild(teleMarkerDivList[i]);
