@@ -965,6 +965,8 @@ function doQuitToHomeScreen() {
 function displayMessage(msg, okFn, cancelFn, useTextInput, hideCancelButton, defaultText, textInputPassword, initCoords) {
 	console.log("MESSAGE");
 	console.log(msg);
+	console.log(msgBtnOk);
+	console.log(msgBtnCancel);
 	//remove previous event listeners so that they do not aggregate to multiple per push
 	//removeEventListeners();
 	messageText.innerHTML = msg;
