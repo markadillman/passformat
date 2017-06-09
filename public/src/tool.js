@@ -961,7 +961,7 @@ function doQuitToHomeScreen() {
 // these functions should include: messageDiv.style.display = "none";
 function displayMessage(msg, okFn, cancelFn, useTextInput, hideCancelButton, defaultText, textInputPassword, initCoords) {
 	//remove previous event listeners so that they do not aggregate to multiple per push
-	//removeEventListeners();
+	removeEventListeners();
 	messageText.innerHTML = msg;
 	//updated so all anonymous functions should also remove themselves as event listeners
 	if (initCoords&&textInputPassword){
@@ -1047,6 +1047,14 @@ function removeEventListeners(){
 	var pwdBtnSkip = document.getElementById('pwdBtnSkip');
 	var pwdBtnPublic = document.getElementById('pwdBtnPublic');
 	var pwdBtnCancel = document.getElementById('pwdBtnCancel');
+	if (verboseDebugging){
+		console.log("GLOBALS FOR REMOVAL"){
+			console.log("OK");
+			console.log(eventListenerMsgBtnOK);
+			console.log("CANCEL");
+			console.log(eventListenerMsgBtnCancel);
+		}
+	}
 	//all nodes are gathered in reference-able variables. Now use the prototype that tracks them
 	//to remove all the event listeners regardless of what they are or what args they have.
 	msgBtnOK.removeEventListener('click',eventListenerMsgBtnOK,false);
