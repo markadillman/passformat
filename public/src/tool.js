@@ -1029,6 +1029,11 @@ function drawMarkersOnMap() {
 			// adjust for size of sprite
 			// !!!
 			
+			console.log(teleMapTileX);
+			console.log(teleMapTileY);
+			console.log(teleMapX);
+			console.log(teleMapY);
+			
 			// set coords into div
 			teleMarkerDivList[i].style.left = teleMapX;
 			teleMarkerDivList[i].style.top = teleMapY;
