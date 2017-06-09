@@ -950,8 +950,8 @@ function updateMapCallback(request,currentCoords) {
 				if (!(indexedTiles[i.toString()] === undefined)){
 					if (!(indexedTiles[i.toString()][j.toString()] === undefined)){
 						if (indexedTiles[i.toString()][j.toString()]['hasArt']) { // this tile exists, so display grey box = "fog of war"
-							var adjx = mapCurrentCenterX - gridCenterX + i;
-							var adjy = mapCurrentCenterY - gridCenterY + j;
+							var adjx = gridCenterX + i;
+							var adjy = gridCenterY + j;
 							var xstring = adjx.toString();
 							var ystring = adjy.toString();
 							if (debugging){
