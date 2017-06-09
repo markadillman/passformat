@@ -814,6 +814,8 @@ app.post('/saveavatar',function(req,res){
 		//add to database
 		var collection = db.collection('avatars');
 		//this will return ALL. In future, may want to paginate.
+		console.log("collection:");
+		console.log(util.inspect(collection));
 		console.log("About to insert:");
 		console.log(query);
 		collection.insert(query,function(err,result){
