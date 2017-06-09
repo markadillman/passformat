@@ -899,15 +899,15 @@ MongoClient.connect(dbUrl,function(err,db){
 		console.log("connected succesfully to server");
 		var collection = db.collection('tiles');
 		//search collection for all tiles with non-empty svg strings
-		collection.find({svg: {$exists : true, $not :  /^(?![\s\S])/ }},function(err,docs){
+		collection.find({svg: {$exists : true, $not :  /^(?![\s\S])/ }}).toArray(function(err,docs){
 			if (err === null){
 				console.log("Gotten all populated tiles.");
 				console.log(docs);
-				res.status(200).send(JSON.stringify());
+				res.status(200).send(JSON.stringify(docs));
 			}
 			else {
 				console.log(err);
-				res.status(553).send("avatar submission broken.");
+				res.status(553).send("Broken tile query.");
 			}
 		});
 	});
