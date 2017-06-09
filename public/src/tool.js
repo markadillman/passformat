@@ -961,7 +961,7 @@ function createTeleMarker() {
 	putTeleMarkerInCanvas(teleMarkerImg, myCanvas.getContext("2d"));
 }
 function putTeleMarkerInCanvas(myGroupStr, myContext) {
-	putGroupInCanvas(myGroupStr, myContext, 100, 100, 50, 50, 0, 0, canvasWidth, canvasHeight)
+	putGroupInCanvas(myGroupStr, myContext, 0, 0, canvasWidth, canvasWidth, 0, 0, canvasWidth, canvasHeight)
 }
 function drawMarkersOnMap() {
 	// get current info out of localStorage
