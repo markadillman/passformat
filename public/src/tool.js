@@ -1135,10 +1135,11 @@ function doQuitToHomeScreen(argsocket) {
 		// hard stop player motion and wait
 		// to make sure no assetRender calls are in progress
 		// when the quit continues
-		player.removeComponent('Gravity');
-		player.removeComponent('Multiway');
-		player.removeComponent('Motion');
-		player.removeComponent('Jumper');
+		var thePlayer = Crafty('Player');
+		thePlayer.removeComponent('Gravity');
+		thePlayer.removeComponent('Multiway');
+		thePlayer.removeComponent('Motion');
+		thePlayer.removeComponent('Jumper');
 		Crafty.e('Delay').delay(function(){
 			if (debugging) {
 				console.log("Waited.");
