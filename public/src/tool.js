@@ -1030,7 +1030,7 @@ function displayMessage(msg, okFn, cancelFn, useTextInput, hideCancelButton, def
 			this.removeEventListener("click",click1,false);
 			okFn(); 
 		},false);
-		cancelButton.addEventListener('click',function click2(){
+		msgBtnCancel.addEventListener('click',function click2(){
 			console.log("callee");
 			console.log(arguments.callee);
 			eventListenerMsgBtnCancel = arguments.callee;
