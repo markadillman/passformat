@@ -892,16 +892,13 @@ app.post('/freetile',function(req,res){
 
 /*This returns a ready made query of all tiles with svg environs.
 */
-app.post('/allpop',function(req,res){
+app.post('/allpop',function(req,res)){
 MongoClient.connect(dbUrl,function(err,db){
 		//test for errors, pop out if there are errors present
 		assert.equal(null,err);
 		console.log("connected succesfully to server");
 		var collection = db.collection('tiles');
 		//search collection for all tiles with non-empty svg strings
-		var filter = {};
-		filter.xcoord = 1;
-		filter.ycoord = 1;
 		collection.find(svg: {$exists : true, $not : /^(?![\s\S])/ }},{xcoord:1,ycoord:1}).toArray(function(err,docs){
 			if (err === null){
 				console.log("Gotten all populated tiles.");
