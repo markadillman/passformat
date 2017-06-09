@@ -121,14 +121,14 @@ const newAvatarImg = "<!--FROM THE BLANK--><svg xmlns=\"http://www.w3.org/2000/s
 		"points=\"269.5 311 326.5 313\" style=\"fill: none; stroke: #000000; stroke-width: " +
 		"5\"/></g><g xmlns=\"http://www.w3.org/2000/svg\" id=\"platformsGroup\" " +
 		"style=\"visibility: hidden\"/></svg>";
-const teleMarkerImg = "<!--FROM THE BLANK--><svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">" + 
+const teleMarkerImg = "<!--FROM THE BLANK--><svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"> width=\"148\" height=\"145\" viewBox=\"0 0 148 145\"" + 
 		"<g xmlns=\"http://www.w3.org/2000/svg\" id=\"drawingGroup\" style=\"opacity: 1\" > " +
 		"<polygon id=\"o1\" points=\"292.96000000000004 105.92 308.96000000000004 147.51999999999998 " +
 		"365.28 146.88 319.84 178.88 338.4 235.2 291.68 198.72 252 229.44 265.44 183.36 230.88 148.16 " +
 		"277.6 148.16\" style=\"fill: #ffff17; fill-rule: evenodd; stroke: #ffff17; stroke-width: 4; opacity: .25\"/> " +
 		"<polygon id=\"o2\" points=\"226 148 279 148 293 98 313 147 374 146 323 182 343 243 292 204 248 237 265 184\" " +
 		"style=\"fill: none; fill-rule: evenodd; stroke: #000000; stroke-width: 4\"/></g></svg>"
-const selectedTeleMarkerImg = "<!--FROM THE BLANK--><svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">" + 
+const selectedTeleMarkerImg = "<!--FROM THE BLANK--><svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"> width=\"148\" height=\"145\" viewBox=\"0 0 148 145\"" + 
 		"<g xmlns=\"http://www.w3.org/2000/svg\" id=\"drawingGroup\" style=\"opacity: 1\" > " +
 		"<polygon id=\"o1\" points=\"292.96000000000004 105.92 308.96000000000004 147.51999999999998 " +
 		"365.28 146.88 319.84 178.88 338.4 235.2 291.68 198.72 252 229.44 265.44 183.36 230.88 148.16 " +
