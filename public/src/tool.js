@@ -946,8 +946,8 @@ function createTeleMarker() {
 	var myDiv;
 	myDiv = document.createElement("div");
 	myDiv.id = "teleMarkerDiv " + nextID.toString();
-	myDiv.width = "8px";
-	myDiv.height = "8px";
+	myDiv.style.width = "8px";
+	myDiv.style.height = "8px";
 	myDiv.style.position = "absolute";
 	myDiv.style.left = "0px";
 	myDiv.style.top = "0px";
@@ -959,8 +959,8 @@ function createTeleMarker() {
 	var myCanvas;
 	myCanvas = document.createElement("canvas");
 	myCanvas.id = "teleMarkerCanvas " + nextID.toString();
-	myCanvas.width = "8px";
-	myCanvas.height = "8px";
+	myCanvas.style.width = "8px";
+	myCanvas.style.height = "8px";
 	teleMarkerCanvasList[nextID] = myCanvas;
 	myDiv.appendChild(myCanvas);
 	
