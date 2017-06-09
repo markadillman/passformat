@@ -976,7 +976,7 @@ function displayMessage(msg, okFn, cancelFn, useTextInput, hideCancelButton, def
 			eventListenerMsgBtnOk = arguments.callee;
 			this.removeEventListener("click",click1, false);
 			okFn(initCoords.xcoord,initCoords.ycoord,textInputPassword);
-			return;
+			//return;
 		},false); 
 		eventListenerMsgBtnCancel = msgBtnCancel.addEventListener('click',function click2(){
 			console.log("callee");
@@ -984,9 +984,9 @@ function displayMessage(msg, okFn, cancelFn, useTextInput, hideCancelButton, def
 			eventListenerMsgBtnCancel = arguments.callee;
 			this.removeEventListener("click",click2,false);
 			cancelFn();
-			return;
+			//return;
 		},false);
-		return;
+		//return;
 	}
 	else if (initCoords) {
 		console.log("second block");
@@ -996,7 +996,7 @@ function displayMessage(msg, okFn, cancelFn, useTextInput, hideCancelButton, def
 			eventListenerMsgBtnOk = arguments.callee;
 			this.removeEventListener("click",click1, false);
 			okFn(initCoords.xcoord,initCoords.ycoord);
-			return;
+			//return;
 		},false);
 		eventListenerMsgBtnCancel = msgBtnCancel.addEventListener('click',function click2(){
 			console.log("callee");
@@ -1004,9 +1004,9 @@ function displayMessage(msg, okFn, cancelFn, useTextInput, hideCancelButton, def
 			eventListenerMsgBtnCancel = arguments.callee;
 			this.removeEventListener("click",click2,false);
 			cancelFn();
-			return;
+			//return;
 		},false);
-		return;
+		//return;
 	}
 	else
 	{
@@ -1018,7 +1018,6 @@ function displayMessage(msg, okFn, cancelFn, useTextInput, hideCancelButton, def
 			this.removeEventListener("click",click1,false);
 			okFn(); 
 		},false);
-		return;
 		eventListenerMsgBtnCancel = msgBtnCancel.addEventListener('click',function click2(){
 			console.log("callee");
 			console.log(arguments.callee);
@@ -1026,7 +1025,6 @@ function displayMessage(msg, okFn, cancelFn, useTextInput, hideCancelButton, def
 			this.removeEventListener("click",click2,false);
 			cancelFn();
 		},false);
-		return;
 	}
 	// use or hide text input element
 	if (useTextInput) { // show the text input element
