@@ -961,7 +961,7 @@ function doQuitToHomeScreen() {
 // these functions should include: messageDiv.style.display = "none";
 function displayMessage(msg, okFn, cancelFn, useTextInput, hideCancelButton, defaultText, textInputPassword, initCoords) {
 	//remove previous event listeners so that they do not aggregate to multiple per push
-	removeEventListeners();
+	//removeEventListeners();
 	messageText.innerHTML = msg;
 	//updated so all anonymous functions should also remove themselves as event listeners
 	if (initCoords&&textInputPassword){
@@ -1053,9 +1053,11 @@ function removeEventListeners(){
 // these should never run!
 function doMsgBtnOK() {
 	console.log("Something went very awry with the message box Okay button.");
+	eventListenerMsgBtnOK();
 }
 function doMsgBtnCancel() {
 	console.log("Something went very awry with the message box Cancel button.");
+	eventListenerMsgBtnCancel();
 }
 
 // helper handlers for message box functions
