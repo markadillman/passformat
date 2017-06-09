@@ -961,7 +961,7 @@ function createTeleMarker() {
 	putTeleMarkerInCanvas(teleMarkerImg, myCanvas.getContext("2d"));
 }
 function putTeleMarkerInCanvas(myGroupStr, myContext) {
-	putGroupInCanvas(myGroupStr, myContext, 100, 100, 50, 50, 0, 0, canvasWidth/10, canvasHeight/10)
+	putGroupInCanvas(myGroupStr, myContext, 100, 100, 50, 50, 0, 0, canvasWidth/30, canvasHeight/30)
 }
 function drawMarkersOnMap() {
 	// get current info out of localStorage
@@ -1066,7 +1066,7 @@ function teleMarkerUnselect() {
 	mapControlsDiv.style.display = "none";
 	
 	// switch current selectedTeleMarker back to regular sprite
-	putTeleMarkerInCanvas(teleMarkerImg, teleMarkerCanvasList[selectedTeleMarker].getContext("2d"));anvasHeight/10)
+	putTeleMarkerInCanvas(teleMarkerImg, teleMarkerCanvasList[selectedTeleMarker].getContext("2d"));
 }
 function doTeleMarkerDelete() {
 	// works on current selectedTeleMarker
