@@ -881,13 +881,20 @@ function updateMapCallback(request,currentCoords) {
 		console.log(populatedTiles);
 	}
 
-	var indexedTiles = {};
+	var indexedTiles = {}};
 	//format response list for quick populating with appropriate tile
 	for (i in populatedTiles){
-		indexedTiles[populatedTiles[i]['xcoord']][populatedTiles[i]['ycoord']]
-			= true;
+		var tempx = populatedTiles[i]['xcoord'];
+		var tempy = populatedTiles[i]['ycoord'];
+		if (debugging){
+			console.log("(X : " + tempx.toString() + ", Y: " + tempy.toString() + ")");
+		}
+		indexedTiles[tempx.toString()][tempy.toString()] = true;
 	}
-
+	if (debugging){
+		console.log("POPULATED TILES:");
+		console.log(indexedTiles);
+	}
 	// update the map drawing centered on tile x, y
 	// so 0, 0 will center the map on the world's origin tile
 	
