@@ -121,20 +121,16 @@ const newAvatarImg = "<!--FROM THE BLANK--><svg xmlns=\"http://www.w3.org/2000/s
 		"points=\"269.5 311 326.5 313\" style=\"fill: none; stroke: #000000; stroke-width: " +
 		"5\"/></g><g xmlns=\"http://www.w3.org/2000/svg\" id=\"platformsGroup\" " +
 		"style=\"visibility: hidden\"/></svg>";
-const teleMarkerImg = "<!--FROM THE BLANK--><svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"390\" height=\"260\" viewBox=\"0 0 390 260\">" + 
-		"<g xmlns=\"http://www.w3.org/2000/svg\" id=\"drawingGroup\" style=\"opacity: 1\" > " +
-		"<polygon id=\"o1\" points=\"292.96000000000004 105.92 308.96000000000004 147.51999999999998 " +
-		"365.28 146.88 319.84 178.88 338.4 235.2 291.68 198.72 252 229.44 265.44 183.36 230.88 148.16 " +
-		"277.6 148.16\" style=\"fill: #ffff17; fill-rule: evenodd; stroke: #ffff17; stroke-width: 4; opacity: .25\"/> " +
-		"<polygon id=\"o2\" points=\"226 148 279 148 293 98 313 147 374 146 323 182 343 243 292 204 248 237 265 184\" " +
-		"style=\"fill: none; fill-rule: evenodd; stroke: #000000; stroke-width: 4\"/></g></svg>"
-const selectedTeleMarkerImg = "<!--FROM THE BLANK--><svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"390\" height=\"260\" viewBox=\"0 0 390 260\">" + 
-		"<g xmlns=\"http://www.w3.org/2000/svg\" id=\"drawingGroup\" style=\"opacity: 1\" > " +
-		"<polygon id=\"o1\" points=\"292.96000000000004 105.92 308.96000000000004 147.51999999999998 " +
-		"365.28 146.88 319.84 178.88 338.4 235.2 291.68 198.72 252 229.44 265.44 183.36 230.88 148.16 " +
-		"277.6 148.16\" style=\"fill: #ffff17; fill-rule: evenodd; stroke: #ffff17; stroke-width: 4; opacity: .75\"/> " +
-		"<polygon id=\"o2\" points=\"226 148 279 148 293 98 313 147 374 146 323 182 343 243 292 204 248 237 265 184\" " +
-		"style=\"fill: none; fill-rule: evenodd; stroke: #000000; stroke-width: 10\"/></g></svg>"
+const teleMarkerImg = "<!--FROM THE BLANK--><svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">" + 
+		"<g xmlns=\"http://www.w3.org/2000/svg\" id=\"drawingGroup\" style=\"opacity: 1\">" +
+		"<polygon id=\"o1\" points=\"10.239202033664 1.855425871872 7.90273982464 7.55914244096 2.473901162496 7.55914244096 6.597069766656 10.720238370816 4.604204941312 16.011638079488 9.895604649984 13.194139533312 15.11828488192 16.630113370112 13.194139533312 11.063835754496 18.279380811776 7.90273982464 12.094627905536 7.90273982464\" style=\"fill: #ffff00; fill-rule: evenodd; stroke: #ffff00; stroke-width: 1;opacity:.25\"/>" +
+		"<polygon id=\"o2\" points=\"10.239202033664 1.649267441664 7.834020347904 7.55914244096 2.06158430208 7.421703487488 6.597069766656 10.788957847552 4.329327034368 16.355235463168 9.895604649984 13.262859010048 15.393162788864 17.111149707264 13.40029796352 11.132555231232 18.691697672192 7.90273982464 12.163347382272 7.765300871168\" style=\"fill: none; fill-rule: evenodd; stroke: #000000; stroke-width: 1\"/>" +
+		"</g></svg>";
+const selectedTeleMarkerImg = "<!--FROM THE BLANK--><svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">" + 
+		"<g xmlns=\"http://www.w3.org/2000/svg\" id=\"drawingGroup\" style=\"opacity: 1\">" +
+		"<polygon id=\"o1\" points=\"10.239202033664 1.855425871872 7.90273982464 7.55914244096 2.473901162496 7.55914244096 6.597069766656 10.720238370816 4.604204941312 16.011638079488 9.895604649984 13.194139533312 15.11828488192 16.630113370112 13.194139533312 11.063835754496 18.279380811776 7.90273982464 12.094627905536 7.90273982464\" style=\"fill: #ffff00; fill-rule: evenodd; stroke: #ffff00; stroke-width: 1;opacity:.75\"/>" +
+		"<polygon id=\"o2\" points=\"10.239202033664 1.649267441664 7.834020347904 7.55914244096 2.06158430208 7.421703487488 6.597069766656 10.788957847552 4.329327034368 16.355235463168 9.895604649984 13.262859010048 15.393162788864 17.111149707264 13.40029796352 11.132555231232 18.691697672192 7.90273982464 12.163347382272 7.765300871168\" style=\"fill: none; fill-rule: evenodd; stroke: #000000; stroke-width: 2.25\"/>" +
+		"</g></svg>";
 // Toni used this for testing the size/shape of avatars rendered in Crafty
 const ovalAvatarImg = "<!--FROM THE BLANK--><svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">" +
 		"<clipPath id=\"avatarClipPath\"><ellipse cx=\"300\" cy=\"175\" rx=\"87\" " +
