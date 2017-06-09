@@ -963,59 +963,59 @@ function displayMessage(msg, okFn, cancelFn, useTextInput, hideCancelButton, def
 	console.log("MESSAGE");
 	console.log(msg);
 	//remove previous event listeners so that they do not aggregate to multiple per push
-	//removeEventListeners();
+	removeEventListeners();
 	messageText.innerHTML = msg;
 	//updated so all anonymous functions should also remove themselves as event listeners
 	if (initCoords&&textInputPassword){
 		//this works because the truthiness of strings in Javascriprt. Both true and defined.
 		console.log("first block");
-		eventListenerMsgBtnOk = msgBtnOK.addEventListener('click',function click1(){
+		eventListenerMsgBtnOk = msgBtnOK.eventListener('click',function click1(){
 			console.log("callee");
 			console.log(arguments.callee);
 			eventListenerMsgBtnOk = arguments.callee;
-			this.removeEventListener("click",click1, false);
+			//this.removeEventListener("click",click1, false);
 			okFn(initCoords.xcoord,initCoords.ycoord,textInputPassword);
 		},false); 
-		eventListenerMsgBtnCancel = msgBtnCancel.addEventListener('click',function click2(){
+		eventListenerMsgBtnCancel = msgBtnCancel.eventListener('click',function click2(){
 			console.log("callee");
 			console.log(arguments.callee);
 			eventListenerMsgBtnCancel = arguments.callee;
-			this.removeEventListener("click",click2,false);
+			//this.removeEventListener("click",click2,false);
 			cancelFn();
 		},false);
 	}
 	else if (initCoords) {
 		console.log("second block");
-		eventListenerMsgBtnOk = msgBtnOK.addEventListener('click',function click1(){
+		eventListenerMsgBtnOk = msgBtnOK.eventListener('click',function click1(){
 			console.log("callee");
 			console.log(arguments.callee);
 			eventListenerMsgBtnOk = arguments.callee;
-			this.removeEventListener("click",click1, false);
+			//this.removeEventListener("click",click1, false);
 			okFn(initCoords.xcoord,initCoords.ycoord);
 		},false);
-		eventListenerMsgBtnCancel = msgBtnCancel.addEventListener('click',function click2(){
+		eventListenerMsgBtnCancel = msgBtnCancel.eventListener('click',function click2(){
 			console.log("callee");
 			console.log(arguments.callee);
 			eventListenerMsgBtnCancel = arguments.callee;
-			this.removeEventListener("click",click2,false);
+			//this.removeEventListener("click",click2,false);
 			cancelFn();
 		},false);
 	}
 	else
 	{
 		console.log("third block");
-		eventListenerMsgBtnOk = msgBtnOK.addEventListener('click',function click1(){
+		eventListenerMsgBtnOk = msgBtnOK.eventListener('click',function click1(){
 			console.log("callee");
 			console.log(arguments.callee);
 			eventListenerMsgBtnOk = arguments.callee;
-			this.removeEventListener("click",click1,false);
+			//this.removeEventListener("click",click1,false);
 			okFn(); 
 		},false);
-		eventListenerMsgBtnCancel = msgBtnCancel.addEventListener('click',function click2(){
+		eventListenerMsgBtnCancel = msgBtnCancel.eventListener('click',function click2(){
 			console.log("callee");
 			console.log(arguments.callee);
 			eventListenerMsgBtnCancel = arguments.callee;
-			this.removeEventListener("click",click2,false);
+			//this.removeEventListener("click",click2,false);
 			cancelFn();
 		},false);
 	}
@@ -1058,8 +1058,6 @@ function displayMessage(msg, okFn, cancelFn, useTextInput, hideCancelButton, def
 //every time on the first line of displayMessage or displayPassword to avoid eventListeners from
 //accumulating. Somewhat redundant with the new self-removing functions above.
 function removeEventListeners(){
-	var msgBtnOk = document.getElementById('msgBtnOk');
-	var msgBtnCancel = document.getElementById('msgBtnCancel');
 	var pwdBtnOK = document.getElementById('pwdBtnOK');
 	var pwdBtnSkip = document.getElementById('pwdBtnSkip');
 	var pwdBtnPublic = document.getElementById('pwdBtnPublic');
@@ -1073,12 +1071,12 @@ function removeEventListeners(){
 	}
 	//all nodes are gathered in reference-able variables. Now use the prototype that tracks them
 	//to remove all the event listeners regardless of what they are or what args they have.
-	msgBtnOK.removeEventListener('click',eventListenerMsgBtnOK,false);
-	msgBtnCancel.removeEventListener('click',eventListenerMsgBtnCancel,false);
-	pwdBtnOK.removeEventListener('click',eventListenerPwdBtnOk,false);
-	pwdBtnSkip.removeEventListener('click',eventListenerPwdBtnSkip,false);
-	pwdBtnCancel.removeEventListener('click',eventListenerPwdBtnCancel,false);
-	pwdBtnPublic.removeEventListener('click',eventListenerPwdBtnPublic,false);
+	msgBtnOK.eventListener(eventListenerMsgBtnOK);
+	msgBtnCancel.eventListener(eventListenerMsgBtnCancel);
+	pwdBtnOK.eventListener(eventListenerPwdBtnOk);
+	pwdBtnSkip.eventListener(eventListenerPwdBtnSkip);
+	pwdBtnCancel.eventListener(eventListenerPwdBtnCancel);
+	pwdBtnPublic.eventListener(eventListenerPwdBtnPublic);
 }
 
 // default handlers for message box buttons
