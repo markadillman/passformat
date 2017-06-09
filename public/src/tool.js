@@ -956,6 +956,11 @@ function createTeleMarker() {
 	myCanvas.height = canvasHeight/30;
 	teleMarkerCanvasList[nextID] = myCanvas;
 	myDiv.appendChild(myCanvas);
+	
+	// put the regular marker sprite in the canvas
+	myGroupStr = teleMarkerImg;
+	myContext = myCanvas.getContext("2d");
+	putGroupInCanvas(myGroupStr, myContext, 0, 0, canvasWidth, canvasHeight, 0, 0, canvasWidth/10, canvasHeight/10)
 }
 function drawMarkersOnMap() {
 	// get current info out of localStorage
@@ -1040,7 +1045,7 @@ function teleMarkerSelect(markerID) {
 	// switch markerID to use selected sprite
 	myGroupStr = selectedTeleMarkerImg;
 	myContext = teleMarkerCanvasList[markerID].getContext("2d");
-	putGroupInCanvas(myGroupStr, myContext, 0, 0, canvasWidth, canvasHeight, 0, 0, canvasWidth/1, canvasHeight/1)
+	putGroupInCanvas(myGroupStr, myContext, 0, 0, canvasWidth, canvasHeight, 0, 0, canvasWidth/10, canvasHeight/10)
 	
 	// update selectedTeleMarker
 	selectedTeleMarker = markerID;
@@ -1064,7 +1069,7 @@ function teleMarkerUnselect() {
 	// switch current selectedTeleMarker back to regular sprite
 	myGroupStr = teleMarkerImg;
 	myContext = teleMarkerCanvasList[selectedTeleMarker].getContext("2d");
-	putGroupInCanvas(myGroupStr, myContext, 0, 0, canvasWidth, canvasHeight, 0, 0, canvasWidth/1, canvasHeight/1)
+	putGroupInCanvas(myGroupStr, myContext, 0, 0, canvasWidth, canvasHeight, 0, 0, canvasWidth/10, canvasHeight/10)
 }
 function doTeleMarkerDelete() {
 	// works on current selectedTeleMarker
