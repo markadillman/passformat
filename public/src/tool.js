@@ -961,8 +961,8 @@ function createTeleMarker() {
 	var myCanvas;
 	myCanvas = document.createElement("canvas");
 	myCanvas.id = "teleMarkerCanvas " + nextID.toString();
-	myCanvas.style.width = 21;
-	myCanvas.style.height = 21;
+	myCanvas.style.width = "21px";
+	myCanvas.style.height = "21px";
 	teleMarkerCanvasList[nextID] = myCanvas;
 	myDiv.appendChild(myCanvas);
 	
