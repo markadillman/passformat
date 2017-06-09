@@ -1006,7 +1006,7 @@ function drawMarkersOnMap() {
 			teleMarkerDivList[i].style.top = teleMapY;
 			
 			// append this div to this tile in the map
-			//mapCanvasGridDiv.appendChild(teleMarkerDivList[i]);
+			mapCanvasGridDiv.appendChild(teleMarkerDivList[i]);
 			
 		} else { // make sure this div is not appended in the DOM
 			var myParent = teleMarkerDivList[i].parentNode;
@@ -1039,7 +1039,7 @@ function teleMarkerSelect(markerID) {
 	// switch markerID to use selected sprite
 	myGroupStr = selectedTeleMarkerImg;
 	myContext = teleMarkerCanvasList[markerID].getContext("2d");
-	putGroupInCanvas(myGroupStr, myContext, 0, 0, canvasWidth, canvasHeight, 0, 0, canvasWidth/30, canvasHeight/30)
+	putGroupInCanvas(myGroupStr, myContext, 0, 0, canvasWidth, canvasHeight, 0, 0, canvasWidth/1, canvasHeight/1)
 	
 	// update selectedTeleMarker
 	selectedTeleMarker = markerID;
@@ -1063,7 +1063,7 @@ function teleMarkerUnselect() {
 	// switch current selectedTeleMarker back to regular sprite
 	myGroupStr = teleMarkerImg;
 	myContext = teleMarkerCanvasList[selectedTeleMarker].getContext("2d");
-	putGroupInCanvas(myGroupStr, myContext, 0, 0, canvasWidth, canvasHeight, 0, 0, canvasWidth/30, canvasHeight/30)
+	putGroupInCanvas(myGroupStr, myContext, 0, 0, canvasWidth, canvasHeight, 0, 0, canvasWidth/1, canvasHeight/1)
 }
 function doTeleMarkerDelete() {
 	// works on current selectedTeleMarker

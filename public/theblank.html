@@ -35,17 +35,18 @@ http://infiniteblank.com/wordpress/?page_id=20
 		<!-- game scripts -->
 		<script type="text/javascript" src="src/game.js"></script>
 		<script type="text/javascript" src="src/tool.js"></script>
-		<!--Dynamically loads socket.io from CDN-->:
+		
+		<!--Dynamically loads socket.io from CDN-->
 		<script type="text/javascript">
       		window.onload = loadScript('https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.1/socket.io.js', function(){
         		console.log('Onload triggered.');
         		window.addEventListener('load', Game.start);
       		});
     	</script>
+	
 	</head>
 
 	<body onload="initHTML()">
-	
 
 		<!-- GAMEPLAY DIV -->
 	
