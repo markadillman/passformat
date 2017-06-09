@@ -948,7 +948,7 @@ function createTeleMarker(x, y) {
 	myDiv.style.position = "absolute";
 	myDiv.style.left = mapXCoord.toString() + "px";
 	myDiv.style.top = mapYCoord.toString() + "px";
-	myDiv.addEventListener('click', toggleTeleSelect(evt));
+	myDiv.addEventListener('click', function(evt){toggleTeleSelect(evt)});
 	teleMarkerDivList[nextID] = myDiv;
 	
 	// create the canvas and add it to the canvas list
