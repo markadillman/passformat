@@ -63,7 +63,7 @@ var msgBtnCancel;		// the message Cancel button
 var pageHeader;			// the h1 tag for the drawing tool
 var drawingHeader = "CREATE THE BLANK --- Add your art to the world! Don't forget to create platforms before you submit your tile.";
 var avatarHeader = "CREATE YOUR AVATAR --- Edit an existing avatar or draw a new one. For best results, draw to the oval's edges.";
-var mapHeader = "EXPLORE THE BLANK --- Use the arrow keys to pan. Click on a teleportation marker to go directly to that location.";
+var mapHeader = "EXPLORE THE BLANK --- Use the arrow keys to pan. Select a marker and click Teleport to go directly to that location.";
 var mapCanvasGridDiv;
 var mapControlsDiv;
 var mapGridWidth = 17;	// number of tiles the map can display at once
@@ -480,6 +480,7 @@ function initHTML() {
 	// and sometimes it selects stuff and makes things look weird
 	document.addEventListener("dblclick", function(evt) {
 		evt.preventDefault();
+		evt.stopPropagation();
 	});
 
 	// initialize the game music
@@ -968,7 +969,7 @@ function createTeleMarker() {
 }
 function putTeleMarkerInCanvas(myGroupStr, myContext) {
 	// use true flag to tell putGroupInCanvas not to use the background rect
-	putGroupInCanvas(myGroupStr, myContext, 200, 110, 190, 300, 0, 0, 50, 70, true)
+	putGroupInCanvas(myGroupStr, myContext, 200, 110, 180, 300, 0, 0, 50, 70, true)
 }
 function drawMarkersOnMap() {
 	// get current info out of localStorage
