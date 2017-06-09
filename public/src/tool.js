@@ -63,7 +63,7 @@ var msgBtnCancel;		// the message Cancel button
 var pageHeader;			// the h1 tag for the drawing tool
 var drawingHeader = "CREATE THE BLANK --- Add your art to the world! Don't forget to create platforms before you submit your tile.";
 var avatarHeader = "CREATE YOUR AVATAR --- Edit an existing avatar or draw a new one. For best results, draw to the oval's edges.";
-var mapHeader = "EXPLORE THE BLANK --- Use the arrow keys to pan. Select a marker and click Teleport to go directly to that location.";
+var mapHeader = "EXPLORE THE BLANK --- Use the arrow keys to pan. Select a marker and click Teleport to teleport to that location.";
 var mapCanvasGridDiv;
 var mapControlsDiv;
 var mapGridWidth = 17;	// number of tiles the map can display at once
@@ -949,8 +949,8 @@ function createTeleMarker() {
 	myDiv.width = canvasWidth;
 	myDiv.height = canvasHeight;
 	myDiv.style.position = "absolute";
-	myDiv.style.left = 0;
-	myDiv.style.top = 0;
+	myDiv.style.left = "0px";
+	myDiv.style.top = "0px";
 	myDiv.style.display = "block";
 	myDiv.addEventListener('click', function(evt){toggleTeleSelect(evt)});
 	teleMarkerDivList[nextID] = myDiv;
@@ -1009,8 +1009,8 @@ function drawMarkersOnMap() {
 			// if yes, need to draw this marker on the mapGrid in the right spot
 			
 			// get in-map coordinates for these world coordinates
-			teleMapX = 100;
-			teleMapY = 100;
+			teleMapX = "100px";
+			teleMapY = "100px";
 			
 			// adjust for size of sprite
 			// !!!
