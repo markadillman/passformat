@@ -923,6 +923,9 @@ function updateMapCallback(request,currentCoords) {
 				console.log("coordinates: (" + i.toString() + " , " + j.toString() + ")");
 			}
 			
+			// turn the tile blue to make sure previous map renders do not linger
+			putColorInCanvas(mapGrid[i][j], 224, 251, 253, 255);
+			
 			// figure out what world tile to look at
 			worldX = mapCurrentCenterX - gridCenterX + i;
 			worldY = mapCurrentCenterY - gridCenterY + j;
