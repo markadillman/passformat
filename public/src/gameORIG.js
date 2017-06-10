@@ -44,7 +44,6 @@ var exitDelay = 500; // ms to wait before exiting to make sure no assetRender ca
 var titleTextColor = '#373854';
 var selectedButtonColor = '#99CCFF';
 var panTime = 500; // ms
-var avatarFrozen = false;
 
 //BEGIN CODE ADDED BY MARK
 //global value holder for socket.io socket and socketId
@@ -521,18 +520,11 @@ function loadPlayer(argsocket) {
 			// Check for ability to move
 			if (mode == gameMode && playing == true)
 			{
-				if(avatarFrozen)
-				{
-                    this.gravity('Platform');
-                    this.enableControl();
-				}
-                avatarFrozen = false;
+				this.enableControl();
 			}
 			else
 			{
 				this.disableControl();
-                this.antigravity();
-                avatarFrozen = true;
 			}
 			// Toni added mode conditions below b/c it was still using down arrow while in art mode
 			if(e.key == Crafty.keys.DOWN_ARROW && mode == gameMode && playing == true)
