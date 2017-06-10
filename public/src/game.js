@@ -22,7 +22,7 @@ var creditsText = "<br>" + titleString + "<br>" +
 	"Network Developer: Mark Dillman<br>" +
 	"Art Developer: Antonina (Toni) York<br><br>" +
 	"BETA TESTING AND GAME ART<br>" +
-	"The Folks at Polital Enterprises<br>" +
+	"The Folks at Polital Enterprises<br><br>" +
 	"GAME MUSIC<br>" +
 	"Antonina (Toni) York";
 
