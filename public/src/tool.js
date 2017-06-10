@@ -946,9 +946,9 @@ function updateMapCallback(request,currentCoords) {
 				// ### Mark, I need help here, please
 				// ### need to replace "true" with a real test to see if world tile
 				// ### (worldX, worldY) currently exists in the database
-				var adji = i - gridCenterX;
+				/*var adji = i - gridCenterX;
 				var adjj = j - gridCenterY;
-				/*if (!(indexedTiles[adji.toString()] === undefined)){
+				if (!(indexedTiles[adji.toString()] === undefined)){
 					if (!(indexedTiles[adji.toString()][adjj.toString()] === undefined)){
 						if (indexedTiles[adji.toString()][adjj.toString()]['hasArt']) { // this tile exists, so display grey box = "fog of war"
 							var adjx = gridCenterX + adji;
@@ -960,13 +960,19 @@ function updateMapCallback(request,currentCoords) {
 							}
 							putColorInCanvas(mapGrid[adjx][adjy], 84, 84, 84, 255);
 						}
-					}*/
+					}
 				if (!(indexedTiles[worldX.toString()] === undefined)){
                     if (!(indexedTiles[worldY.toString()][adjj.toString()] === undefined)){
                         if (indexedTiles[worldX.toString()][worldY.toString()]['hasArt']) {
                             putColorInCanvas(mapGrid[i][j], 84, 84, 84, 255);
                         }
-                    }
+                    }*/
+				
+				// determine if this tile actually exists in the world or not
+				if (indexedTiles[worldX][worldY]['hasArt']) {
+					// it exists, so give it the "fog of war" grey
+					putColorInCanvas(mapGrid[adjx][adjy], 84, 84, 84, 255);
+				}
                 } else { // this tile doesn't exist, so just display background color
 					// ### in a perfect world, I would have a helper function to
 					// convert the bgroundColor hex string to these ints
