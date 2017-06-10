@@ -11,8 +11,8 @@ var http = require('http');
 const util = require('util');
 var MongoClient = require('mongodb').MongoClient, assert = require('assert');
 //database url
-var dbUrl = 'mongodb://172.31.34.164:27017/test'
-//var dbUrl = 'mongodb://127.0.0.1:27017/test' //<-- Mark's Test Environment
+//var dbUrl = 'mongodb://172.31.34.164:27017/test'
+var dbUrl = 'mongodb://127.0.0.1:27017/test' //<-- Mark's Test Environment
 var socketioPort = 8080;
 
 var index = require('./routes/index');
