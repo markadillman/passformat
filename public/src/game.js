@@ -14,7 +14,7 @@ the client side of The Blank.
 */
 
 var titleString = "THE BLANK";
-var creditsText = titleString + "<br>" +
+var creditsText = "<br>" + titleString + "<br>" +
 	"a clone of Evan Balster's original game titled \"Infinite Blank\"<br>" +
 	"developed as a capstone project for OSU's CS 467 in the Spring 2017 term<br><br>" +
 	"CAPSTONE TEAM ARIES<br>" +
@@ -23,7 +23,6 @@ var creditsText = titleString + "<br>" +
 	"Art Developer: Antonina (Toni) York<br><br>" +
 	"BETA TESTING AND GAME ART<br>" +
 	"The Folks at Polital Enterprises<br>" +
-	"The Nerdfighers of ANF<br><br>" +
 	"GAME MUSIC<br>" +
 	"Antonina (Toni) York";
 
