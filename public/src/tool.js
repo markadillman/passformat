@@ -972,7 +972,7 @@ function updateMapCallback(request,currentCoords) {
 				if (indexedTiles[worldX] != undefined) {
 					if (indexedTiles[worldX][worldY] != undefined) {
 						// it exists, so give it the "fog of war" grey
-						putColorInCanvas(mapGrid[adjx][adjy], 84, 84, 84, 255);
+						putColorInCanvas(mapGrid[i][j], 84, 84, 84, 255);
 					}
                 } else { // this tile doesn't exist, so just display background color
 					// ### in a perfect world, I would have a helper function to
