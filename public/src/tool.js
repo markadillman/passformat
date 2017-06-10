@@ -969,9 +969,11 @@ function updateMapCallback(request,currentCoords) {
                     }*/
 				
 				// determine if this tile actually exists in the world or not
-				if (indexedTiles[worldX][worldY]['hasArt']) {
-					// it exists, so give it the "fog of war" grey
-					putColorInCanvas(mapGrid[adjx][adjy], 84, 84, 84, 255);
+				if (indexedTiles[worldX] != undefined) {
+					if (indexedTiles[worldX][worldY] != undefined) {
+						// it exists, so give it the "fog of war" grey
+						putColorInCanvas(mapGrid[adjx][adjy], 84, 84, 84, 255);
+					}
                 } else { // this tile doesn't exist, so just display background color
 					// ### in a perfect world, I would have a helper function to
 					// convert the bgroundColor hex string to these ints
