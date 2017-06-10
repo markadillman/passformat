@@ -475,7 +475,7 @@ function initHTML() {
 	
 	// check to make sure local storage is working and set it up if necessary
 	if (typeof(localStorage) != "undefined") {
-		if (localStorage.hello != "world!") {
+		if (localStorage.hello != "world") {
 			// local storage has not yet been set up for this browser, so do set up
 			localStorage.hello = "world";
 			localStorage.myAvatarCount = 0;
@@ -946,32 +946,7 @@ function updateMapCallback(request,currentCoords) {
 				
 			} else { // they haven't been in this tile
 				// determine if this tile actually exists in the world or not
-				// ### Mark, I need help here, please
-				// ### need to replace "true" with a real test to see if world tile
-				// ### (worldX, worldY) currently exists in the database
-				/*var adji = i - gridCenterX;
-				var adjj = j - gridCenterY;
-				if (!(indexedTiles[adji.toString()] === undefined)){
-					if (!(indexedTiles[adji.toString()][adjj.toString()] === undefined)){
-						if (indexedTiles[adji.toString()][adjj.toString()]['hasArt']) { // this tile exists, so display grey box = "fog of war"
-							var adjx = gridCenterX + adji;
-							var adjy = gridCenterY + adjj;
-							var xstring = adjx.toString();
-							var ystring = adjy.toString();
-							if (debugging){
-								console.log("ABOUT TO GRAY OUT: (" + xstring + " , " + ystring + ")");
-							}
-							putColorInCanvas(mapGrid[adjx][adjy], 84, 84, 84, 255);
-						}
-					}
-				if (!(indexedTiles[worldX.toString()] === undefined)){
-                    if (!(indexedTiles[worldY.toString()][adjj.toString()] === undefined)){
-                        if (indexedTiles[worldX.toString()][worldY.toString()]['hasArt']) {
-                            putColorInCanvas(mapGrid[i][j], 84, 84, 84, 255);
-                        }
-                    }*/
-				
-				// determine if this tile actually exists in the world or not
+				// does tile (worldX, worldY) currently exist in the database?
 				if (indexedTiles[worldX] != undefined) {
 					if (indexedTiles[worldX][worldY] != undefined) {
 						// it exists, so give it the "fog of war" grey
