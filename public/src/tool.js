@@ -967,8 +967,7 @@ function updateMapCallback(request,currentCoords) {
                             putColorInCanvas(mapGrid[i][j], 84, 84, 84, 255);
                         }
                     }
-                }
-				} else { // this tile doesn't exist, so just display background color
+                } else { // this tile doesn't exist, so just display background color
 					// ### in a perfect world, I would have a helper function to
 					// convert the bgroundColor hex string to these ints
 					putColorInCanvas(mapGrid[i][j], 224, 251, 253, 255);
