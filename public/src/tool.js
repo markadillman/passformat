@@ -173,10 +173,6 @@ function onFormSubmit(form_element) {
 function parseKeyHTML(evt) {
 	var keyID = evt.keyCode;
 	//console.log(keyID);
-
-	// handle quitting to menu via q no matter what mode
-	// means moving the code from game.js to here
-	// ### really should switch to this but we have higher priorities right now
 	
 	// handle toggling help screen no matter what mode
 	if (keyID == 72 && messageDiv.style.display != "block") { // h key
@@ -952,7 +948,7 @@ function updateMapCallback(request,currentCoords) {
 				// ### (worldX, worldY) currently exists in the database
 				var adji = i - gridCenterX;
 				var adjj = j - gridCenterY;
-				if (!(indexedTiles[adji.toString()] === undefined)){
+				/*if (!(indexedTiles[adji.toString()] === undefined)){
 					if (!(indexedTiles[adji.toString()][adjj.toString()] === undefined)){
 						if (indexedTiles[adji.toString()][adjj.toString()]['hasArt']) { // this tile exists, so display grey box = "fog of war"
 							var adjx = gridCenterX + adji;
@@ -964,7 +960,14 @@ function updateMapCallback(request,currentCoords) {
 							}
 							putColorInCanvas(mapGrid[adjx][adjy], 84, 84, 84, 255);
 						}
-					}
+					}*/
+				if (!(indexedTiles[worldX.toString()] === undefined)){
+                    if (!(indexedTiles[worldY.toString()][adjj.toString()] === undefined)){
+                        if (indexedTiles[worldX.toString()][worldY.toString()]['hasArt']) {
+                            putColorInCanvas(mapGrid[i][j], 84, 84, 84, 255);
+                        }
+                    }
+                }
 				} else { // this tile doesn't exist, so just display background color
 					// ### in a perfect world, I would have a helper function to
 					// convert the bgroundColor hex string to these ints
